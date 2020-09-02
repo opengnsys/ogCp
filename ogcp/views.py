@@ -20,7 +20,7 @@ def index():
 
 @app.route('/scopes/')
 def scopes():
-    def add_state_to_scopes(scope, clients):
+    def add_state_and_ips(scope, clients):
         if 'ip' in scope:
             filtered_client = filter(lambda x: x['addr']==scope['ip'], clients)
             client = next(filtered_client, False)
@@ -32,14 +32,14 @@ def scopes():
         else:
             scope['ip'] = []
             for child in scope['scope']:
-                scope['ip'] += add_state_to_scopes(child, clients)
+                scope['ip'] += add_state_and_ips(child, clients)
         return scope['ip']
 
     r = g.server.get('/scopes')
     scopes = r.json()
     r = g.server.get('/clients')
     clients = r.json()
-    add_state_to_scopes(scopes, clients['clients'])
+    add_state_and_ips(scopes, clients['clients'])
     return render_template('scopes.html', scopes=scopes, clients=clients)
 
 @app.route('/action/poweroff', methods=['POST'])
