@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% macro print_scopes_tree(scopes) -%}
+
+  <ul class="list-group">
+    {% for scope in scopes %}
+      <li class="list-group-item">
+        <input class="form-check-input" type="checkbox"
+               value="{{ " ".join(scope["ip"]) }}"
+               name="{{ scope["name"] }}_{{ scope["id"] }}">
+        {{ scope["name"] }}
+        {% if "state" in scope %}
+          -- STATE: {{ scope["state"] }}
+        {% endif %}
+        {{ print_scopes_tree(scope["scope"]) }}
+      </li>
+    {% endfor %}
+  </ul>
+
+{% endmacro %}
+
+{% block content %}
+
+<form method="post">
+  {{ print_scopes_tree(scopes["scope"]) }}
+
+  <div class="dropdown">
+    <button class="btn btn-primary dropdown-toggle" type="button"
+            id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
+            aria-expanded="false">
+    {{ _('Actions') }}
+    </button>
+    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+      <input class="dropdown-item" type="submit" value="{{ _('Poweroff') }}"
+             formaction="{{ url_for('action_poweroff') }}">
+    </div>
+  </div>
+</form>
+
+{% endblock %}
