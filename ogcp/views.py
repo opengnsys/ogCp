@@ -1,7 +1,13 @@
-from flask import g, render_template, url_for
+from flask import g, render_template, url_for, request, jsonify, make_response
 from ogcp.og_server import OGServer
 from flask_babel import _
 from ogcp import app
+
+def parse_ips(checkboxes_dict):
+    ips = set()
+    for ips_list in checkboxes_dict.values():
+        ips.update(ips_list.split(' '))
+    return ips
 
 @app.before_request
 def load_config():
@@ -35,3 +41,10 @@ def scopes():
     clients = r.json()
     add_state_to_scopes(scopes, clients['clients'])
     return render_template('scopes.html', scopes=scopes, clients=clients)
+
+@app.route('/action/poweroff', methods=['POST'])
+def action_poweroff():
+    ips = parse_ips(request.form.to_dict())
+    payload = {'clients': list(ips)}
+    g.server.post('/poweroff', payload)
+    return make_response("200 OK", 200)
