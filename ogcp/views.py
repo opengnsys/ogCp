@@ -48,3 +48,10 @@ def action_poweroff():
     payload = {'clients': list(ips)}
     g.server.post('/poweroff', payload)
     return make_response("200 OK", 200)
+
+@app.route('/action/reboot', methods=['POST'])
+def action_reboot():
+    ips = parse_ips(request.form.to_dict())
+    payload = {'clients': list(ips)}
+    g.server.post('/reboot', payload)
+    return make_response("200 OK", 200)
