@@ -19,6 +19,10 @@ def load_config():
 def page_not_found(error):
     return render_template('error.html', message=error), 404
 
+@app.errorhandler(500)
+def page_not_found(error):
+    return render_template('error.html', message=error), 404
+
 @app.route('/')
 def index():
     return render_template('base.html')
