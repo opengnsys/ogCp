@@ -70,3 +70,10 @@ def action_reboot():
     payload = {'clients': list(ips)}
     g.server.post('/reboot', payload)
     return make_response("200 OK", 200)
+
+@app.route('/action/refresh', methods=['POST'])
+def action_refresh():
+    ips = parse_ips(request.form.to_dict())
+    payload = {'clients': list(ips)}
+    g.server.post('/refresh', payload)
+    return make_response("200 OK", 200)
