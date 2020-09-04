@@ -21,7 +21,8 @@
 
 {% block content %}
 
-<form method="post">
+<form>
+  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
   {{ print_scopes_tree(scopes["scope"]) }}
 
   <div class="dropdown">
@@ -31,10 +32,12 @@
     {{ _('Actions') }}
     </button>
     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+      <input class="dropdown-item" type="submit" value="{{ _('Run') }}"
+             formaction="{{ url_for('action_wol') }}" formmethod="get">
       <input class="dropdown-item" type="submit" value="{{ _('Poweroff') }}"
-             formaction="{{ url_for('action_poweroff') }}">
+             formaction="{{ url_for('action_poweroff') }}" formmethod="post">
       <input class="dropdown-item" type="submit" value="{{ _('Reboot') }}"
-             formaction="{{ url_for('action_reboot') }}">
+             formaction="{{ url_for('action_reboot') }}" formmethod="post">
     </div>
   </div>
 </form>

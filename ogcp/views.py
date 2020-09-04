@@ -1,4 +1,5 @@
 from flask import g, render_template, url_for, request, jsonify, make_response
+from ogcp.forms.action_forms import WOLForm
 from ogcp.og_server import OGServer
 from flask_babel import _
 from ogcp import app
@@ -48,6 +49,20 @@ def action_poweroff():
     payload = {'clients': list(ips)}
     g.server.post('/poweroff', payload)
     return make_response("200 OK", 200)
+
+@app.route('/action/wol', methods=['GET', 'POST'])
+def action_wol():
+    form = WOLForm(request.form)
+    if request.method == 'POST' and form.validate():
+        wol_type = form.wol_type.data
+        ips = parse_ips(request.form.to_dict())
+        payload = {'type': wol_type, 'clients': list(ips)}
+        g.server.post('/wol', payload)
+        return make_response("200 OK", 200)
+    else:
+        ips = parse_ips(request.args.to_dict())
+        form.ips.data = " ".join(ips)
+        return render_template('actions/wol.html', form=form)
 
 @app.route('/action/reboot', methods=['POST'])
 def action_reboot():
