@@ -15,6 +15,10 @@ def load_config():
     g.server = OGServer()
     g.server.load_config('ogcp/cfg/ogserver.json')
 
+@app.errorhandler(404)
+def page_not_found(error):
+    return render_template('error.html', message=error), 404
+
 @app.route('/')
 def index():
     return render_template('base.html')
