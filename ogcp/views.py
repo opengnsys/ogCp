@@ -6,8 +6,9 @@ from ogcp import app
 
 def parse_ips(checkboxes_dict):
     ips = set()
-    for ips_list in checkboxes_dict.values():
-        ips.update(ips_list.split(' '))
+    for key, ips_list in checkboxes_dict.items():
+        if key != 'csrf_token':
+            ips.update(ips_list.split(' '))
     return ips
 
 @app.before_request
