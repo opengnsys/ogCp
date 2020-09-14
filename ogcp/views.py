@@ -20,8 +20,8 @@ def page_not_found(error):
     return render_template('error.html', message=error), 404
 
 @app.errorhandler(500)
-def page_not_found(error):
-    return render_template('error.html', message=error), 404
+def server_error(error):
+    return render_template('error.html', message=error), 500
 
 @app.route('/')
 def index():
