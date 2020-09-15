@@ -5,12 +5,37 @@ from flask_babel import _
 from ogcp import app
 import requests
 
+FS_CODES = {
+    0: 'DISK',
+    1: 'EMPTY',
+    2: 'CACHE',
+    6: 'EXT4',
+    13: 'NTFS'
+}
+
+PART_TYPE_CODES = {
+    0: 'EMPTY',
+    1: 'DISK',
+    7: 'NTFS',
+    131: 'LINUX',
+    218: 'DATA'
+}
+
 def parse_ips(checkboxes_dict):
     ips = set()
     for key, ips_list in checkboxes_dict.items():
         if key != 'csrf_token':
             ips.update(ips_list.split(' '))
     return ips
+
+def get_client_setup(ip):
+    payload = payload = {'client': list(ip)}
+    r = g.server.get('/client/setup', payload)
+    db_partitions = r.json()['partitions']
+    for partition in db_partitions:
+        partition['code'] = PART_TYPE_CODES[partition['code']]
+        partition['filesystem'] = FS_CODES[partition['filesystem']]
+    return db_partitions
 
 @app.before_request
 def load_config():
@@ -77,15 +102,15 @@ def action_wol():
 @app.route('/action/setup', methods=['GET'])
 def action_setup_show():
     ips = parse_ips(request.args.to_dict())
-    payload = {'client': list(ips)}
-    r = g.server.get('/client/setup', payload)
-    db_partitions = r.json()['partitions']
+    db_partitions = get_client_setup(ips)
     forms = [PartitionForm() for _ in db_partitions]
     forms = list(forms)
     for form, db_part in zip(forms, db_partitions):
         form.ips.data = " ".join(ips)
         form.disk.data = db_part['disk']
         form.partition.data = db_part['partition']
+        form.part_type.data = db_part['code']
+        form.fs.data = db_part['filesystem']
         form.size.data = db_part['size']
         form.modify.render_kw = {"formaction": url_for('action_setup_modify')}
         form.delete.render_kw = {"formaction": url_for('action_setup_delete')}
@@ -96,7 +121,7 @@ def action_setup_modify():
     form = PartitionForm(request.form)
     if form.validate():
         ips = form.ips.data.split(' ')
-        r = g.server.get('/client/setup', payload={'client': ips})
+        db_partitions = get_client_setup(ips)
 
         payload = {'clients': ips,
                    'disk': str(form.disk.data),
@@ -104,16 +129,18 @@ def action_setup_modify():
                    'cache_size': str(0),
                    'partition_setup': []}
 
-        for i in range(1,5):
-            partition_placeholder = {'partition': str(i),
-                                     'filesystem': 'EMPTY',
-                                     'code': 'EMPTY',
-                                     'size': str(0),
-                                     'format': str(int(False))}
-            payload['partition_setup'].append(partition_placeholder)
+        for db_part in db_partitions:
+            if db_part['partition'] == 0:
+                # Skip if this is disk setup.
+                continue
+            partition_setup = {'partition': str(db_part['partition']),
+                               'code': db_part['code'],
+                               'filesystem': db_part['filesystem'],
+                               'size': str(db_part['size']),
+                               'format': str(int(False))}
+            payload['partition_setup'].append(partition_setup)
 
         modified_part = payload['partition_setup'][int(form.partition.data) - 1]
-        modified_part['partition'] = str(form.partition.data)
         modified_part['filesystem'] = str(form.fs.data)
         modified_part['code'] = str(form.part_type.data)
         modified_part['size'] = str(form.size.data)
