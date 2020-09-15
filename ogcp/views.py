@@ -153,7 +153,38 @@ def action_setup_modify():
 
 @app.route('/action/setup/delete', methods=['POST'])
 def action_setup_delete():
-    return make_response("200 OK", 200)
+    form = PartitionForm(request.form)
+    if form.validate():
+        ips = form.ips.data.split(' ')
+        db_partitions = get_client_setup(ips)
+
+        payload = {'clients': ips,
+                   'disk': str(form.disk.data),
+                   'cache': str(0),
+                   'cache_size': str(0),
+                   'partition_setup': []}
+
+        for db_part in db_partitions:
+            if db_part['partition'] == 0:
+                # Skip if this is disk setup.
+                continue
+            partition_setup = {'partition': str(db_part['partition']),
+                               'code': db_part['code'],
+                               'filesystem': db_part['filesystem'],
+                               'size': str(db_part['size']),
+                               'format': str(int(False))}
+            payload['partition_setup'].append(partition_setup)
+
+        modified_part = payload['partition_setup'][int(form.partition.data) - 1]
+        modified_part['filesystem'] = FS_CODES[1]
+        modified_part['code'] = PART_TYPE_CODES[0]
+        modified_part['size'] = str(0)
+        modified_part['format'] = str(int(True))
+
+        r = g.server.post('/setup', payload=payload)
+        if r.status_code == requests.codes.ok:
+            return make_response("200 OK", 200)
+    return make_response("400 Bad Request", 400)
 
 @app.route('/action/reboot', methods=['POST'])
 def action_reboot():
