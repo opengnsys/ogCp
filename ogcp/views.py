@@ -229,6 +229,41 @@ def action_client_info():
     form.create.render_kw = {"style": "visibility:hidden;"}
     return render_template('actions/client_details.html', form=form)
 
+@app.route('/action/client/add', methods=['GET', 'POST'])
+def action_client_add():
+    form = ClientDetailsForm(request.form)
+    if request.method == 'POST':
+        payload = {"boot": form.boot.data,
+                   "ip": form.ip.data,
+                   "livedir": form.livedir.data,
+                   "mac": form.mac.data,
+                   "maintenance": form.maintenance.data,
+                   "name": form.name.data,
+                   "netdriver": form.netdriver.data,
+                   "netiface": form.netiface.data,
+                   "netmask": form.netmask.data,
+                   "remote": form.remote.data,
+                   "repo_id": int(form.repo.data),
+                   "room": int(form.room.data),
+                   "serial_number": form.serial_number.data}
+
+        r = g.server.post('/client/add', payload)
+        if r.status_code == requests.codes.ok:
+            return make_response("200 OK", 200)
+        return make_response("400 Bad Request", 400)
+    else:
+        r = g.server.get('/mode')
+        available_modes = [(mode, mode) for mode in r.json()['modes']]
+        form.boot.choices = list(available_modes)
+
+        r = g.server.get('/scopes')
+        rooms = parse_scopes_from_tree(r.json(), 'room')
+        rooms = [(room['id'], room['name']) for room in rooms]
+        form.room.choices = list(rooms)
+
+        form.create.render_kw = {"formaction": url_for('action_client_add')}
+        return render_template('actions/client_details.html', form=form)
+
 @app.route('/action/reboot', methods=['POST'])
 def action_reboot():
     ips = parse_ips(request.form.to_dict())
