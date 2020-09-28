@@ -42,6 +42,8 @@
              formaction="{{ url_for('action_refresh') }}" formmethod="post">
       <input class="dropdown-item" type="submit" value="{{ _('Setup') }}"
              formaction="{{ url_for('action_setup_show') }}" formmethod="get">
+      <input class="dropdown-item" type="submit" value="{{ _('Details') }}"
+             formaction="{{ url_for('action_client_info') }}" formmethod="get">
     </div>
   </div>
 </form>

@@ -1,5 +1,6 @@
 from wtforms import (
-    Form, SubmitField, HiddenField, SelectField, BooleanField, IntegerField
+    Form, SubmitField, HiddenField, SelectField, BooleanField, IntegerField,
+    StringField
 )
 from flask_wtf import FlaskForm
 from flask_babel import _
@@ -27,3 +28,25 @@ class PartitionForm(FlaskForm):
     format_partition = BooleanField(label=_('Format'))
     modify = SubmitField(label=_('Modify'))
     delete = SubmitField(label=_('Delete'))
+
+class ClientDetailsForm(FlaskForm):
+    name = StringField(label=_('Name'))
+    ip = StringField(label=_('IP'))
+    mac = StringField(label=_('MAC'))
+    serial_number = StringField(label=_('Serial Number'))
+    netmask = StringField(label=_('Netmask'))
+    livedir = SelectField(label=_('ogLive'),
+                          choices=[('ogLive', 'Default'),])
+    remote = BooleanField(label=_('Remote'))
+    maintenance = BooleanField(label=_('Maintenance'))
+    netiface = SelectField(label=_('Interface'),
+                           choices=[('eth0', 'eth0'),
+                                    ('eth1', 'eth1'),
+                                    ('eth2', 'eth2')])
+    netdriver = SelectField(label=_('Driver'),
+                            choices=[('generic', 'generic')])
+    repo = SelectField(label=_('Repository'),
+                       choices=[(1, 'Default')])
+    room = SelectField(label=_('Room'))
+    boot = SelectField(label=_('Boot Mode'))
+    create = SubmitField(label=_('Create'))

@@ -1,5 +1,5 @@
 from flask import g, render_template, url_for, request, jsonify, make_response
-from ogcp.forms.action_forms import WOLForm, PartitionForm
+from ogcp.forms.action_forms import WOLForm, PartitionForm, ClientDetailsForm
 from ogcp.og_server import OGServer
 from flask_babel import _
 from ogcp import app
@@ -36,6 +36,15 @@ def get_client_setup(ip):
         partition['code'] = PART_TYPE_CODES[partition['code']]
         partition['filesystem'] = FS_CODES[partition['filesystem']]
     return db_partitions
+
+def parse_scopes_from_tree(tree, scope_type):
+    scopes = []
+    for scope in tree['scope']:
+        if scope['type'] == scope_type:
+            scopes.append(scope)
+        else:
+            scopes += parse_scopes_from_tree(scope, scope_type)
+    return scopes
 
 @app.before_request
 def load_config():
@@ -185,6 +194,40 @@ def action_setup_delete():
         if r.status_code == requests.codes.ok:
             return make_response("200 OK", 200)
     return make_response("400 Bad Request", 400)
+
+@app.route('/action/client/info', methods=['GET'])
+def action_client_info():
+    form = ClientDetailsForm()
+    ips = parse_ips(request.args.to_dict())
+    payload = {'client': list(ips)}
+    r = g.server.get('/client/info', payload)
+    db_client = r.json()
+
+    form.name.data = db_client['name']
+    form.ip.data = db_client['ip']
+    form.mac.data = db_client['mac']
+    form.serial_number.data = db_client['serial_number']
+    form.netmask.data = db_client['netmask']
+    form.livedir.data = db_client['livedir']
+    form.remote.data = db_client['remote']
+    form.maintenance.data = db_client['maintenance']
+    form.netiface.data = db_client['netiface']
+    form.netdriver.data = db_client['netdriver']
+    form.repo.data = db_client['repo_id']
+    form.room.data = db_client['room']
+    form.boot.data = db_client['boot']
+
+    r = g.server.get('/mode')
+    available_modes = [(mode, mode) for mode in r.json()['modes']]
+    form.boot.choices = list(available_modes)
+
+    r = g.server.get('/scopes')
+    rooms = parse_scopes_from_tree(r.json(), 'room')
+    rooms = [(room['id'], room['name']) for room in rooms]
+    form.room.choices = list(rooms)
+
+    form.create.render_kw = {"style": "visibility:hidden;"}
+    return render_template('actions/client_details.html', form=form)
 
 @app.route('/action/reboot', methods=['POST'])
 def action_reboot():
