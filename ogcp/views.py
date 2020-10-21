@@ -1,5 +1,7 @@
 from flask import g, render_template, url_for, request, jsonify, make_response
-from ogcp.forms.action_forms import WOLForm, PartitionForm, ClientDetailsForm
+from ogcp.forms.action_forms import (
+    WOLForm, PartitionForm, ClientDetailsForm, HardwareForm
+)
 from ogcp.og_server import OGServer
 from flask_babel import _
 from ogcp import app
@@ -194,6 +196,23 @@ def action_setup_delete():
         if r.status_code == requests.codes.ok:
             return make_response("200 OK", 200)
     return make_response("400 Bad Request", 400)
+
+@app.route('/action/hardware', methods=['GET', 'POST'])
+def action_hardware():
+    form = HardwareForm(request.form)
+    if request.method == 'POST':
+        ips = form.ips.data.split(' ')
+        r = g.server.post('/hardware', payload={'clients': ips})
+        if r.status_code == requests.codes.ok:
+            return make_response("200 OK", 200)
+        return make_response("400 Bad Request", 400)
+    else:
+        ips = parse_ips(request.args.to_dict())
+        form.ips.data = ' '.join(ips)
+        r = g.server.get('/hardware', payload={'client': list(ips)})
+        hardware = r.json()['hardware']
+        return render_template('actions/hardware.html', form=form,
+                               hardware=hardware)
 
 @app.route('/action/client/info', methods=['GET'])
 def action_client_info():

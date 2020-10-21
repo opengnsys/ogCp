@@ -29,6 +29,10 @@ class PartitionForm(FlaskForm):
     modify = SubmitField(label=_('Modify'))
     delete = SubmitField(label=_('Delete'))
 
+class HardwareForm(FlaskForm):
+    ips = HiddenField()
+    refresh = SubmitField(label=_('Refresh'))
+
 class ClientDetailsForm(FlaskForm):
     name = StringField(label=_('Name'))
     ip = StringField(label=_('IP'))
