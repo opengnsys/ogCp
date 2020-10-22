@@ -1,6 +1,6 @@
 from wtforms import (
     Form, SubmitField, HiddenField, SelectField, BooleanField, IntegerField,
-    StringField
+    StringField, RadioField
 )
 from flask_wtf import FlaskForm
 from flask_babel import _
@@ -32,6 +32,11 @@ class PartitionForm(FlaskForm):
 class HardwareForm(FlaskForm):
     ips = HiddenField()
     refresh = SubmitField(label=_('Refresh'))
+
+class SessionForm(FlaskForm):
+    ips = HiddenField()
+    os = RadioField(label=_('Session'), choices=[])
+    run = SubmitField(label=_('Run'))
 
 class ClientDetailsForm(FlaskForm):
     name = StringField(label=_('Name'))

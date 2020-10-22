@@ -1,6 +1,6 @@
 from flask import g, render_template, url_for, request, jsonify, make_response
 from ogcp.forms.action_forms import (
-    WOLForm, PartitionForm, ClientDetailsForm, HardwareForm
+    WOLForm, PartitionForm, ClientDetailsForm, HardwareForm, SessionForm
 )
 from ogcp.og_server import OGServer
 from flask_babel import _
@@ -213,6 +213,29 @@ def action_hardware():
         hardware = r.json()['hardware']
         return render_template('actions/hardware.html', form=form,
                                hardware=hardware)
+
+@app.route('/action/session', methods=['GET', 'POST'])
+def action_session():
+    form = SessionForm(request.form)
+    if request.method == 'POST':
+        ips = form.ips.data.split(' ')
+        disk, partition = form.os.data.split(' ')
+        r = g.server.post('/session', payload={'clients': ips,
+                                               'disk': str(disk),
+                                               'partition': str(partition)})
+        if r.status_code == requests.codes.ok:
+            return make_response("200 OK", 200)
+        return make_response("400 Bad Request", 400)
+    else:
+        ips = parse_ips(request.args.to_dict())
+        form.ips.data = ' '.join(ips)
+        r = g.server.get('/session', payload={'client': list(ips)})
+        sessions = r.json()['sessions']
+        for os in sessions:
+            choice = (f"{os['disk']} {os['partition']}",
+                      f"{os['name']} ({os['disk']},{os['partition']})")
+            form.os.choices.append(choice)
+        return render_template('actions/session.html', form=form)
 
 @app.route('/action/client/info', methods=['GET'])
 def action_client_info():
