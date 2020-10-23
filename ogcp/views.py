@@ -1,6 +1,7 @@
 from flask import g, render_template, url_for, request, jsonify, make_response
 from ogcp.forms.action_forms import (
-    WOLForm, PartitionForm, ClientDetailsForm, HardwareForm, SessionForm
+    WOLForm, PartitionForm, ClientDetailsForm, HardwareForm, SessionForm,
+    ImageRestoreForm
 )
 from ogcp.og_server import OGServer
 from flask_babel import _
@@ -196,6 +197,60 @@ def action_setup_delete():
         if r.status_code == requests.codes.ok:
             return make_response("200 OK", 200)
     return make_response("400 Bad Request", 400)
+
+@app.route('/action/image/restore', methods=['GET', 'POST'])
+def action_image_restore():
+    def search_image(images_list, image_id):
+        for image in images_list:
+            if image['id'] == image_id:
+                return image
+        return False
+
+    form = ImageRestoreForm(request.form)
+    if request.method == 'POST':
+        ips = form.ips.data.split(' ')
+        disk, partition = form.partition.data.split(' ')
+        image_id = form.image.data
+        r = g.server.get('/images')
+        images_list = r.json()['images']
+        image = search_image(images_list, int(image_id))
+        if not image:
+            return make_response("400 Bad Request", 400)
+
+        payload = {'disk': disk,
+                   'partition': partition,
+                   'name': image['name'],
+                   'repository': g.server.ip,
+                   'clients': ips,
+                   'type': form.method.data,
+                   'profile': str(image['software_id']),
+                   'id': str(image['id'])}
+        g.server.post('/image/restore', payload)
+        if r.status_code == requests.codes.ok:
+            return make_response("200 OK", 200)
+        return make_response("400 Bad Request", 400)
+    else:
+        ips = parse_ips(request.args.to_dict())
+        form.ips.data = ' '.join(ips)
+        r = g.server.get('/images')
+        for image in r.json()['images']:
+            form.image.choices.append((image['id'], image['name']))
+        r = g.server.get('/client/setup', payload={'client': list(ips)})
+        for partition in r.json()['partitions']:
+            disk_id = partition['disk']
+            part_id = partition['partition']
+            fs_id = partition['filesystem']
+
+            if part_id == 0:
+                # This is the disk data, not a partition.
+                continue
+
+            choice_value = f"{disk_id} {part_id}"
+            choice_name = (f"{_('Disk')} {disk_id} - "
+                           f"{_('Partition')} {part_id} - "
+                           f"{_('FS')} {FS_CODES[fs_id]}")
+            form.partition.choices.append((choice_value, choice_name))
+        return render_template('actions/image_restore.html', form=form)
 
 @app.route('/action/hardware', methods=['GET', 'POST'])
 def action_hardware():

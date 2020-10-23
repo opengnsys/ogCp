@@ -38,6 +38,14 @@ class SessionForm(FlaskForm):
     os = RadioField(label=_('Session'), choices=[])
     run = SubmitField(label=_('Run'))
 
+class ImageRestoreForm(FlaskForm):
+    ips = HiddenField()
+    partition = SelectField(label=_('Partition'), choices=[])
+    image = SelectField(label=_('Image'), choices=[])
+    method = SelectField(label=_('Method'),
+                         choices=[('UNICAST', 'Unicast')])
+    restore = SubmitField(label=_('Restore'))
+
 class ClientDetailsForm(FlaskForm):
     name = StringField(label=_('Name'))
     ip = StringField(label=_('IP'))
