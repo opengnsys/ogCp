@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block content %}
+
+<table class="table table-striped">
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col">{{ _('Item') }}</th>
+      <th scope="col">{{ _('Type') }}</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for item in hardware %}
+        <tr>
+            <td>{{ item['description'] }}</td>
+            <td>{{ item['type'] }}</td>
+        </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+{{ wtf.quick_form(form,
+                  action=url_for('action_hardware'),
+                  method='post',
+                  button_map={'refresh': 'primary'}) }}
+
+{% endblock %}
