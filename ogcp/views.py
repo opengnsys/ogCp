@@ -1,7 +1,7 @@
 from flask import g, render_template, url_for, request, jsonify, make_response
 from ogcp.forms.action_forms import (
     WOLForm, PartitionForm, ClientDetailsForm, HardwareForm, SessionForm,
-    ImageRestoreForm
+    ImageRestoreForm, ImageCreateForm
 )
 from ogcp.og_server import OGServer
 from flask_babel import _
@@ -360,6 +360,48 @@ def action_client_add():
 
         form.create.render_kw = {"formaction": url_for('action_client_add')}
         return render_template('actions/client_details.html', form=form)
+
+@app.route('/action/image/create', methods=['GET', 'POST'])
+def action_image_create():
+    form = ImageCreateForm(request.form)
+    if request.method == 'POST':
+        ip = form.ip.data
+        r = g.server.get('/client/info', payload={"client": [ip]})
+        disk, partition, code = form.os.data.split(' ')
+        payload = {"clients": [ip],
+                   "disk": disk,
+                   "partition": partition,
+                   "code": code,
+                   "name": form.name.data,
+                   "repository": g.server.ip,
+                   "id": "0", # This is ignored by the server.
+                   "description": form.description.data,
+                   "group_id": 0, # Default group.
+                   "center_id": r.json()["center"]}
+        r = g.server.post('/image/create', payload)
+        if r.status_code == requests.codes.ok:
+            return make_response("200 OK", 200)
+        return make_response("400 Bad Request", 400)
+    else:
+        ips = parse_ips(request.args.to_dict())
+        form.ip.data = " ".join(ips)
+        r = g.server.get('/client/setup', payload={'client': list(ips)})
+        for partition in r.json()['partitions']:
+            disk_id = partition['disk']
+            part_id = partition['partition']
+            fs_id = partition['filesystem']
+            code = partition['code']
+
+            if part_id == 0:
+                # This is the disk data, not a partition.
+                continue
+
+            choice_value = f"{disk_id} {part_id} {code}"
+            choice_name = (f"{_('Disk')} {disk_id} | "
+                           f"{_('Partition')} {part_id} | "
+                           f"{_('FS')} {FS_CODES[fs_id]}")
+            form.os.choices.append((choice_value, choice_name))
+        return render_template('actions/image_create.html', form=form)
 
 @app.route('/action/reboot', methods=['POST'])
 def action_reboot():

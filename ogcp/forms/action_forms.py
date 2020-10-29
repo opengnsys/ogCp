@@ -67,3 +67,10 @@ class ClientDetailsForm(FlaskForm):
     room = SelectField(label=_('Room'))
     boot = SelectField(label=_('Boot Mode'))
     create = SubmitField(label=_('Create'))
+
+class ImageCreateForm(FlaskForm):
+    ip = HiddenField()
+    os = SelectField(label=_('OS'), choices=[])
+    name = StringField(label=_('Image name'))
+    description = StringField(label=_('Description'))
+    create = SubmitField(label=_('Create'))
