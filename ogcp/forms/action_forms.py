@@ -33,6 +33,12 @@ class HardwareForm(FlaskForm):
     ips = HiddenField()
     refresh = SubmitField(label=_('Refresh'))
 
+class SoftwareForm(FlaskForm):
+    ips = HiddenField()
+    os = SelectField(label=_('Partition'), choices=[])
+    view = SubmitField(label=_('View'))
+    update = SubmitField(label=_('Update'))
+
 class SessionForm(FlaskForm):
     ips = HiddenField()
     os = RadioField(label=_('Session'), choices=[])

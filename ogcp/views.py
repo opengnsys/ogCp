@@ -1,7 +1,7 @@
 from flask import g, render_template, url_for, request, jsonify, make_response
 from ogcp.forms.action_forms import (
     WOLForm, PartitionForm, ClientDetailsForm, HardwareForm, SessionForm,
-    ImageRestoreForm, ImageCreateForm
+    ImageRestoreForm, ImageCreateForm, SoftwareForm
 )
 from ogcp.og_server import OGServer
 from flask_babel import _
@@ -268,6 +268,44 @@ def action_hardware():
         hardware = r.json()['hardware']
         return render_template('actions/hardware.html', form=form,
                                hardware=hardware)
+
+@app.route('/action/software', methods=['GET', 'POST'])
+def action_software():
+    form = SoftwareForm(request.form)
+    if request.method == 'POST':
+        ips = form.ips.data.split(' ')
+        disk, partition = form.os.data.split(' ')
+        if form.view.data:
+            r = g.server.get('/software', payload={'client': ips,
+                                               'disk': int(disk),
+                                               'partition': int(partition)})
+            if r.status_code == requests.codes.ok:
+                return r.json()
+
+        elif form.update.data:
+            r = g.server.post('/software', payload={'clients': ips,
+                                                    'disk': disk,
+                                                    'partition': partition})
+            if r.status_code == requests.codes.ok:
+                return make_response(f"Se generó correctamente el perfil "
+                                     f"software de {ips[0]} D:{disk} "
+                                     f"P:{partition}",
+                                     200)
+
+        return make_response("400 Bad Request", 400)
+    else:
+        ips = parse_ips(request.args.to_dict())
+        form.ips.data = ' '.join(ips)
+        r = g.server.get('/client/setup', payload={'client': list(ips)})
+
+        for part in r.json()['partitions'][1:]:
+            form.os.choices.append(
+                (f"{part.get('disk')} {part.get('partition')}",
+                 f"Disco {part.get('disk')} | Partición {part.get('partition')} "
+                 f"| {PART_TYPE_CODES[part.get('code')]} "
+                 f"{FS_CODES[part.get('filesystem')]}")
+            )
+    return render_template('actions/software.html', form=form)
 
 @app.route('/action/session', methods=['GET', 'POST'])
 def action_session():

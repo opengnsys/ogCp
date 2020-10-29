@@ -42,6 +42,8 @@
              formaction="{{ url_for('action_refresh') }}" formmethod="post">
       <input class="dropdown-item" type="submit" value="{{ _('Hardware') }}"
              formaction="{{ url_for('action_hardware') }}" formmethod="get">
+      <input class="dropdown-item" type="submit" value="{{ _('Software') }}"
+             formaction="{{ url_for('action_software') }}" formmethod="get">
       <input class="dropdown-item" type="submit" value="{{ _('Sessions') }}"
              formaction="{{ url_for('action_session') }}" formmethod="get">
       <input class="dropdown-item" type="submit" value="{{ _('Restore Image') }}"
