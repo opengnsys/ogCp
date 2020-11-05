@@ -5,10 +5,12 @@ from flask import Flask
 from os import urandom
 
 app = Flask(__name__)
+app.config.from_json('cfg/ogserver.json')
+app.secret_key = urandom(16)
+
 babel = Babel(app)
 csrf = CSRFProtect(app)
 bootstrap = Bootstrap(app)
 
-app.secret_key = urandom(16)
 
 import ogcp.views

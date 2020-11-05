@@ -52,7 +52,6 @@ def parse_scopes_from_tree(tree, scope_type):
 @app.before_request
 def load_config():
     g.server = OGServer()
-    g.server.load_config('ogcp/cfg/ogserver.json')
 
 @app.errorhandler(404)
 def page_not_found(error):
