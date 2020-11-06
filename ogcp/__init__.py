@@ -5,7 +5,7 @@ from flask import Flask
 from os import urandom
 
 app = Flask(__name__)
-app.config.from_json('cfg/ogserver.json')
+app.config.from_json('cfg/ogcp.json')
 app.secret_key = urandom(16)
 
 babel = Babel(app)
