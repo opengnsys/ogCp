@@ -252,7 +252,7 @@ def action_image_restore():
                    'id': str(image['id'])}
         g.server.post('/image/restore', payload)
         if r.status_code == requests.codes.ok:
-            return make_response("200 OK", 200)
+            return redirect(url_for("scopes"))
         return make_response("400 Bad Request", 400)
     else:
         ips = parse_ips(request.args.to_dict())
