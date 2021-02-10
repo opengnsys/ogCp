@@ -1,4 +1,4 @@
-from flask import g, render_template, url_for, request, jsonify, make_response
+from flask import g, render_template, url_for, redirect, request, jsonify, make_response
 from ogcp.forms.action_forms import (
     WOLForm, PartitionForm, ClientDetailsForm, HardwareForm, SessionForm,
     ImageRestoreForm, ImageCreateForm, SoftwareForm
@@ -21,7 +21,13 @@ PART_TYPE_CODES = {
     1: 'DISK',
     7: 'NTFS',
     131: 'LINUX',
+    202: 'CACHE',
     218: 'DATA'
+}
+
+PART_SCHEME_CODES = {
+    1: 'MSDOS',
+    2: 'GPT'
 }
 
 def parse_ips(checkboxes_dict):
@@ -36,7 +42,11 @@ def get_client_setup(ip):
     r = g.server.get('/client/setup', payload)
     db_partitions = r.json()['partitions']
     for partition in db_partitions:
-        partition['code'] = PART_TYPE_CODES[partition['code']]
+        if partition['partition'] == 0:
+            partition['code'] = PART_SCHEME_CODES[partition['code']]
+        else:
+            partition['code'] = PART_TYPE_CODES[partition['code']]
+
         partition['filesystem'] = FS_CODES[partition['filesystem']]
     return db_partitions
 
@@ -116,10 +126,14 @@ def action_setup_show():
     db_partitions = get_client_setup(ips)
     forms = [PartitionForm() for _ in db_partitions]
     forms = list(forms)
+
     for form, db_part in zip(forms, db_partitions):
         form.ips.data = " ".join(ips)
         form.disk.data = db_part['disk']
         form.partition.data = db_part['partition']
+        # XXX: Should separate whole disk form from partition setup form
+        if db_part['code'] in PART_SCHEME_CODES.values():
+            form.part_type.choices = list(PART_SCHEME_CODES.values())
         form.part_type.data = db_part['code']
         form.fs.data = db_part['filesystem']
         form.size.data = db_part['size']
@@ -142,7 +156,8 @@ def action_setup_modify():
 
         for db_part in db_partitions:
             if db_part['partition'] == 0:
-                # Skip if this is disk setup.
+                # Set partition scheme
+                payload['type'] = db_part['code']
                 continue
             partition_setup = {'partition': str(db_part['partition']),
                                'code': db_part['code'],
@@ -150,6 +165,17 @@ def action_setup_modify():
                                'size': str(db_part['size']),
                                'format': str(int(False))}
             payload['partition_setup'].append(partition_setup)
+
+        # Ensure a 4 partition setup
+        for i in range(len(db_partitions), 5):
+            empty_part = {
+                'partition': str(i),
+                'code': 'EMPTY',
+                'filesystem': 'EMPTY',
+                'size': '0',
+                'format': '0',
+            }
+            payload['partition_setup'].append(empty_part)
 
         modified_part = payload['partition_setup'][int(form.partition.data) - 1]
         modified_part['filesystem'] = str(form.fs.data)
@@ -159,7 +185,7 @@ def action_setup_modify():
 
         r = g.server.post('/setup', payload=payload)
         if r.status_code == requests.codes.ok:
-            return make_response("200 OK", 200)
+            return redirect(url_for("scopes"))
     return make_response("400 Bad Request", 400)
 
 @app.route('/action/setup/delete', methods=['POST'])
