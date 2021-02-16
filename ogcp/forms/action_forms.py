@@ -2,6 +2,7 @@ from wtforms import (
     Form, SubmitField, HiddenField, SelectField, BooleanField, IntegerField,
     StringField, RadioField
 )
+from wtforms.validators import InputRequired
 from flask_wtf import FlaskForm
 from flask_babel import _
 
@@ -78,6 +79,7 @@ class ClientDetailsForm(FlaskForm):
 class ImageCreateForm(FlaskForm):
     ip = HiddenField()
     os = SelectField(label=_('OS'), choices=[])
-    name = StringField(label=_('Image name'))
+    name = StringField(label=_('Image name'),
+                       validators=[InputRequired()])
     description = StringField(label=_('Description'))
     create = SubmitField(label=_('Create'))
