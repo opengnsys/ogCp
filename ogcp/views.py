@@ -15,6 +15,7 @@ FS_CODES = {
     1: 'EMPTY',
     2: 'CACHE',
     6: 'EXT4',
+    9: 'FAT32',
     13: 'NTFS'
 }
 
