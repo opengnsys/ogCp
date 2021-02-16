@@ -1,4 +1,6 @@
-from flask import g, render_template, url_for, redirect, request, jsonify, make_response
+from flask import (
+    g, render_template, url_for, flash, redirect, request, jsonify, make_response
+)
 from ogcp.forms.action_forms import (
     WOLForm, PartitionForm, ClientDetailsForm, HardwareForm, SessionForm,
     ImageRestoreForm, ImageCreateForm, SoftwareForm
@@ -111,10 +113,11 @@ def action_wol():
     form = WOLForm(request.form)
     if request.method == 'POST' and form.validate():
         wol_type = form.wol_type.data
-        ips = parse_ips(request.form.to_dict())
-        payload = {'type': wol_type, 'clients': list(ips)}
+        ips = form.ips.data.split(' ')
+        payload = {'type': wol_type, 'clients': ips}
         g.server.post('/wol', payload)
-        return make_response("200 OK", 200)
+        flash(_('Wake On Lan request sent successfully'), category='info')
+        return redirect(url_for("scopes"))
     else:
         ips = parse_ips(request.args.to_dict())
         form.ips.data = " ".join(ips)
@@ -312,11 +315,9 @@ def action_software():
                                                     'disk': disk,
                                                     'partition': partition})
             if r.status_code == requests.codes.ok:
-                return make_response(f"Se generó correctamente el perfil "
-                                     f"software de {ips[0]} D:{disk} "
-                                     f"P:{partition}",
-                                     200)
-
+                flash(_('Software profile request sent successfully'), category='info')
+                return redirect(url_for("scopes"))
+            flash(_(f'Error processing software profile request: ({r.status})'), category='error')
         return make_response("400 Bad Request", 400)
     else:
         ips = parse_ips(request.args.to_dict())
