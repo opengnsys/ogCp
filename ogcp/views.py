@@ -33,6 +33,16 @@ PART_SCHEME_CODES = {
     2: 'GPT'
 }
 
+def validate_ips(ips, min_len=1, max_len=float('inf')):
+    valid = True
+    if len(ips) < min_len:
+        flash(_(f'Please, select at least {min_len} computer(s)'), category='error')
+        valid = not valid
+    elif len(ips) > max_len:
+        flash(_(f'No more than {max_len} computer(s) can be selected'), category='error')
+        valid = not valid
+    return valid
+
 def parse_ips(checkboxes_dict):
     ips = set()
     for key, ips_list in checkboxes_dict.items():
@@ -107,7 +117,7 @@ def action_poweroff():
     ips = parse_ips(request.form.to_dict())
     payload = {'clients': list(ips)}
     g.server.post('/poweroff', payload)
-    return make_response("200 OK", 200)
+    return redirect(url_for("scopes"))
 
 @app.route('/action/wol', methods=['GET', 'POST'])
 def action_wol():
@@ -122,7 +132,10 @@ def action_wol():
     else:
         ips = parse_ips(request.args.to_dict())
         form.ips.data = " ".join(ips)
-        return render_template('actions/wol.html', form=form)
+        if validate_ips(ips, min_len=1):
+            return render_template('actions/wol.html', form=form)
+        else:
+            return redirect(url_for('scopes'))
 
 @app.route('/action/setup', methods=['GET'])
 def action_setup_show():
@@ -224,7 +237,7 @@ def action_setup_delete():
 
         r = g.server.post('/setup', payload=payload)
         if r.status_code == requests.codes.ok:
-            return make_response("200 OK", 200)
+            return redirect(url_for("scopes"))
     return make_response("400 Bad Request", 400)
 
 @app.route('/action/image/restore', methods=['GET', 'POST'])
@@ -344,7 +357,7 @@ def action_session():
                                                'disk': str(disk),
                                                'partition': str(partition)})
         if r.status_code == requests.codes.ok:
-            return make_response("200 OK", 200)
+            return redirect(url_for("scopes"))
         return make_response("400 Bad Request", 400)
     else:
         ips = parse_ips(request.args.to_dict())
@@ -450,6 +463,9 @@ def action_image_create():
     else:
         ips = parse_ips(request.args.to_dict())
         form.ip.data = " ".join(ips)
+        if not validate_ips(ips, max_len=1):
+            return redirect(url_for("scopes"))
+
         r = g.server.get('/client/setup', payload={'client': list(ips)})
         for partition in r.json()['partitions']:
             disk_id = partition['disk']
@@ -473,11 +489,11 @@ def action_reboot():
     ips = parse_ips(request.form.to_dict())
     payload = {'clients': list(ips)}
     g.server.post('/reboot', payload)
-    return make_response("200 OK", 200)
+    return redirect(url_for("scopes"))
 
 @app.route('/action/refresh', methods=['POST'])
 def action_refresh():
     ips = parse_ips(request.form.to_dict())
     payload = {'clients': list(ips)}
     g.server.post('/refresh', payload)
-    return make_response("200 OK", 200)
+    return redirect(url_for("scopes"))
