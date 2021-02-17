@@ -56,6 +56,8 @@
              formaction="{{ url_for('action_client_add') }}" formmethod="get">
       <input class="dropdown-item" type="submit" value="{{ _('Create image') }}"
              formaction="{{ url_for('action_image_create') }}" formmethod="get">
+      <input class="dropdown-item" type="submit" value="{{ _('Set boot mode') }}"
+             formaction="{{ url_for('action_mode') }}" formmethod="get">
     </div>
   </div>
 </form>

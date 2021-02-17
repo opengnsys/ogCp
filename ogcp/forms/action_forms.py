@@ -76,6 +76,11 @@ class ClientDetailsForm(FlaskForm):
     boot = SelectField(label=_('Boot Mode'))
     create = SubmitField(label=_('Create'))
 
+class BootModeForm(FlaskForm):
+    ips = HiddenField()
+    boot = SelectField(label=_('Boot mode'))
+    ok = SubmitField(label=_('Ok'))
+
 class ImageCreateForm(FlaskForm):
     ip = HiddenField()
     os = SelectField(label=_('OS'), choices=[])

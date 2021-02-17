@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block content %}
+
+{{ wtf.quick_form(form,
+                  action=url_for('action_mode'),
+                  method='post',
+                  button_map={'ok': 'primary'},
+                  extra_classes="m-5") }}
+
+{% endblock %}
+

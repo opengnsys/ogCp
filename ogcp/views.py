@@ -3,7 +3,7 @@ from flask import (
 )
 from ogcp.forms.action_forms import (
     WOLForm, PartitionForm, ClientDetailsForm, HardwareForm, SessionForm,
-    ImageRestoreForm, ImageCreateForm, SoftwareForm
+    ImageRestoreForm, ImageCreateForm, SoftwareForm, BootModeForm
 )
 from ogcp.og_server import OGServer
 from flask_babel import _
@@ -438,6 +438,34 @@ def action_client_add():
 
         form.create.render_kw = {"formaction": url_for('action_client_add')}
         return render_template('actions/client_details.html', form=form)
+
+@app.route('/action/mode', methods=['GET', 'POST'])
+def action_mode():
+    form = BootModeForm(request.form)
+    if request.method == 'POST':
+        ips = form.ips.data.split(' ')
+        payload = { 'clients': ips, 'mode': form.boot.data }
+        print(payload)
+        r = g.server.post('/mode', payload)
+        if r.status_code == requests.codes.ok:
+            flash(_('Client set boot mode request sent successfully'), category='info')
+        else:
+            flash(_('Ogserver replied with status code not ok'), category='error')
+        return redirect(url_for("scopes"))
+
+    else:
+        r = g.server.get('/mode')
+        available_modes = [(mode, mode) for mode in r.json()['modes']]
+        form.boot.choices = list(available_modes)
+
+        ips = parse_ips(request.args.to_dict())
+        form.ips.data = " ".join(ips)
+        if not validate_ips(ips):
+            return redirect(url_for("scopes"))
+
+        form.ok.render_kw = { 'formaction': url_for('action_mode') }
+        return render_template('actions/mode.html', form=form)
+
 
 @app.route('/action/image/create', methods=['GET', 'POST'])
 def action_image_create():
