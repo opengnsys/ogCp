@@ -273,25 +273,43 @@ def action_image_restore():
         return make_response("400 Bad Request", 400)
     else:
         ips = parse_ips(request.args.to_dict())
+        if not validate_ips(ips):
+            return redirect(url_for('scopes'))
         form.ips.data = ' '.join(ips)
+
+        part_choices = []
+
         r = g.server.get('/images')
         for image in r.json()['images']:
             form.image.choices.append((image['id'], image['name']))
-        r = g.server.get('/client/setup', payload={'client': list(ips)})
-        for partition in r.json()['partitions']:
-            disk_id = partition['disk']
-            part_id = partition['partition']
-            fs_id = partition['filesystem']
 
-            if part_id == 0:
-                # This is the disk data, not a partition.
-                continue
+        for ip in ips:
+            r = g.server.get('/client/setup', payload={'client': [ip]})
+            if r.status_code == requests.codes.ok:
+                partitions = r.json()['partitions']
+                parts = []
+                for partition in partitions:
+                    disk_id = partition['disk']
+                    part_id = partition['partition']
+                    if part_id == 0:  # This is the disk data, not a partition.
+                        continue
 
-            choice_value = f"{disk_id} {part_id}"
-            choice_name = (f"{_('Disk')} {disk_id} - "
-                           f"{_('Partition')} {part_id} - "
-                           f"{_('FS')} {FS_CODES[fs_id]}")
-            form.partition.choices.append((choice_value, choice_name))
+                    choice_value = (disk_id, part_id)
+                    parts.append(choice_value)
+
+                if not part_choices:  # Use first computer as reference part setup conf
+                    part_choices = [part for part in parts]
+                elif part_choices != parts:
+                    flash(_(f'Computers have different partition setup'), category='error')
+                    return redirect(url_for("scopes"))
+
+            else:
+                flash(_(f'ogServer was unable to obtain setup of selected computer {ip}'), category='error')
+                return redirect(url_for("scopes"))
+
+        form.partition.choices = [ (f'{disk_id} {part_id}', _(f'Disk: {disk_id} | Part: {part_id}'))
+                                    for disk_id, part_id in part_choices ]
+
         return render_template('actions/image_restore.html', form=form)
 
 @app.route('/action/hardware', methods=['GET', 'POST'])
