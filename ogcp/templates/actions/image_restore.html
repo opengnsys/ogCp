@@ -6,6 +6,8 @@
 {{ wtf.quick_form(form,
                   action=url_for('action_image_restore'),
                   method='post',
-                  button_map={'restore': 'primary'}) }}
+                  button_map={'restore': 'primary'},
+                  extra_classes='m-5') }}
+
 
 {% endblock %}

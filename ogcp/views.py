@@ -36,10 +36,12 @@ PART_SCHEME_CODES = {
 def validate_ips(ips, min_len=1, max_len=float('inf')):
     valid = True
     if len(ips) < min_len:
-        flash(_(f'Please, select at least {min_len} computer(s)'), category='error')
+        flash(_(f'Please, select at least {min_len} computer(s)'),
+              category='error')
         valid = not valid
     elif len(ips) > max_len:
-        flash(_(f'No more than {max_len} computer(s) can be selected'), category='error')
+        flash(_(f'No more than {max_len} computer(s) can be selected for the given action'),
+              category='error')
         valid = not valid
     return valid
 
@@ -323,6 +325,9 @@ def action_hardware():
         return make_response("400 Bad Request", 400)
     else:
         ips = parse_ips(request.args.to_dict())
+        if not validate_ips(ips, max_len=1):
+            return redirect(url_for('scopes'))
+
         form.ips.data = ' '.join(ips)
         r = g.server.get('/hardware', payload={'client': list(ips)})
         hardware = r.json()['hardware']
@@ -353,6 +358,9 @@ def action_software():
         return make_response("400 Bad Request", 400)
     else:
         ips = parse_ips(request.args.to_dict())
+        if not validate_ips(ips, max_len=1):
+            return redirect(url_for('scopes'))
+
         form.ips.data = ' '.join(ips)
         r = g.server.get('/client/setup', payload={'client': list(ips)})
 
@@ -379,6 +387,9 @@ def action_session():
         return make_response("400 Bad Request", 400)
     else:
         ips = parse_ips(request.args.to_dict())
+        if not validate_ips(ips, max_len=1):
+            return redirect(url_for('scopes'))
+
         form.ips.data = ' '.join(ips)
         r = g.server.get('/session', payload={'client': list(ips)})
         sessions = r.json()['sessions']
@@ -392,6 +403,9 @@ def action_session():
 def action_client_info():
     form = ClientDetailsForm()
     ips = parse_ips(request.args.to_dict())
+    if not validate_ips(ips, max_len=1):
+        return redirect(url_for("scopes"))
+
     payload = {'client': list(ips)}
     r = g.server.get('/client/info', payload)
     db_client = r.json()
@@ -533,13 +547,27 @@ def action_image_create():
 @app.route('/action/reboot', methods=['POST'])
 def action_reboot():
     ips = parse_ips(request.form.to_dict())
+    if not validate_ips(ips):
+        return redirect(url_for('scopes'))
+
     payload = {'clients': list(ips)}
-    g.server.post('/reboot', payload)
+    r = g.server.post('/reboot', payload)
+    if r.status_code != requests.codes.ok:
+        flash(_('OgServer replied with a non ok status code'), category='error')
+    else:
+        flash(_('Refresh request processed successfully'), category='info')
     return redirect(url_for("scopes"))
 
 @app.route('/action/refresh', methods=['POST'])
 def action_refresh():
     ips = parse_ips(request.form.to_dict())
+    if not validate_ips(ips):
+        return redirect(url_for('scopes'))
+
     payload = {'clients': list(ips)}
-    g.server.post('/refresh', payload)
+    r = g.server.post('/refresh', payload)
+    if r.status_code != requests.codes.ok:
+        flash(_('OgServer replied with a non ok status code'), category='error')
+    else:
+        flash(_('Refresh request processed successfully'), category='info')
     return redirect(url_for("scopes"))
