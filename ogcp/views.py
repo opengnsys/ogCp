@@ -5,6 +5,14 @@ from ogcp.forms.action_forms import (
     WOLForm, PartitionForm, ClientDetailsForm, HardwareForm, SessionForm,
     ImageRestoreForm, ImageCreateForm, SoftwareForm, BootModeForm
 )
+from flask_login import (
+    current_user, LoginManager,
+    login_user, logout_user,
+    login_required
+)
+
+from ogcp.models import User
+from ogcp.forms.auth import LoginForm
 from ogcp.og_server import OGServer
 from flask_babel import _
 from ogcp import app
@@ -32,6 +40,10 @@ PART_SCHEME_CODES = {
     1: 'MSDOS',
     2: 'GPT'
 }
+
+login_manager = LoginManager()
+login_manager.init_app(app)
+login_manager.login_view = 'login'
 
 def validate_ips(ips, min_len=1, max_len=float('inf')):
     valid = True
@@ -74,6 +86,12 @@ def parse_scopes_from_tree(tree, scope_type):
             scopes += parse_scopes_from_tree(scope, scope_type)
     return scopes
 
+@login_manager.user_loader
+def load_user(user_id):
+    if user_id == 1:
+        return User()
+    return None
+
 @app.before_request
 def load_config():
     g.server = OGServer()
@@ -90,7 +108,31 @@ def server_error(error):
 def index():
     return render_template('base.html')
 
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    form = LoginForm(request.form)
+    if request.method == 'POST' and form.validate():
+        user = User()
+        form_user = request.form['user']
+        pwd = request.form['pwd']
+        if form_user != app.config['USER']:
+            flash(_('Incorrect user name'))
+            return render_template('auth/login.html', form=form)
+        if pwd != app.config['PASS']:
+            flash(_('Incorrect password'))
+            return render_template('auth/login.html', form=form)
+        login_user(user)
+        return redirect(url_for('scopes'))
+    return render_template('auth/login.html', form=LoginForm())
+
+@app.route("/logout")
+@login_required
+def logout():
+    logout_user()
+    return redirect(url_for('index'))
+
 @app.route('/scopes/')
+@login_required
 def scopes():
     def add_state_and_ips(scope, clients):
         if 'ip' in scope:
@@ -115,6 +157,7 @@ def scopes():
     return render_template('scopes.html', scopes=scopes, clients=clients)
 
 @app.route('/action/poweroff', methods=['POST'])
+@login_required
 def action_poweroff():
     ips = parse_ips(request.form.to_dict())
     payload = {'clients': list(ips)}
@@ -122,6 +165,7 @@ def action_poweroff():
     return redirect(url_for("scopes"))
 
 @app.route('/action/wol', methods=['GET', 'POST'])
+@login_required
 def action_wol():
     form = WOLForm(request.form)
     if request.method == 'POST' and form.validate():
@@ -140,6 +184,7 @@ def action_wol():
             return redirect(url_for('scopes'))
 
 @app.route('/action/setup', methods=['GET'])
+@login_required
 def action_setup_show():
     ips = parse_ips(request.args.to_dict())
     db_partitions = get_client_setup(ips)
@@ -161,6 +206,7 @@ def action_setup_show():
     return render_template('actions/setup.html', forms=forms)
 
 @app.route('/action/setup/modify', methods=['POST'])
+@login_required
 def action_setup_modify():
     form = PartitionForm(request.form)
     if form.validate():
@@ -208,6 +254,7 @@ def action_setup_modify():
     return make_response("400 Bad Request", 400)
 
 @app.route('/action/setup/delete', methods=['POST'])
+@login_required
 def action_setup_delete():
     form = PartitionForm(request.form)
     if form.validate():
@@ -243,6 +290,7 @@ def action_setup_delete():
     return make_response("400 Bad Request", 400)
 
 @app.route('/action/image/restore', methods=['GET', 'POST'])
+@login_required
 def action_image_restore():
     def search_image(images_list, image_id):
         for image in images_list:
@@ -315,6 +363,7 @@ def action_image_restore():
         return render_template('actions/image_restore.html', form=form)
 
 @app.route('/action/hardware', methods=['GET', 'POST'])
+@login_required
 def action_hardware():
     form = HardwareForm(request.form)
     if request.method == 'POST':
@@ -335,6 +384,7 @@ def action_hardware():
                                hardware=hardware)
 
 @app.route('/action/software', methods=['GET', 'POST'])
+@login_required
 def action_software():
     form = SoftwareForm(request.form)
     if request.method == 'POST':
@@ -374,6 +424,7 @@ def action_software():
     return render_template('actions/software.html', form=form)
 
 @app.route('/action/session', methods=['GET', 'POST'])
+@login_required
 def action_session():
     form = SessionForm(request.form)
     if request.method == 'POST':
@@ -400,6 +451,7 @@ def action_session():
         return render_template('actions/session.html', form=form)
 
 @app.route('/action/client/info', methods=['GET'])
+@login_required
 def action_client_info():
     form = ClientDetailsForm()
     ips = parse_ips(request.args.to_dict())
@@ -437,6 +489,7 @@ def action_client_info():
     return render_template('actions/client_details.html', form=form)
 
 @app.route('/action/client/add', methods=['GET', 'POST'])
+@login_required
 def action_client_add():
     form = ClientDetailsForm(request.form)
     if request.method == 'POST':
@@ -472,6 +525,7 @@ def action_client_add():
         return render_template('actions/client_details.html', form=form)
 
 @app.route('/action/mode', methods=['GET', 'POST'])
+@login_required
 def action_mode():
     form = BootModeForm(request.form)
     if request.method == 'POST':
@@ -500,6 +554,7 @@ def action_mode():
 
 
 @app.route('/action/image/create', methods=['GET', 'POST'])
+@login_required
 def action_image_create():
     form = ImageCreateForm(request.form)
     if request.method == 'POST':
@@ -545,6 +600,7 @@ def action_image_create():
         return render_template('actions/image_create.html', form=form)
 
 @app.route('/action/reboot', methods=['POST'])
+@login_required
 def action_reboot():
     ips = parse_ips(request.form.to_dict())
     if not validate_ips(ips):
@@ -559,6 +615,7 @@ def action_reboot():
     return redirect(url_for("scopes"))
 
 @app.route('/action/refresh', methods=['POST'])
+@login_required
 def action_refresh():
     ips = parse_ips(request.form.to_dict())
     if not validate_ips(ips):

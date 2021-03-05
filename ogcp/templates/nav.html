@@ -9,9 +9,27 @@
       <li class="nav-item active">
         <a class="nav-link" href="{{ url_for('index') }}">{{ _('Home') }}<span class="sr-only">(current)</span></a>
       </li>
+    {% if current_user.is_authenticated %}
       <li class="nav-item">
         <a class="nav-link" href="{{ url_for('scopes') }}">{{ _('Scopes') }}</a>
       </li>
+    {% endif %}
+    </ul>
+
+    <ul class="nav navbar-nav navbar-right">
+    {% if current_user.is_authenticated %}
+
+        <li class="nav-item">
+          <a class="btn btn-danger" href="{{ url_for('logout') }}">{{ _('Logout') }}</a>
+        </li>
+
+    {% else %}
+
+        <li class="nav-item">
+          <a class="btn btn-primary" href="{{ url_for('login') }}">{{ _('Login') }}</a>
+        </li>
+
+    {% endif %}
     </ul>
   </div>
 </nav>
