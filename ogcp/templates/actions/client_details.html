@@ -3,8 +3,11 @@
 
 {% block content %}
 
+<h1 class="m-5">{{_('Client details')}}</h1>
+
 {{ wtf.quick_form(form,
                   method='post',
-                  button_map={'create': 'primary'}) }}
+                  button_map={'create': 'primary'},
+                  extra_classes="mx-5") }}
 
 {% endblock %}

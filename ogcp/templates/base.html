@@ -4,6 +4,7 @@
     {% block head %}
     <script src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/soleta.css') }}" />
     <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
     <title>{% block title %}{% endblock %} - OpenGnsys</title>
     {% endblock %}
@@ -32,7 +33,7 @@
 
     {% block footer %}
     <footer class="footer navbar-inverse bg-dark" role="contentinfo">
-        <div class="text-center text-secondary my-2 p-3">
+        <div class="text-center text-secondary mt-1 p-3">
             Powered by
             <a class="text-light" href="https://opengnsys.soleta.eu/">Soleta Networks</a>
         </div>

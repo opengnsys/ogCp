@@ -3,12 +3,14 @@
 
 {% block content %}
 
+<h1 class="m-5">{{_('Partition and Format')}}</h1>
+
 {% for form in forms %}
 
 {{ wtf.quick_form(form,
                   method='post',
-									form_type='inline',
-									extra_classes='m-2 p-2',
+                  form_type='inline',
+                  extra_classes='mx-5 pb-3',
                   button_map={'modify': 'primary',
                               'delete': 'danger'}) }}
 

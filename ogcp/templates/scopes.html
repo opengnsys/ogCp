@@ -1,10 +1,11 @@
 {% extends 'base.html' %}
+{% block nav_scopes %}active{% endblock %}
 
 {% macro print_scopes_tree(scopes) -%}
 
   <ul class="list-group list-group-flush mx-5">
     {% for scope in scopes %}
-      <li class="list-group-item">
+    <li class="list-group-item state--{{ scope['state'] | lower }}">
         <input class="form-check-input" type="checkbox"
                value="{{ " ".join(scope["ip"]) }}"
                name="{{ scope["name"] }}_{{ scope["id"] }}">
@@ -32,9 +33,9 @@
     {{ _('Actions') }}
     </button>
     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-      <input class="dropdown-item" type="submit" value="{{ _('Run') }}"
+      <input class="dropdown-item" type="submit" value="{{ _('Power on (WoL)') }}"
              formaction="{{ url_for('action_wol') }}" formmethod="get">
-      <input class="dropdown-item" type="submit" value="{{ _('Poweroff') }}"
+      <input class="dropdown-item" type="submit" value="{{ _('Power off') }}"
              formaction="{{ url_for('action_poweroff') }}" formmethod="post">
       <input class="dropdown-item" type="submit" value="{{ _('Reboot') }}"
              formaction="{{ url_for('action_reboot') }}" formmethod="post">
@@ -44,13 +45,13 @@
              formaction="{{ url_for('action_hardware') }}" formmethod="get">
       <input class="dropdown-item" type="submit" value="{{ _('Software') }}"
              formaction="{{ url_for('action_software') }}" formmethod="get">
-      <input class="dropdown-item" type="submit" value="{{ _('Sessions') }}"
+      <input class="dropdown-item" type="submit" value="{{ _('Start session') }}"
              formaction="{{ url_for('action_session') }}" formmethod="get">
       <input class="dropdown-item" type="submit" value="{{ _('Restore Image') }}"
              formaction="{{ url_for('action_image_restore') }}" formmethod="get">
-      <input class="dropdown-item" type="submit" value="{{ _('Setup') }}"
+      <input class="dropdown-item" type="submit" value="{{ _('Partition & Format') }}"
              formaction="{{ url_for('action_setup_show') }}" formmethod="get">
-      <input class="dropdown-item" type="submit" value="{{ _('Details') }}"
+      <input class="dropdown-item" type="submit" value="{{ _('Client details') }}"
              formaction="{{ url_for('action_client_info') }}" formmethod="get">
       <input class="dropdown-item" type="submit" value="{{ _('Add client') }}"
              formaction="{{ url_for('action_client_add') }}" formmethod="get">

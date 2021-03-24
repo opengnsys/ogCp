@@ -24,6 +24,7 @@ class PartitionForm(FlaskForm):
     fs = SelectField(label=_('Filesystem'),
                      choices=[('EXT4', 'EXT4'),
                               ('NTFS', 'NTFS'),
+                              ('DISK', 'Disk'),
                               ('EMPTY', 'Empty')])
     size = IntegerField(label=_('Size (KB)'))
     format_partition = BooleanField(label=_('Format'))

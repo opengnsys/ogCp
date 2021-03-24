@@ -75,7 +75,15 @@ def get_client_setup(ip):
             partition['code'] = PART_TYPE_CODES[partition['code']]
 
         partition['filesystem'] = FS_CODES[partition['filesystem']]
+
     return db_partitions
+
+def get_clients(state_filter=None):
+    r = g.server.get('/clients')
+    clients = r.json()
+    if state_filter:
+        return filter(clients.items(), lambda c: c.state == state_filter)
+    return clients
 
 def parse_scopes_from_tree(tree, scope_type):
     scopes = []
@@ -106,6 +114,10 @@ def server_error(error):
 
 @app.route('/')
 def index():
+    clients = None
+    if current_user.is_authenticated:
+        clients = get_clients()
+        return render_template('dashboard.html', clients=clients)
     return render_template('base.html')
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -196,8 +208,10 @@ def action_setup_show():
         form.disk.data = db_part['disk']
         form.partition.data = db_part['partition']
         # XXX: Should separate whole disk form from partition setup form
-        if db_part['code'] in PART_SCHEME_CODES.values():
+        if db_part['filesystem'] == "DISK":
             form.part_type.choices = list(PART_SCHEME_CODES.values())
+            form.fs.render_kw = {'disabled': ''}
+
         form.part_type.data = db_part['code']
         form.fs.data = db_part['filesystem']
         form.size.data = db_part['size']

@@ -6,11 +6,11 @@
 
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav mr-auto">
-      <li class="nav-item active">
+      <li class="nav-item {% if request.endpoint == "index" %}active{% endif %}">
         <a class="nav-link" href="{{ url_for('index') }}">{{ _('Home') }}<span class="sr-only">(current)</span></a>
       </li>
     {% if current_user.is_authenticated %}
-      <li class="nav-item">
+      <li class="nav-item {% if request.endpoint == "scopes" %}active{% endif %}">
         <a class="nav-link" href="{{ url_for('scopes') }}">{{ _('Scopes') }}</a>
       </li>
     {% endif %}

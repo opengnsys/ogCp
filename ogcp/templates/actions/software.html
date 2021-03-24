@@ -3,9 +3,12 @@
 
 {% block content %}
 
+<h1 class="m-5">{{_('Software Inventory')}}</h1>
+
 {{ wtf.quick_form(form,
                   action=url_for('action_software'),
                   method='post',
-                  button_map={'view': 'primary', 'update': 'primary'}) }}
+                  button_map={'view': 'primary', 'update': 'primary'},
+                  extra_classes="mx-5")}}
 
 {% endblock %}

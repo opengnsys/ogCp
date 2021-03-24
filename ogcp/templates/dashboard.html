@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="m-4 w-25 card text-center">
+  <div class="card-header">
+    Connected clients (ogClient)
+  </div>
+  <div class="card-body">
+    <p class="card-text">{{ clients['clients'] | length }}</p>
+  </div>
+</div>
+{% endblock %}
