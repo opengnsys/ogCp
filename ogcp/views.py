@@ -134,7 +134,7 @@ def login():
             flash(_('Incorrect password'))
             return render_template('auth/login.html', form=form)
         login_user(user)
-        return redirect(url_for('scopes'))
+        return redirect(url_for('index'))
     return render_template('auth/login.html', form=LoginForm())
 
 @app.route("/logout")
