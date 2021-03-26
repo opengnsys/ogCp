@@ -1,12 +1,22 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="m-4 w-25 card text-center">
-  <div class="card-header">
-    Connected clients (ogClient)
+<div class="row">
+  <div class="m-4 w-25 card text-center">
+    <div class="card-header">
+      Connected clients (ogClient)
+    </div>
+    <div class="card-body">
+      <p class="card-text">{{ clients['clients'] | length }}</p>
+    </div>
   </div>
-  <div class="card-body">
-    <p class="card-text">{{ clients['clients'] | length }}</p>
+  <div class="m-4 w-25 card text-center">
+    <div class="card-header">
+      Number of images
+    </div>
+    <div class="card-body">
+      <p class="card-text">{{ images | length }}</p>
+    </div>
   </div>
 </div>
 {% endblock %}

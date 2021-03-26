@@ -117,7 +117,10 @@ def index():
     clients = None
     if current_user.is_authenticated:
         clients = get_clients()
-        return render_template('dashboard.html', clients=clients)
+        images_response = g.server.get('/images')
+        images = images_response.json()['images']
+        return render_template('dashboard.html', clients=clients,
+                               images=images)
     return render_template('base.html')
 
 @app.route('/login', methods=['GET', 'POST'])
