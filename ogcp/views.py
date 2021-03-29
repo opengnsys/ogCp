@@ -17,6 +17,7 @@ from ogcp.og_server import OGServer
 from flask_babel import _
 from ogcp import app
 import requests
+import datetime
 
 FS_CODES = {
     0: 'DISK',
@@ -112,6 +113,9 @@ def page_not_found(error):
 def server_error(error):
     return render_template('error.html', message=error), 500
 
+def image_modified_date_from_str(image):
+    return datetime.datetime.strptime(image['modified'], '%a %b %d %H:%M:%S %Y')
+
 @app.route('/')
 def index():
     clients = None
@@ -119,6 +123,7 @@ def index():
         clients = get_clients()
         images_response = g.server.get('/images')
         images = images_response.json()['images']
+        images.sort(key=image_modified_date_from_str, reverse=True)
         return render_template('dashboard.html', clients=clients,
                                images=images)
     return render_template('base.html')

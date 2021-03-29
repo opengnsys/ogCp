@@ -18,5 +18,20 @@
       <p class="card-text">{{ images | length }}</p>
     </div>
   </div>
+  <div class="m-4 w-25 card text-center">
+    <div class="card-header">
+      Latest images
+    </div>
+      {% for image in images[:10] %}
+        <ul class="list-group list-group-horizontal">
+          <li class="list-group-item w-50">
+            {{ image['name'] }}
+          </li>
+          <li class="list-group-item w-50">
+            {{ image['modified'] }}
+          </li>
+        </ul>
+      {% endfor %}
+  </div>
 </div>
 {% endblock %}
