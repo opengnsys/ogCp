@@ -12,6 +12,39 @@
   </div>
   <div class="m-4 w-25 card text-center">
     <div class="card-header">
+      Disk stats
+    </div>
+    <div class="card-body">
+      <ul class="list-group list-group-horizontal">
+        <li class="list-group-item w-50">
+          Disk size
+        </li>
+        <li class="list-group-item w-50">
+          used
+        </li>
+        <li class="list-group-item w-50">
+          available
+        </li>
+        <li class="list-group-item w-50">
+          use(%)
+        </li>
+      </ul>
+      <ul class="list-group list-group-horizontal">
+        <li class="list-group-item w-50">
+          {{ disk['total'] // 2**30 }} Gbytes
+        </li>
+        <li class="list-group-item w-50">
+          {{ (disk['total'] - disk['free']) // 2**30 }} Gbytes
+        </li>
+        <li class="list-group-item w-50">
+          {{ disk['free'] // 2**30 }} Gbytes
+        </li>
+        <li class="list-group-item w-50">
+          {{ (((disk['total'] - disk['free']) / disk['total']) * 100)|int }}%
+        </li>
+      </ul>
+    </div>
+    <div class="card-header">
       Number of images
     </div>
     <div class="card-body">

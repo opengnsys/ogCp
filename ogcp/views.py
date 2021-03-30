@@ -124,8 +124,9 @@ def index():
         images_response = g.server.get('/images')
         images = images_response.json()['images']
         images.sort(key=image_modified_date_from_str, reverse=True)
+        disk = images_response.json()['disk']
         return render_template('dashboard.html', clients=clients,
-                               images=images)
+                               images=images, disk=disk)
     return render_template('base.html')
 
 @app.route('/login', methods=['GET', 'POST'])
