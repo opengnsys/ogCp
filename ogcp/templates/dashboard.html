@@ -66,5 +66,20 @@
         </ul>
       {% endfor %}
   </div>
+  <div class="m-4 w-25 card text-center">
+    <div class="card-header">
+      ogLives
+    </div>
+      <ul class="list-group">
+        {% for oglive in oglive_list['oglive'] %}
+          <li class="list-group-item">
+            {{ oglive['directory'] }}
+          {% if loop.index0 == oglive_list['default'] %}
+            (default)
+          {% endif %}
+          </li>
+        {% endfor %}
+      </ul>
+  </div>
 </div>
 {% endblock %}
