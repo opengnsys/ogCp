@@ -89,3 +89,12 @@ class ImageCreateForm(FlaskForm):
                        validators=[InputRequired()])
     description = StringField(label=_('Description'))
     create = SubmitField(label=_('Create'))
+
+class RoomForm(FlaskForm):
+    center = SelectField(label=_('Center'),
+                         validators=[InputRequired()])
+    name = StringField(label=_('Room name'),
+                       validators=[InputRequired()])
+    netmask = StringField(label=_('Netmask'),
+                          validators=[InputRequired()])
+    submit = SubmitField(label=_('Submit'))

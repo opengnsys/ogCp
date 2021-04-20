@@ -3,7 +3,7 @@ from flask import (
 )
 from ogcp.forms.action_forms import (
     WOLForm, PartitionForm, ClientDetailsForm, HardwareForm, SessionForm,
-    ImageRestoreForm, ImageCreateForm, SoftwareForm, BootModeForm
+    ImageRestoreForm, ImageCreateForm, SoftwareForm, BootModeForm, RoomForm
 )
 from flask_login import (
     current_user, LoginManager,
@@ -653,3 +653,24 @@ def action_refresh():
     else:
         flash(_('Refresh request processed successfully'), category='info')
     return redirect(url_for("scopes"))
+
+@app.route('/action/room/add', methods=['GET', 'POST'])
+@login_required
+def action_room_add():
+    form = RoomForm(request.form)
+    if request.method == 'POST':
+        payload = {"center": int(form.center.data),
+                   "name": form.name.data,
+                   "netmask": form.netmask.data}
+        r = g.server.post('/room/add', payload)
+        if r.status_code != requests.codes.ok:
+            flash(_('Server replied with error code when adding the room'), category='error')
+        else:
+            flash(_('Room added successfully'), category='info')
+        return redirect(url_for("scopes"))
+    else:
+        r = g.server.get('/scopes')
+        centers = parse_scopes_from_tree(r.json(), 'center')
+        centers = [(center['id'], center['name']) for center in centers]
+        form.center.choices = list(centers)
+        return render_template('actions/add_room.html', form=form)
