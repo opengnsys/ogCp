@@ -61,6 +61,8 @@
              formaction="{{ url_for('action_mode') }}" formmethod="get">
       <input class="dropdown-item" type="submit" value="{{ _('Add room') }}"
              formaction="{{ url_for('action_room_add') }}" formmethod="get">
+      <input class="dropdown-item" type="submit" value="{{ _('Delete room') }}"
+             formaction="{{ url_for('action_room_delete') }}" formmethod="get">
     </div>
   </div>
 </form>

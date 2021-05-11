@@ -98,3 +98,8 @@ class RoomForm(FlaskForm):
     netmask = StringField(label=_('Netmask'),
                           validators=[InputRequired()])
     submit = SubmitField(label=_('Submit'))
+
+class DeleteRoomForm(FlaskForm):
+    room = SelectField(label=_('Room'),
+                       validators=[InputRequired()])
+    submit = SubmitField(label=_('Submit'))

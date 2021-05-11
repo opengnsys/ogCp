@@ -3,7 +3,8 @@ from flask import (
 )
 from ogcp.forms.action_forms import (
     WOLForm, PartitionForm, ClientDetailsForm, HardwareForm, SessionForm,
-    ImageRestoreForm, ImageCreateForm, SoftwareForm, BootModeForm, RoomForm
+    ImageRestoreForm, ImageCreateForm, SoftwareForm, BootModeForm, RoomForm,
+    DeleteRoomForm
 )
 from flask_login import (
     current_user, LoginManager,
@@ -90,6 +91,8 @@ def parse_scopes_from_tree(tree, scope_type):
     scopes = []
     for scope in tree['scope']:
         if scope['type'] == scope_type:
+            if 'name' in tree:
+                scope['parent'] = tree['name']
             scopes.append(scope)
         else:
             scopes += parse_scopes_from_tree(scope, scope_type)
@@ -674,3 +677,24 @@ def action_room_add():
         centers = [(center['id'], center['name']) for center in centers]
         form.center.choices = list(centers)
         return render_template('actions/add_room.html', form=form)
+
+@app.route('/action/room/delete', methods=['GET', 'POST'])
+@login_required
+def action_room_delete():
+    form = DeleteRoomForm(request.form)
+    if request.method == 'POST':
+        payload = {"id": form.room.data}
+        r = g.server.post('/room/delete', payload)
+        if r.status_code != requests.codes.ok:
+            flash(_('Server replied with error code when deleting the room'),
+                  category='error')
+        else:
+            flash(_('Room deleted successfully'), category='info')
+        return redirect(url_for("scopes"))
+    else:
+        r = g.server.get('/scopes')
+        rooms = parse_scopes_from_tree(r.json(), 'room')
+        rooms = [(room['id'], room['name'] + " (" + room['parent'] + ")")
+                 for room in rooms]
+        form.room.choices = list(rooms)
+        return render_template('actions/delete_room.html', form=form)
