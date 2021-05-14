@@ -113,6 +113,12 @@ class ImageCreateForm(FlaskForm):
     description = StringField(label=_('Description'))
     create = SubmitField(label=_('Create'))
 
+class CenterForm(FlaskForm):
+    name = StringField(label=_('Center name'),
+                       validators=[InputRequired()])
+    comment = StringField(label=_('Comment'))
+    submit = SubmitField(label=_('Submit'))
+
 class RoomForm(FlaskForm):
     center = SelectField(label=_('Center'),
                          validators=[InputRequired()])

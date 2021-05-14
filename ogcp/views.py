@@ -11,7 +11,7 @@ from flask import (
 from ogcp.forms.action_forms import (
     WOLForm, PartitionForm, NewPartitionForm, ClientDetailsForm, HardwareForm,
     SessionForm, ImageRestoreForm, ImageCreateForm, SoftwareForm, BootModeForm,
-    RoomForm, DeleteRoomForm
+    RoomForm, DeleteRoomForm, CenterForm
 )
 from flask_login import (
     current_user, LoginManager,
@@ -699,6 +699,23 @@ def action_refresh():
     else:
         flash(_('Refresh request processed successfully'), category='info')
     return redirect(url_for("scopes"))
+
+@app.route('/action/center/add', methods=['GET', 'POST'])
+@login_required
+def action_center_add():
+    form = CenterForm(request.form)
+    if request.method == 'POST':
+        payload = {"name": form.name.data,
+                   "comment": form.comment.data}
+        r = g.server.post('/center/add', payload)
+        if r.status_code != requests.codes.ok:
+            flash(_('Server replied with error code when adding the center'),
+                  category='error')
+        else:
+            flash(_('Center added successfully'), category='info')
+        return redirect(url_for("scopes"))
+    else:
+        return render_template('actions/add_center.html', form=form)
 
 @app.route('/action/room/add', methods=['GET', 'POST'])
 @login_required
