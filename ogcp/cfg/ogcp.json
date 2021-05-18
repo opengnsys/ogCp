@@ -1,7 +1,7 @@
 {
 	"IP": "127.0.0.1",
 	"PORT": 8888,
-	"API_TOKEN": "c3fe7bb0395747ec42a25df027585871"
+	"API_TOKEN": "c3fe7bb0395747ec42a25df027585871",
 	"USER": "user",
 	"PASS": "pass"
 }
