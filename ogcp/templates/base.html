@@ -2,42 +2,55 @@
 <html lang="en">
 <head>
     {% block head %}
-    <script src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}" />
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/soleta.css') }}" />
-    <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
     <title>{% block title %}{% endblock %} - OpenGnsys</title>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='AdminLTE/plugins/fontawesome-free/css/all.min.css') }}">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='AdminLTE/dist/css/adminlte.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/soleta.css') }}" />
     {% endblock %}
 </head>
 <body>
-    {% include 'nav.html' %}
-    {% block nav %}{% endblock %}
-    {% block flash %}
-    {% for category, message in get_flashed_messages(with_categories=True) %}
-        {% if category == 'info' %}
-            <div class="alert alert-info alert-dismissible fade show m-1" role="alert">
-        {% elif category == 'error' %}
-            <div class="alert alert-danger alert-dismissible fade show m-1" role="alert">
-        {% else %}
-            <div class="alert alert-warning alert-dismissible fade show m-1" role="alert">
-        {% endif %}
-            {{ message }}
-            <button type="button" class="close" data-dismiss="alert" aria-label="{{ _('Close') }}">
-                <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
-    {% endfor %}
-    {% endblock %}
+    <div class="main d-flex flex-column align-items-stretch h-100">
+        {% include 'nav.html' %}
+        {% block nav %}{% endblock %}
+        {% block flash %}
+        {% for category, message in get_flashed_messages(with_categories=True) %}
+            {% if category == 'info' %}
+                <div class="alert alert-info alert-dismissible fade show m-1" role="alert">
+            {% elif category == 'error' %}
+                <div class="alert alert-danger alert-dismissible fade show m-1" role="alert">
+            {% else %}
+                <div class="alert alert-warning alert-dismissible fade show m-1" role="alert">
+            {% endif %}
+                {{ message }}
+                <button type="button" class="close" data-dismiss="alert" aria-label="{{ _('Close') }}">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        {% endfor %}
+        {% endblock %}
 
-    <div id="content">{% block content %}{% endblock %}</div>
+        <div id="content" class="container-fluid flex-grow-1">{% block content %}{% endblock %}</div>
 
-    {% block footer %}
-    <footer class="footer navbar-inverse bg-dark" role="contentinfo">
-        <div class="text-center text-secondary mt-1 p-3">
-            Powered by
-            <a class="text-light" href="https://opengnsys.soleta.eu/">Soleta Networks</a>
-        </div>
-    </footer>
-    {% endblock %}
+        {% block footer %}
+        <footer class="footer navbar-inverse bg-dark flex-shrink-0" role="contentinfo">
+            <div class="text-center text-secondary mt-1 p-3">
+                Powered by
+                <a class="text-light" href="https://opengnsys.soleta.eu/">Soleta Networks</a>
+            </div>
+        </footer>
+        {% endblock %}
+    </div>
+
+    <!-- jQuery -->
+    <script src="{{ url_for('static', filename='AdminLTE/plugins/jquery/jquery.min.js') }}"></script>
+    <!-- Bootstrap 4 -->
+    <script src="{{ url_for('static', filename='AdminLTE/plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+    <!-- AdminLTE App -->
+    <script src="{{ url_for('static', filename='AdminLTE/dist/js/adminlte.min.js') }}"></script>
 </body>
 </html>
