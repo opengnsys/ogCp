@@ -128,18 +128,18 @@ def image_modified_date_from_str(image):
 
 @app.route('/')
 def index():
-    clients = None
-    if current_user.is_authenticated:
-        clients = get_clients()
-        images_response = g.server.get('/images')
-        images = images_response.json()['images']
-        images.sort(key=image_modified_date_from_str, reverse=True)
-        disk = images_response.json()['disk']
-        oglive_list = g.server.get('/oglive/list').json()
-        return render_template('dashboard.html', clients=clients,
-                               images=images, disk=disk,
-                               oglive_list=oglive_list)
-    return render_template('base.html')
+    if not current_user.is_authenticated:
+        return redirect(url_for('login'))
+
+    clients = get_clients()
+    images_response = g.server.get('/images')
+    images = images_response.json()['images']
+    images.sort(key=image_modified_date_from_str, reverse=True)
+    disk = images_response.json()['disk']
+    oglive_list = g.server.get('/oglive/list').json()
+    return render_template('dashboard.html', clients=clients,
+                           images=images, disk=disk,
+                           oglive_list=oglive_list)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
