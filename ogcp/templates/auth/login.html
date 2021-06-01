@@ -3,10 +3,25 @@
 
 {% block content %}
 
-{{ wtf.quick_form(form,
-                  method='post',
-									form_type='basic',
-									button_map={'submit':'primary'},
-									extra_classes='p-5') }}
+<div class="d-flex justify-content-center align-items-center mt-4">
+    <div class="login-box mb-5">
+      <div class="login-logo"> OpenGnsys </div>
+      <div class="card">
+        <div class="card-body login-card-body">
+          <p class="login-box-msg">
+            <i class="fas fa-user-circle fa-8x"></i>
+          </p>
+
+          {{ wtf.quick_form(form,
+                            method='post',
+                            form_type='basic',
+                            button_map={'submit':'primary'}) }}
+        </div>
+        <!-- /.login-card-body -->
+      </div>
+    </div>
+<!-- /.login-box -->
+</div>
+
 
 {% endblock %}
