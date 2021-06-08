@@ -105,6 +105,30 @@ def parse_scopes_from_tree(tree, scope_type):
             scopes += parse_scopes_from_tree(scope, scope_type)
     return scopes
 
+def add_state_and_ips(scope, clients):
+    if 'ip' in scope:
+        filtered_client = filter(lambda x: x['addr']==scope['ip'], clients)
+        client = next(filtered_client, False)
+        if client:
+            scope['state'] = client['state']
+        else:
+            scope['state'] = 'OFF'
+        scope['ip'] = [scope['ip']]
+    else:
+        scope['ip'] = []
+        for child in scope['scope']:
+            scope['ip'] += add_state_and_ips(child, clients)
+    return scope['ip']
+
+def get_scopes():
+    r = g.server.get('/scopes')
+    scopes = r.json()
+    r = g.server.get('/clients')
+    clients = r.json()
+    add_state_and_ips(scopes, clients['clients'])
+
+    return scopes, clients
+
 @login_manager.user_loader
 def load_user(user_id):
     if user_id == 1:
@@ -167,26 +191,7 @@ def logout():
 @app.route('/scopes/')
 @login_required
 def scopes():
-    def add_state_and_ips(scope, clients):
-        if 'ip' in scope:
-            filtered_client = filter(lambda x: x['addr']==scope['ip'], clients)
-            client = next(filtered_client, False)
-            if client:
-                scope['state'] = client['state']
-            else:
-                scope['state'] = 'OFF'
-            scope['ip'] = [scope['ip']]
-        else:
-            scope['ip'] = []
-            for child in scope['scope']:
-                scope['ip'] += add_state_and_ips(child, clients)
-        return scope['ip']
-
-    r = g.server.get('/scopes')
-    scopes = r.json()
-    r = g.server.get('/clients')
-    clients = r.json()
-    add_state_and_ips(scopes, clients['clients'])
+    scopes, clients = get_scopes()
     return render_template('scopes.html', scopes=scopes, clients=clients)
 
 @app.route('/action/poweroff', methods=['POST'])
@@ -585,7 +590,8 @@ def action_mode():
             return redirect(url_for("scopes"))
 
         form.ok.render_kw = { 'formaction': url_for('action_mode') }
-        return render_template('actions/mode.html', form=form)
+        scopes, clients = get_scopes()
+        return render_template('actions/mode.html', form=form, scopes=scopes, clients=clients)
 
 
 @app.route('/action/image/create', methods=['GET', 'POST'])

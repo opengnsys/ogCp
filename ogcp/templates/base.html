@@ -17,24 +17,25 @@
     <div class="main d-flex flex-column align-items-stretch h-100">
         {% include 'nav.html' %}
         {% block nav %}{% endblock %}
-        {% block flash %}
-        {% for category, message in get_flashed_messages(with_categories=True) %}
-            {% if category == 'info' %}
-                <div class="alert alert-info alert-dismissible fade show m-1" role="alert">
-            {% elif category == 'error' %}
-                <div class="alert alert-danger alert-dismissible fade show m-1" role="alert">
-            {% else %}
-                <div class="alert alert-warning alert-dismissible fade show m-1" role="alert">
-            {% endif %}
-                {{ message }}
-                <button type="button" class="close" data-dismiss="alert" aria-label="{{ _('Close') }}">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+        <div class="container-fluid flex-grow-1">
+            {% block container %}
+            <div class="row h-100">
+                    {# The sidebar is not visible on index #}
+                    {% if request.endpoint != "index" %}
+                        <div id="sidebar" class="bg-light col-md-3 col-lg-2">
+                            {% block sidebar %}{% endblock %}
+                        </div>
+                    {% else %}
+                    {% endif %}
+                    <div id="content" class="col">
+                        <div id="commands" class="py-2">{% block commands %}{% endblock %}</div>
+                        <div class="container">
+                            {% block content %}{% endblock %}
+                        </div>
+                    </div>
             </div>
-        {% endfor %}
-        {% endblock %}
-
-        <div id="content" class="container-fluid flex-grow-1">{% block content %}{% endblock %}</div>
+            {% endblock %}
+        </div>
 
         {% block footer %}
         <footer class="footer navbar-inverse bg-dark flex-shrink-0" role="contentinfo">
@@ -52,5 +53,26 @@
     <script src="{{ url_for('static', filename='AdminLTE/plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
     <!-- AdminLTE App -->
     <script src="{{ url_for('static', filename='AdminLTE/dist/js/adminlte.min.js') }}"></script>
+
+    <script>
+        // error messages
+        {% for category, message in get_flashed_messages(with_categories=True) %}
+            let bgclass = 'bg-success';
+            {% if category == 'info' %}
+                bgclass = 'bg-info';
+            {% elif category == 'error' %}
+                bgclass = 'bg-danger';
+            {% else %}
+                bgclass = 'bg-warning';
+            {% endif %}
+            $(document).Toasts('create', {
+                class: bgclass,
+                position: 'topLeft',
+                autohide: true,
+                delay: 5000,
+                title: '{{ message }}',
+            })
+        {% endfor %}
+    </script>
 </body>
 </html>

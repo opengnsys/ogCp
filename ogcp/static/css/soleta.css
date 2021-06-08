@@ -6,3 +6,11 @@ html, body {
     width: 100%;
     height: 100% !important;
 }
+
+#sidebar .list-group-item {
+    background-color: transparent;
+}
+
+.toast {
+    margin: 10px;
+}

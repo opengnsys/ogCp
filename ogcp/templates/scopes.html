@@ -3,10 +3,10 @@
 
 {% macro print_scopes_tree(scopes) -%}
 
-  <ul class="list-group list-group-flush mx-5">
+  <ul class="list-group list-group-flush">
     {% for scope in scopes %}
     <li class="list-group-item state--{{ scope['state'] | lower }}">
-        <input class="form-check-input" type="checkbox"
+        <input class="form-check-input" type="checkbox" form="scopesForm"
                value="{{ " ".join(scope["ip"]) }}"
                name="{{ scope["name"] }}_{{ scope["id"] }}">
         {{ scope["name"] }}
@@ -20,51 +20,47 @@
 
 {% endmacro %}
 
-{% block content %}
-
-<form>
-  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-  {{ print_scopes_tree(scopes["scope"]) }}
-
-  <div class="dropdown mt-2">
-    <button class="btn btn-primary dropdown-toggle" type="button"
-            id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
-            aria-expanded="false">
-    {{ _('Actions') }}
-    </button>
-    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-      <input class="dropdown-item" type="submit" value="{{ _('Power on (WoL)') }}"
-             formaction="{{ url_for('action_wol') }}" formmethod="get">
-      <input class="dropdown-item" type="submit" value="{{ _('Power off') }}"
-             formaction="{{ url_for('action_poweroff') }}" formmethod="post">
-      <input class="dropdown-item" type="submit" value="{{ _('Reboot') }}"
-             formaction="{{ url_for('action_reboot') }}" formmethod="post">
-      <input class="dropdown-item" type="submit" value="{{ _('Refresh') }}"
-             formaction="{{ url_for('action_refresh') }}" formmethod="post">
-      <input class="dropdown-item" type="submit" value="{{ _('Hardware') }}"
-             formaction="{{ url_for('action_hardware') }}" formmethod="get">
-      <input class="dropdown-item" type="submit" value="{{ _('Software') }}"
-             formaction="{{ url_for('action_software') }}" formmethod="get">
-      <input class="dropdown-item" type="submit" value="{{ _('Start session') }}"
-             formaction="{{ url_for('action_session') }}" formmethod="get">
-      <input class="dropdown-item" type="submit" value="{{ _('Restore Image') }}"
-             formaction="{{ url_for('action_image_restore') }}" formmethod="get">
-      <input class="dropdown-item" type="submit" value="{{ _('Partition & Format') }}"
-             formaction="{{ url_for('action_setup_show') }}" formmethod="get">
-      <input class="dropdown-item" type="submit" value="{{ _('Client details') }}"
-             formaction="{{ url_for('action_client_info') }}" formmethod="get">
-      <input class="dropdown-item" type="submit" value="{{ _('Add client') }}"
-             formaction="{{ url_for('action_client_add') }}" formmethod="get">
-      <input class="dropdown-item" type="submit" value="{{ _('Create image') }}"
-             formaction="{{ url_for('action_image_create') }}" formmethod="get">
-      <input class="dropdown-item" type="submit" value="{{ _('Set boot mode') }}"
-             formaction="{{ url_for('action_mode') }}" formmethod="get">
-      <input class="dropdown-item" type="submit" value="{{ _('Add room') }}"
-             formaction="{{ url_for('action_room_add') }}" formmethod="get">
-      <input class="dropdown-item" type="submit" value="{{ _('Delete room') }}"
-             formaction="{{ url_for('action_room_delete') }}" formmethod="get">
-    </div>
-  </div>
+{% block container %}
+    <form id="scopesForm">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+    </form>
+    {{ super() }}
 </form>
+{% endblock %}
 
+{% block sidebar %}
+  {{ print_scopes_tree(scopes["scope"]) }}
+{% endblock %}
+
+{% block commands %}
+  <input class="btn btn-light" type="submit" value="{{ _('Power on (WoL)') }}"
+         form="scopesForm" formaction="{{ url_for('action_wol') }}" formmethod="get">
+  <input class="btn btn-light" type="submit" value="{{ _('Power off') }}"
+         form="scopesForm" formaction="{{ url_for('action_poweroff') }}" formmethod="post">
+  <input class="btn btn-light" type="submit" value="{{ _('Reboot') }}"
+         form="scopesForm" formaction="{{ url_for('action_reboot') }}" formmethod="post">
+  <input class="btn btn-light" type="submit" value="{{ _('Refresh') }}"
+         form="scopesForm" formaction="{{ url_for('action_refresh') }}" formmethod="post">
+  <input class="btn btn-light" type="submit" value="{{ _('Hardware') }}"
+         form="scopesForm" formaction="{{ url_for('action_hardware') }}" formmethod="get">
+  <input class="btn btn-light" type="submit" value="{{ _('Software') }}"
+         form="scopesForm" formaction="{{ url_for('action_software') }}" formmethod="get">
+  <input class="btn btn-light" type="submit" value="{{ _('Start session') }}"
+         form="scopesForm" formaction="{{ url_for('action_session') }}" formmethod="get">
+  <input class="btn btn-light" type="submit" value="{{ _('Restore Image') }}"
+         form="scopesForm" formaction="{{ url_for('action_image_restore') }}" formmethod="get">
+  <input class="btn btn-light" type="submit" value="{{ _('Partition & Format') }}"
+         form="scopesForm" formaction="{{ url_for('action_setup_show') }}" formmethod="get">
+  <input class="btn btn-light" type="submit" value="{{ _('Client details') }}"
+         form="scopesForm" formaction="{{ url_for('action_client_info') }}" formmethod="get">
+  <input class="btn btn-light" type="submit" value="{{ _('Add client') }}"
+         form="scopesForm" formaction="{{ url_for('action_client_add') }}" formmethod="get">
+  <input class="btn btn-light" type="submit" value="{{ _('Create image') }}"
+         form="scopesForm" formaction="{{ url_for('action_image_create') }}" formmethod="get">
+  <input class="btn btn-light" type="submit" value="{{ _('Set boot mode') }}"
+         form="scopesForm" formaction="{{ url_for('action_mode') }}" formmethod="get">
+  <input class="btn btn-light" type="submit" value="{{ _('Add room') }}"
+         form="scopesForm" formaction="{{ url_for('action_room_add') }}" formmethod="get">
+  <input class="btn btn-light" type="submit" value="{{ _('Delete room') }}"
+         form="scopesForm" formaction="{{ url_for('action_room_delete') }}" formmethod="get">
 {% endblock %}
