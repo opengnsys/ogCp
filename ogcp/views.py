@@ -162,7 +162,7 @@ def index():
     disk = images_response.json()['disk']
     oglive_list = g.server.get('/oglive/list').json()
     return render_template('dashboard.html', clients=clients,
-                           images=images, disk=disk,
+                           images=images, disk=disk, colsize="6",
                            oglive_list=oglive_list)
 
 @app.route('/login', methods=['GET', 'POST'])

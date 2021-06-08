@@ -53,6 +53,8 @@
     <script src="{{ url_for('static', filename='AdminLTE/plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
     <!-- AdminLTE App -->
     <script src="{{ url_for('static', filename='AdminLTE/dist/js/adminlte.min.js') }}"></script>
+    <!-- ChartJS -->
+    <script src="{{ url_for('static', filename='AdminLTE/plugins/chart.js/Chart.min.js') }}"></script>
 
     <script>
         // error messages
@@ -74,5 +76,7 @@
             })
         {% endfor %}
     </script>
+
+    {% block extrabody %}{% endblock %}
 </body>
 </html>

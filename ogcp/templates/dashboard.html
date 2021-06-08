@@ -2,84 +2,140 @@
 
 {% block content %}
 <div class="row">
-  <div class="m-4 w-25 card text-center">
-    <div class="card-header">
-      Connected clients (ogClient)
-    </div>
-    <div class="card-body">
-      <p class="card-text">{{ clients['clients'] | length }}</p>
-    </div>
-  </div>
-  <div class="m-4 w-25 card text-center">
-    <div class="card-header">
-      Disk stats
-    </div>
-    <div class="card-body">
-      <ul class="list-group list-group-horizontal">
-        <li class="list-group-item w-50">
-          Disk size
-        </li>
-        <li class="list-group-item w-50">
-          used
-        </li>
-        <li class="list-group-item w-50">
-          available
-        </li>
-        <li class="list-group-item w-50">
-          use(%)
-        </li>
-      </ul>
-      <ul class="list-group list-group-horizontal">
-        <li class="list-group-item w-50">
-          {{ disk['total'] // 2**30 }} Gbytes
-        </li>
-        <li class="list-group-item w-50">
-          {{ (disk['total'] - disk['free']) // 2**30 }} Gbytes
-        </li>
-        <li class="list-group-item w-50">
-          {{ disk['free'] // 2**30 }} Gbytes
-        </li>
-        <li class="list-group-item w-50">
-          {{ (((disk['total'] - disk['free']) / disk['total']) * 100)|int }}%
-        </li>
-      </ul>
-    </div>
-    <div class="card-header">
-      Number of images
-    </div>
-    <div class="card-body">
-      <p class="card-text">{{ images | length }}</p>
+  <!-- connected clients -->
+  <div class="col-{{ colsize }}">
+    <div class="card text-center">
+      <div class="card-header">
+        Connected clients (ogClient)
+      </div>
+      <div class="card-body">
+        <p class="card-text">{{ clients['clients'] | length }}</p>
+      </div>
     </div>
   </div>
-  <div class="m-4 w-25 card text-center">
-    <div class="card-header">
-      Latest images
+
+  <!-- latest images -->
+  <div class="col-{{ colsize }}">
+    <div class="card text-center">
+      <div class="card-header">
+        Latest images
+      </div>
+        {% for image in images[:10] %}
+          <ul class="list-group list-group-horizontal">
+            <li class="list-group-item w-50">
+              {{ image['name'] }}
+            </li>
+            <li class="list-group-item w-50">
+              {{ image['modified'] }}
+            </li>
+          </ul>
+        {% endfor %}
     </div>
-      {% for image in images[:10] %}
+  </div>
+
+  <!-- disk stats -->
+  <div class="col-{{ colsize }}">
+    <div class="card text-center">
+      <div class="card-header">
+        Disk stats
+      </div>
+      <div class="card-body">
+        <canvas id="diskChart" class="mb-2"></canvas>
         <ul class="list-group list-group-horizontal">
           <li class="list-group-item w-50">
-            {{ image['name'] }}
+            Disk size
           </li>
           <li class="list-group-item w-50">
-            {{ image['modified'] }}
+            used
+          </li>
+          <li class="list-group-item w-50">
+            available
+          </li>
+          <li class="list-group-item w-50">
+            use(%)
           </li>
         </ul>
-      {% endfor %}
-  </div>
-  <div class="m-4 w-25 card text-center">
-    <div class="card-header">
-      ogLives
-    </div>
-      <ul class="list-group">
-        {% for oglive in oglive_list['oglive'] %}
-          <li class="list-group-item">
-            {{ oglive['directory'] }}
-          {% if loop.index0 == oglive_list['default'] %}
-            (default)
-          {% endif %}
+        <ul class="list-group list-group-horizontal">
+          <li class="list-group-item w-50">
+            {{ disk['total'] // 2**30 }} Gbytes
           </li>
-        {% endfor %}
-      </ul>
+          <li class="list-group-item w-50">
+            {{ (disk['total'] - disk['free']) // 2**30 }} Gbytes
+          </li>
+          <li class="list-group-item w-50">
+            {{ disk['free'] // 2**30 }} Gbytes
+          </li>
+          <li class="list-group-item w-50">
+            {{ (((disk['total'] - disk['free']) / disk['total']) * 100)|int }}%
+          </li>
+        </ul>
+      </div>
+      <div class="card-header">
+        Number of images
+      </div>
+      <div class="card-body">
+        <p class="card-text">{{ images | length }}</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ogLives -->
+  <div class="col-{{ colsize }}">
+    <div class="card text-center">
+      <div class="card-header">
+        ogLives
+      </div>
+        <ul class="list-group">
+          {% for oglive in oglive_list['oglive'] %}
+            <li class="list-group-item">
+              {{ oglive['directory'] }}
+            {% if loop.index0 == oglive_list['default'] %}
+              (default)
+            {% endif %}
+            </li>
+          {% endfor %}
+        </ul>
+    </div>
   </div>
 </div>
+{% endblock %}
+
+{% block extrabody %}
+<script>
+  const diskChartConfig = {
+    type: 'doughnut',
+    data: {
+      labels: ['Used', 'Availabel'],
+      datasets: [
+        {
+          label: 'Disk usage',
+          data: [
+            {{ (disk['total'] - disk['free']) // 2**30 }},
+            {{ disk['free'] // 2**30 }},
+          ],
+          backgroundColor: [
+            'rgb(255, 99, 132)',
+            'rgb(54, 162, 235)',
+          ],
+        },
+      ],
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: {
+          position: 'top',
+        },
+        title: {
+          display: true,
+          text: 'Chart.js Doughnut Chart'
+        },
+      },
+    },
+  };
+  var diskChart = new Chart(
+    document.getElementById('diskChart'),
+    diskChartConfig,
+  );
+</script>
 {% endblock %}
