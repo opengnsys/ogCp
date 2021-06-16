@@ -20,8 +20,8 @@
         <div class="container-fluid flex-grow-1">
             {% block container %}
             <div class="row h-100">
-                    {# The sidebar is not visible on index #}
-                    {% if request.endpoint != "index" %}
+                    {# The sidebar is not visible on index and login #}
+                    {% if request.endpoint not in ["index", "login"] %}
                         <div id="sidebar" class="bg-light col-md-3 col-lg-2">
                             {% block sidebar %}{% endblock %}
                         </div>
