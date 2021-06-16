@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% import "macros.html" as macros %}
+
+{% block nav_scopes %}active{% endblock %}
+
+{% block container %}
+    <form id="scopesForm">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+    </form>
+    {{ super() }}
+</form>
+{% endblock %}
+
+{% block sidebar %}
+  {{ macros.print_scopes_tree(scopes["scope"]) }}
+{% endblock %}
+
+{% block commands %}
+  <input class="btn btn-light" type="submit" value="{{ _('Power on (WoL)') }}"
+         form="scopesForm" formaction="{{ url_for('action_wol') }}" formmethod="get">
+  <input class="btn btn-light" type="submit" value="{{ _('Power off') }}"
+         form="scopesForm" formaction="{{ url_for('action_poweroff') }}" formmethod="post">
+  <input class="btn btn-light" type="submit" value="{{ _('Reboot') }}"
+         form="scopesForm" formaction="{{ url_for('action_reboot') }}" formmethod="post">
+  <input class="btn btn-light" type="submit" value="{{ _('Refresh') }}"
+         form="scopesForm" formaction="{{ url_for('action_refresh') }}" formmethod="post">
+  <input class="btn btn-light" type="submit" value="{{ _('Hardware') }}"
+         form="scopesForm" formaction="{{ url_for('action_hardware') }}" formmethod="get">
+  <input class="btn btn-light" type="submit" value="{{ _('Software') }}"
+         form="scopesForm" formaction="{{ url_for('action_software') }}" formmethod="get">
+  <input class="btn btn-light" type="submit" value="{{ _('Start session') }}"
+         form="scopesForm" formaction="{{ url_for('action_session') }}" formmethod="get">
+  <input class="btn btn-light" type="submit" value="{{ _('Restore Image') }}"
+         form="scopesForm" formaction="{{ url_for('action_image_restore') }}" formmethod="get">
+  <input class="btn btn-light" type="submit" value="{{ _('Partition & Format') }}"
+         form="scopesForm" formaction="{{ url_for('action_setup_show') }}" formmethod="get">
+  <input class="btn btn-light" type="submit" value="{{ _('Client details') }}"
+         form="scopesForm" formaction="{{ url_for('action_client_info') }}" formmethod="get">
+  <input class="btn btn-light" type="submit" value="{{ _('Create image') }}"
+         form="scopesForm" formaction="{{ url_for('action_image_create') }}" formmethod="get">
+  <input class="btn btn-light" type="submit" value="{{ _('Set boot mode') }}"
+         form="scopesForm" formaction="{{ url_for('action_mode') }}" formmethod="get">
+{% endblock %}
+

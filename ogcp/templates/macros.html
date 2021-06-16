@@ -1,0 +1,19 @@
+{% macro print_scopes_tree(scopes) -%}
+
+  <ul class="list-group list-group-flush">
+    {% for scope in scopes %}
+    <li class="list-group-item state--{{ scope['state'] | lower }}">
+        <input class="form-check-input" type="checkbox" form="scopesForm"
+               value="{{ " ".join(scope["ip"]) }}"
+               name="{{ scope["name"] }}_{{ scope["id"] }}">
+        {{ scope["name"] }}
+        {% if "state" in scope %}
+          -- STATE: {{ scope["state"] }}
+        {% endif %}
+        {{ print_scopes_tree(scope["scope"]) }}
+      </li>
+    {% endfor %}
+  </ul>
+
+{% endmacro %}
+

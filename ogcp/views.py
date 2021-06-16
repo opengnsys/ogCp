@@ -711,3 +711,9 @@ def action_room_delete():
                  for room in rooms]
         form.room.choices = list(rooms)
         return render_template('actions/delete_room.html', form=form)
+
+@app.route('/commands/', methods=['GET'])
+@login_required
+def commands():
+    scopes, clients = get_scopes()
+    return render_template('commands.html', scopes=scopes, clients=clients)

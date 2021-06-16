@@ -14,7 +14,7 @@
         <a class="nav-link" href="{{ url_for('scopes') }}">{{ _('Scopes') }}</a>
       </li>
       <li class="nav-item {% if request.endpoint == "commands" %}active{% endif %}">
-        <a class="nav-link" href="#">{{ _('Commands') }}</a>
+        <a class="nav-link" href="{{ url_for('commands') }}">{{ _('Commands') }}</a>
       </li>
       <li class="nav-item {% if request.endpoint == "images" %}active{% endif %}">
         <a class="nav-link" href="#">{{ _('Images') }}</a>
