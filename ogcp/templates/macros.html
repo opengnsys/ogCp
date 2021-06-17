@@ -5,6 +5,7 @@
     <li class="list-group-item state--{{ scope['state'] | lower }}">
         <input class="form-check-input" type="checkbox" form="scopesForm"
                value="{{ " ".join(scope["ip"]) }}"
+               {% if scope.get("selected", False) %}checked{% endif %}
                name="{{ scope["name"] }}_{{ scope["id"] }}">
         {{ scope["name"] }}
         {% if "state" in scope %}

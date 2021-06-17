@@ -105,7 +105,8 @@ def parse_scopes_from_tree(tree, scope_type):
             scopes += parse_scopes_from_tree(scope, scope_type)
     return scopes
 
-def add_state_and_ips(scope, clients):
+def add_state_and_ips(scope, clients, ips):
+    scope['selected'] = False
     if 'ip' in scope:
         filtered_client = filter(lambda x: x['addr']==scope['ip'], clients)
         client = next(filtered_client, False)
@@ -114,18 +115,20 @@ def add_state_and_ips(scope, clients):
         else:
             scope['state'] = 'OFF'
         scope['ip'] = [scope['ip']]
+        scope['selected'] = set(scope['ip']).issubset(ips)
     else:
         scope['ip'] = []
         for child in scope['scope']:
-            scope['ip'] += add_state_and_ips(child, clients)
+            scope['ip'] += add_state_and_ips(child, clients, ips)
+            scope['selected'] = set(scope['ip']).issubset(ips)
     return scope['ip']
 
-def get_scopes():
+def get_scopes(ips=set()):
     r = g.server.get('/scopes')
     scopes = r.json()
     r = g.server.get('/clients')
     clients = r.json()
-    add_state_and_ips(scopes, clients['clients'])
+    add_state_and_ips(scopes, clients['clients'], ips)
 
     return scopes, clients
 
@@ -243,7 +246,10 @@ def action_setup_show():
         form.size.data = db_part['size']
         form.modify.render_kw = {"formaction": url_for('action_setup_modify')}
         form.delete.render_kw = {"formaction": url_for('action_setup_delete')}
-    return render_template('actions/setup.html', forms=forms)
+    scopes, _clients = get_scopes(ips)
+    return render_template('actions/setup.html',
+                           forms=forms,
+                           scopes=scopes)
 
 @app.route('/action/setup/modify', methods=['POST'])
 @login_required
@@ -590,7 +596,7 @@ def action_mode():
             return redirect(url_for("scopes"))
 
         form.ok.render_kw = { 'formaction': url_for('action_mode') }
-        scopes, clients = get_scopes()
+        scopes, clients = get_scopes(set(ips))
         return render_template('actions/mode.html', form=form, scopes=scopes, clients=clients)
 
 
