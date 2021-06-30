@@ -14,3 +14,17 @@ html, body {
 .toast {
     margin: 10px;
 }
+
+.nav {
+  position: relative;
+}
+
+.nav-item {
+  padding-left: 20px;
+  position: relative;
+}
+
+.nav-link {
+  padding: 0;
+}
+

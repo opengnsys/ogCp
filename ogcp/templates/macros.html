@@ -18,3 +18,32 @@
 
 {% endmacro %}
 
+{% macro scopes_tree_collapse(scopes) -%}
+
+<ul class="nav flex-column nav-pills">
+  {{ scopes_tree_collapse_level(scopes["scope"], 1) }}
+</ul>
+
+{% endmacro %}
+
+{% macro scopes_tree_collapse_level(scopes, i) -%}
+{% for scope in scopes %}
+<li class="nav-item {% if scope["state"] %}state--{{scope["state"] | lower}}{% endif %}">
+    {% if " ".join(scope["ip"]) %}
+        <input class="form-check-input" type="checkbox" form="scopesForm"
+               value="{{ " ".join(scope["ip"]) }}"
+               {% if scope.get("selected", False) %}checked{% endif %}
+               name="{{ scope["name"] }}_{{ scope["id"] }}" />
+    {% endif %}
+    <a class="nav-link {% if not scope["scope"] %}disabled{% endif %}" href="#level{{i}}-{{loop.index}}"
+                       {% if scope["scope"] %}data-toggle="collapse"{% endif %}>
+      {{ scope["name"] }}
+    </a>
+    {% if scope["scope"] %}
+      <ul class="nav flex-column collapse level{{i}}" id="level{{i}}-{{loop.index}}">
+          {{ scopes_tree_collapse_level(scope["scope"], i + 1) }}
+      </ul>
+    {% endif %}
+  </li>
+{% endfor %}
+{% endmacro %}
