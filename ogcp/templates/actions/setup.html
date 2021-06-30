@@ -1,19 +1,82 @@
 {% extends 'commands.html' %}
-{% import "bootstrap/wtf.html" as wtf %}
 
 {% block content %}
 
 <h1 class="m-5">{{_('Partition and Format')}}</h1>
 
-{% for form in forms %}
+<table class="table">
+    <thead class="text-center">
+        <tr>
+            <th>Type</th>
+            <th>Filesytem</th>
+            <th>Size (KB)</th>
+            <th>Format?</th>
+            <th colspan="2"></th>
+        </tr>
+    </thead>
 
-{{ wtf.quick_form(form,
-                  method='post',
-                  form_type='inline',
-                  extra_classes='mx-5 pb-3',
-                  button_map={'modify': 'primary',
-                              'delete': 'danger'}) }}
+    <tbody>
+        {% for form in forms %}
+            <form class="form-inline" method="POST">
+                <tr>
+                    {{ form.hidden_tag() }}
+                    <td>{{ form.part_type(class_="form-control") }}</td>
+                    <td>{{ form.fs(class_="form-control") }}</td>
+                    <td>{{ form.size(class_="form-control") }}</td>
+                    <td>{{ form.format_partition(class_="form-control") }}</td>
+                    <td>{{ form.modify(class_="form-control btn-primary") }}</td>
+                    <td>{{ form.delete(class_="form-control btn-danger") }}</td>
+                </tr>
+            </form>
+        {% endfor %}
+    </tbody>
+</table>
 
-{% endfor %}
+<button class="btn btn-primary" data-toggle="modal" data-target="#newPartitionModal">
+    {{ _('Add a new Partition') }}
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="newPartitionModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form class="form" method="POST">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">{{ _('Create a new partition') }}</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+                {{ new_partition_form.hidden_tag() }}
+
+                <div class="form-group">
+                    <label for="{{ new_partition_form.part_type.id }}">{{ new_partition_form.part_type.label }}</label>
+                    {{ new_partition_form.part_type(class_="form-control") }}
+                </div>
+                <div class="form-group">
+                    <label for="{{ new_partition_form.fs.id }}">{{ new_partition_form.fs.label }}</label>
+                    {{ new_partition_form.fs(class_="form-control") }}
+                </div>
+                <div class="form-group">
+                    <label for="{{ new_partition_form.size.id }}">{{ new_partition_form.size.label }}</label>
+                    {% if new_partition_form.size.errors %}
+                        {{ new_partition_form.size(class_="form-control is-invalid") }}
+                    {% else %}
+                        {{ new_partition_form.size(class_="form-control") }}
+                    {% endif %}
+                    {% for error in new_partition_form.size.errors %}
+                        <div class="invalid-feedback">{{ error }}</div>
+                    {% endfor %}
+                </div>
+          </div>
+          <div class="modal-footer">
+            {{ new_partition_form.create(class_="btn btn-primary") }}
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+    </form>
+  </div>
+</div>
 
 {% endblock %}

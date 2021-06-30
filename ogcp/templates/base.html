@@ -56,6 +56,8 @@
     <!-- ChartJS -->
     <script src="{{ url_for('static', filename='AdminLTE/plugins/chart.js/Chart.min.js') }}"></script>
 
+    <script src="{{ url_for('static', filename='js/ogcp.js') }}"></script>
+
     <script>
         // error messages
         {% for category, message in get_flashed_messages(with_categories=True) %}

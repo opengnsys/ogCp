@@ -38,6 +38,22 @@ class PartitionForm(FlaskForm):
     modify = SubmitField(label=_('Modify'))
     delete = SubmitField(label=_('Delete'))
 
+
+class NewPartitionForm(FlaskForm):
+    ips = HiddenField()
+    part_type = SelectField(label=_('Type'),
+                            choices=[('LINUX', 'Linux'),
+                                     ('NTFS', 'NTFS'),
+                                     ('EMPTY', 'Empty')])
+    fs = SelectField(label=_('Filesystem'),
+                     choices=[('EXT4', 'EXT4'),
+                              ('NTFS', 'NTFS'),
+                              ('DISK', 'Disk'),
+                              ('EMPTY', 'Empty')])
+    size = IntegerField(label=_('Size (KB)'))
+    create = SubmitField(label=_('Create'))
+
+
 class HardwareForm(FlaskForm):
     ips = HiddenField()
     refresh = SubmitField(label=_('Refresh'))

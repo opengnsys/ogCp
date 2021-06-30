@@ -9,9 +9,9 @@ from flask import (
     g, render_template, url_for, flash, redirect, request, jsonify, make_response
 )
 from ogcp.forms.action_forms import (
-    WOLForm, PartitionForm, ClientDetailsForm, HardwareForm, SessionForm,
-    ImageRestoreForm, ImageCreateForm, SoftwareForm, BootModeForm, RoomForm,
-    DeleteRoomForm
+    WOLForm, PartitionForm, NewPartitionForm, ClientDetailsForm, HardwareForm,
+    SessionForm, ImageRestoreForm, ImageCreateForm, SoftwareForm, BootModeForm,
+    RoomForm, DeleteRoomForm
 )
 from flask_login import (
     current_user, LoginManager,
@@ -226,11 +226,18 @@ def action_wol():
 
 @app.route('/action/setup', methods=['GET'])
 @login_required
-def action_setup_show():
-    ips = parse_ips(request.args.to_dict())
+def action_setup_show(ips=None, new_partition_form=None):
+    if not ips:
+        ips = parse_ips(request.args.to_dict())
+
     db_partitions = get_client_setup(ips)
     forms = [PartitionForm() for _ in db_partitions]
     forms = list(forms)
+
+    if not new_partition_form:
+        new_partition_form = NewPartitionForm()
+        new_partition_form.ips.data = " ".join(ips)
+        new_partition_form.create.render_kw = {"formaction": url_for('action_setup_create')}
 
     for form, db_part in zip(forms, db_partitions):
         form.ips.data = " ".join(ips)
@@ -249,7 +256,24 @@ def action_setup_show():
     scopes, _clients = get_scopes(ips)
     return render_template('actions/setup.html',
                            forms=forms,
+                           new_partition_form=new_partition_form,
                            scopes=scopes)
+
+@app.route('/action/setup/create', methods=['POST'])
+@login_required
+def action_setup_create():
+    form = NewPartitionForm(request.form)
+    ips = form.ips.data.split(' ')
+
+    if form.validate():
+        # TODO: create the real partition
+        flash(_('Partition created successfully'), category='info')
+        return redirect(url_for('action_setup_show', ips=ips))
+
+    flash(_('Invalid partition configuration'), category='error')
+    # This return will maintain the new partition form state, but will break
+    # the F5 behavior in the browser
+    return action_setup_show(ips, form)
 
 @app.route('/action/setup/modify', methods=['POST'])
 @login_required
