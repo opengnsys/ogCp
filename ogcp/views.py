@@ -113,7 +113,7 @@ def add_state_and_ips(scope, clients, ips):
         if client:
             scope['state'] = client['state']
         else:
-            scope['state'] = 'OFF'
+            scope['state'] = 'off'
         scope['ip'] = [scope['ip']]
         scope['selected'] = set(scope['ip']).issubset(ips)
     else:
@@ -190,6 +190,12 @@ def login():
 def logout():
     logout_user()
     return redirect(url_for('index'))
+
+@app.route('/scopes/status')
+@login_required
+def scopes_status():
+    scopes, _clients = get_scopes()
+    return jsonify(scopes)
 
 @app.route('/scopes/')
 @login_required

@@ -20,15 +20,28 @@
 
 {% macro scopes_tree_collapse(scopes) -%}
 
-<ul class="nav flex-column nav-pills">
+<ul id="scopes" class="nav flex-column nav-pills">
   {{ scopes_tree_collapse_level(scopes["scope"], 1) }}
 </ul>
+<script>
+    // Launch the javascript on document ready, so all the global functions exists
+    // in the scope
+    document.addEventListener('readystatechange', () => {
+        if (document.readyState === 'complete') {
+            updateScopeState();
+            unfoldAll();
+        }
+    });
+</script>
 
 {% endmacro %}
 
 {% macro scopes_tree_collapse_level(scopes, i) -%}
 {% for scope in scopes %}
-<li class="nav-item {% if scope["state"] %}state--{{scope["state"] | lower}}{% endif %}">
+  <li
+    id="{{ scope["name"] }}_{{ scope["id"] }}"
+    class="nav-item {% if scope["state"] %}state--{{scope["state"] | lower}}{% endif %}"
+  >
     {% if " ".join(scope["ip"]) %}
         <input class="form-check-input" type="checkbox" form="scopesForm"
                value="{{ " ".join(scope["ip"]) }}"
@@ -37,6 +50,9 @@
     {% endif %}
     <a class="nav-link {% if not scope["scope"] %}disabled{% endif %}" href="#level{{i}}-{{loop.index}}"
                        {% if scope["scope"] %}data-toggle="collapse"{% endif %}>
+      {% if not scope["scope"] %}
+        <i class="nav-icon fa-circle {% if scope['state'] == 'on' %}fas text-success{% else %}far text-danger{% endif %}"></i>
+      {% endif %}
       {{ scope["name"] }}
     </a>
     {% if scope["scope"] %}
