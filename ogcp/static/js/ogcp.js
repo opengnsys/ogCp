@@ -25,20 +25,21 @@ function updateScopes(scopes) {
     scopes.forEach((scope) => {
         if (scope.state) {
             const scopeId = `${scope.name}_${scope.id}`;
-            const scopeEl = document.querySelector(`#${scopeId}`);
-            const stateCls = ['state--on', 'state--off'];
-            scopeEl.classList.remove(...stateCls);
-            const stateClass = `state--${scope.state}`;
-            scopeEl.classList.add(stateClass);
-
             const iconEl = document.querySelector(`#${scopeId} .nav-icon`);
-            const iconCls = ['fas', 'far', 'text-danger', 'text-success'];
+            const iconCls = ['fas', 'far', 'text-danger', 'text-success',
+                             'text-warning', 'text-wol'];
             iconEl.classList.remove(...iconCls);
             let newIconCls = [];
-            if (scope.state === 'on') {
+            if (scope.state === 'OPG') {
+                newIconCls.push('fas', 'text-warning');
+            } else if (scope.state === 'BSY') {
+                newIconCls.push('fas', 'text-danger');
+            } else if (scope.state === 'VDI') {
                 newIconCls.push('fas', 'text-success');
+            } else if (scope.state === 'WOL_SENT') {
+                newIconCls.push('fas', 'text-wol');
             } else {
-                newIconCls.push('far', 'text-danger');
+                newIconCls.push('far');
             }
             iconEl.classList.add(...newIconCls);
         }

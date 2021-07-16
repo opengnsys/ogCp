@@ -1,7 +1,3 @@
-.state--opg {
-	background-color: rgb(252, 222, 66);
-}
-
 html, body {
     width: 100%;
     height: 100% !important;
@@ -26,5 +22,9 @@ html, body {
 
 .nav-link {
   padding: 0;
+}
+
+.text-wol {
+  color: #99791a !important;
 }
 
