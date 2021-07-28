@@ -9,7 +9,7 @@ from flask import (
     g, render_template, url_for, flash, redirect, request, jsonify, make_response
 )
 from ogcp.forms.action_forms import (
-    WOLForm, PartitionForm, NewPartitionForm, ClientDetailsForm, HardwareForm,
+    WOLForm, SetupForm, ClientDetailsForm, HardwareForm,
     SessionForm, ImageRestoreForm, ImageCreateForm, SoftwareForm, BootModeForm,
     RoomForm, DeleteRoomForm, CenterForm
 )
@@ -46,6 +46,7 @@ PART_TYPE_CODES = {
 }
 
 PART_SCHEME_CODES = {
+    0: 'EMPTY',
     1: 'MSDOS',
     2: 'GPT'
 }
@@ -232,133 +233,71 @@ def action_wol():
 
 @app.route('/action/setup', methods=['GET'])
 @login_required
-def action_setup_show(ips=None, new_partition_form=None):
+def action_setup_show(ips=None):
     if not ips:
         ips = parse_ips(request.args.to_dict())
 
     db_partitions = get_client_setup(ips)
-    forms = [PartitionForm() for _ in db_partitions]
-    forms = list(forms)
+    form = SetupForm()
 
-    if not new_partition_form:
-        new_partition_form = NewPartitionForm()
-        new_partition_form.ips.data = " ".join(ips)
-        new_partition_form.create.render_kw = {"formaction": url_for('action_setup_create')}
+    form.ips.data = " ".join(ips)
+    form.disk.data = db_partitions[0]['disk']
+    # If partition table is empty, set MSDOS
+    form.disk_type.data = db_partitions[0]['code'] or 1
 
-    for form, db_part in zip(forms, db_partitions):
-        form.ips.data = " ".join(ips)
-        form.disk.data = db_part['disk']
-        form.partition.data = db_part['partition']
-        # XXX: Should separate whole disk form from partition setup form
-        if db_part['filesystem'] == "DISK":
-            form.part_type.choices = list(PART_SCHEME_CODES.values())
-            form.fs.render_kw = {'disabled': ''}
+    disk_size = db_partitions[0]['size']
 
-        form.part_type.data = db_part['code']
-        form.fs.data = db_part['filesystem']
-        form.size.data = db_part['size']
-        form.modify.render_kw = {"formaction": url_for('action_setup_modify')}
-        form.delete.render_kw = {"formaction": url_for('action_setup_delete')}
+    # Make form.partition length equal to (db_partitions - 1) length
+    diff = len(db_partitions) - 1 - len(form.partitions)
+    [form.partitions.append_entry() for _ in range(diff)]
+
+    for partition, db_part in zip(form.partitions, db_partitions[1:]):
+        partition.partition.data = str(db_part['partition'])
+        partition.part_type.data = db_part['code']
+        partition.fs.data = db_part['filesystem']
+        partition.size.data = db_part['size']
     scopes, _clients = get_scopes(ips)
     return render_template('actions/setup.html',
-                           forms=forms,
-                           new_partition_form=new_partition_form,
+                           form=form,
+                           disk_size=disk_size,
                            scopes=scopes)
 
-@app.route('/action/setup/create', methods=['POST'])
-@login_required
-def action_setup_create():
-    form = NewPartitionForm(request.form)
-    ips = form.ips.data.split(' ')
-
-    if form.validate():
-        # TODO: create the real partition
-        flash(_('Partition created successfully'), category='info')
-        return redirect(url_for('action_setup_show', ips=ips))
-
-    flash(_('Invalid partition configuration'), category='error')
-    # This return will maintain the new partition form state, but will break
-    # the F5 behavior in the browser
-    return action_setup_show(ips, form)
-
-@app.route('/action/setup/modify', methods=['POST'])
+@app.route('/action/setup', methods=['POST'])
 @login_required
 def action_setup_modify():
-    form = PartitionForm(request.form)
+    form = SetupForm(request.form)
     if form.validate():
         ips = form.ips.data.split(' ')
         db_partitions = get_client_setup(ips)
 
         payload = {'clients': ips,
                    'disk': str(form.disk.data),
+                   'type': str(form.disk_type.data),
                    'cache': str(0),
                    'cache_size': str(0),
                    'partition_setup': []}
 
-        for db_part in db_partitions:
-            if db_part['partition'] == 0:
-                # Set partition scheme
-                payload['type'] = db_part['code']
-                continue
-            partition_setup = {'partition': str(db_part['partition']),
-                               'code': db_part['code'],
-                               'filesystem': db_part['filesystem'],
-                               'size': str(db_part['size']),
-                               'format': str(int(False))}
+        required_partitions = ["1", "2", "3", "4"]
+        for partition in form.partitions:
+            print(partition)
+            partition_setup = {'partition': str(partition.partition.data),
+                               'code': str(partition.part_type.data),
+                               'filesystem': str(partition.fs.data),
+                               'size': str(partition.size.data),
+                               'format': str(int(partition.format_partition.data))}
             payload['partition_setup'].append(partition_setup)
+            if partition.partition.data in required_partitions:
+                required_partitions.remove(partition.partition.data)
 
-        # Ensure a 4 partition setup
-        for i in range(len(db_partitions), 5):
+        for partition in required_partitions:
             empty_part = {
-                'partition': str(i),
+                'partition': partition,
                 'code': 'EMPTY',
                 'filesystem': 'EMPTY',
                 'size': '0',
                 'format': '0',
             }
             payload['partition_setup'].append(empty_part)
-
-        modified_part = payload['partition_setup'][int(form.partition.data) - 1]
-        modified_part['filesystem'] = str(form.fs.data)
-        modified_part['code'] = str(form.part_type.data)
-        modified_part['size'] = str(form.size.data)
-        modified_part['format'] = str(int(form.format_partition.data))
-
-        r = g.server.post('/setup', payload=payload)
-        if r.status_code == requests.codes.ok:
-            return redirect(url_for("scopes"))
-    return make_response("400 Bad Request", 400)
-
-@app.route('/action/setup/delete', methods=['POST'])
-@login_required
-def action_setup_delete():
-    form = PartitionForm(request.form)
-    if form.validate():
-        ips = form.ips.data.split(' ')
-        db_partitions = get_client_setup(ips)
-
-        payload = {'clients': ips,
-                   'disk': str(form.disk.data),
-                   'cache': str(0),
-                   'cache_size': str(0),
-                   'partition_setup': []}
-
-        for db_part in db_partitions:
-            if db_part['partition'] == 0:
-                # Skip if this is disk setup.
-                continue
-            partition_setup = {'partition': str(db_part['partition']),
-                               'code': db_part['code'],
-                               'filesystem': db_part['filesystem'],
-                               'size': str(db_part['size']),
-                               'format': str(int(False))}
-            payload['partition_setup'].append(partition_setup)
-
-        modified_part = payload['partition_setup'][int(form.partition.data) - 1]
-        modified_part['filesystem'] = FS_CODES[1]
-        modified_part['code'] = PART_TYPE_CODES[0]
-        modified_part['size'] = str(0)
-        modified_part['format'] = str(int(True))
 
         r = g.server.post('/setup', payload=payload)
         if r.status_code == requests.codes.ok:

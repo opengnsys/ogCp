@@ -7,7 +7,7 @@
 
 from wtforms import (
     Form, SubmitField, HiddenField, SelectField, BooleanField, IntegerField,
-    StringField, RadioField
+    StringField, RadioField, FormField, FieldList
 )
 from wtforms.validators import InputRequired
 from flask_wtf import FlaskForm
@@ -21,9 +21,8 @@ class WOLForm(FlaskForm):
     submit = SubmitField(label=_('Submit'))
 
 class PartitionForm(FlaskForm):
-    ips = HiddenField()
-    disk = HiddenField()
-    partition = HiddenField()
+    partition = SelectField(label=_('Partition'),
+                            choices=range(1,10))
     part_type = SelectField(label=_('Type'),
                             choices=[('LINUX', 'Linux'),
                                      ('NTFS', 'NTFS'),
@@ -31,28 +30,19 @@ class PartitionForm(FlaskForm):
     fs = SelectField(label=_('Filesystem'),
                      choices=[('EXT4', 'EXT4'),
                               ('NTFS', 'NTFS'),
-                              ('DISK', 'Disk'),
                               ('EMPTY', 'Empty')])
     size = IntegerField(label=_('Size (KB)'))
     format_partition = BooleanField(label=_('Format'))
-    modify = SubmitField(label=_('Modify'))
-    delete = SubmitField(label=_('Delete'))
 
-
-class NewPartitionForm(FlaskForm):
+class SetupForm(FlaskForm):
     ips = HiddenField()
-    part_type = SelectField(label=_('Type'),
-                            choices=[('LINUX', 'Linux'),
-                                     ('NTFS', 'NTFS'),
-                                     ('EMPTY', 'Empty')])
-    fs = SelectField(label=_('Filesystem'),
-                     choices=[('EXT4', 'EXT4'),
-                              ('NTFS', 'NTFS'),
-                              ('DISK', 'Disk'),
-                              ('EMPTY', 'Empty')])
-    size = IntegerField(label=_('Size (KB)'))
-    create = SubmitField(label=_('Create'))
-
+    disk = HiddenField()
+    disk_type = SelectField(label=_('Type'),
+                            choices=[('MSDOS', 'MSDOS'),
+                                     ('GPT', 'GPT')])
+    partitions = FieldList(FormField(PartitionForm),
+                           min_entries=1,
+                           max_entries=10)
 
 class HardwareForm(FlaskForm):
     ips = HiddenField()

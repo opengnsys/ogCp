@@ -53,3 +53,25 @@ function updateScopes(scopes) {
 function unfoldAll() {
     $('#scopes .collapse').collapse('show');
 }
+
+function AddPartition(evt) {
+    const target = $($(evt).data("target"));
+    const oldrow = target.find("[data-toggle=fieldset-entry]:last");
+    const row = oldrow.clone(true, true);
+    const elem_id = row.find(":input")[0].id;
+    const elem_prefix = elem_id.replace(/(.*)-(\d{1,4})/m, '$1')// max 4 digits for ids in list
+    const elem_num = parseInt(elem_id.replace(/(.*)-(\d{1,4})/m, '$2')) + 1;
+    // Increment WTForms unique identifiers
+    row.children(':input').each(function() {
+        const id = $(this).attr('id').replace(elem_prefix+'-' + (elem_num - 1),
+                                              elem_prefix+'-' + (elem_num));
+        $(this).attr('name', id).attr('id', id).val('').removeAttr("checked");
+    });
+    row.show();
+    oldrow.after(row);
+}
+
+function RemovePartition(evt) {
+    const target = $(evt).parent().parent();
+    target.remove();
+}

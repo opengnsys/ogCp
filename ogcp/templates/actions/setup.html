@@ -4,79 +4,61 @@
 
 <h1 class="m-5">{{_('Partition and Format')}}</h1>
 
-<table class="table">
-    <thead class="text-center">
-        <tr>
-            <th>Type</th>
-            <th>Filesytem</th>
-            <th>Size (KB)</th>
-            <th>Format?</th>
-            <th colspan="2"></th>
-        </tr>
-    </thead>
+<form class="form-inline" method="POST" id="setupForm">
+    <table class="table">
+        <thead class="text-center">
+            <tr>
+                <th>Partition Table</th>
+                <th>Total Disk Size (KB)</th>
+            </tr>
+        </thead>
 
-    <tbody>
-        {% for form in forms %}
-            <form class="form-inline" method="POST">
-                <tr>
-                    {{ form.hidden_tag() }}
-                    <td>{{ form.part_type(class_="form-control") }}</td>
-                    <td>{{ form.fs(class_="form-control") }}</td>
-                    <td>{{ form.size(class_="form-control") }}</td>
-                    <td>{{ form.format_partition(class_="form-control") }}</td>
-                    <td>{{ form.modify(class_="form-control btn-primary") }}</td>
-                    <td>{{ form.delete(class_="form-control btn-danger") }}</td>
-                </tr>
-            </form>
-        {% endfor %}
-    </tbody>
-</table>
+        <tbody data-target="partitons-fieldset" id="setupTable" class="text-center">
+                    <tr>
+                        {{ form.hidden_tag() }}
+                        <td>{{ form.disk_type(class_="form-control") }}</td>
+                        <td>{{ disk_size }}</td>
+                    </tr>
+        </tbody>
+    </table>
+    <table class="table">
+        <thead class="text-center">
+            <tr>
+                <th>Partition</th>
+                <th>Type</th>
+                <th>Filesytem</th>
+                <th>Size (KB)</th>
+                <th>Format?</th>
+                <th colspan="2"></th>
+            </tr>
+        </thead>
 
-<button class="btn btn-primary" data-toggle="modal" data-target="#newPartitionModal">
-    {{ _('Add a new Partition') }}
+        <tbody data-target="partitons-fieldset" id="partitionsTable" class="text-center">
+                {% for partition in form.partitions %}
+                    <tr data-toggle="fieldset-entry">
+                        {{ partition.hidden_tag() }}
+                        <td>{{ partition.partition(class_="form-control") }}</td>
+                        <td>{{ partition.part_type(class_="form-control") }}</td>
+                        <td>{{ partition.fs(class_="form-control") }}</td>
+                        <td>{{ partition.size(class_="form-control") }}</td>
+                        <td>{{ partition.format_partition(class_="form-control") }}</td>
+                        <td>
+                            <button class="btn btn-danger" onclick="RemovePartition(this)">
+                                {{ _('Remove') }}
+                            </button>
+                        </td>
+                    </tr>
+                {% endfor %}
+        </tbody>
+    </table>
+</form>
+
+<button class="btn btn-primary" data-target="#partitionsTable" onclick="AddPartition(this)">
+    {{ _('Add a new partition') }}
 </button>
 
-<!-- Modal -->
-<div class="modal fade" id="newPartitionModal" tabindex="-1" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <form class="form" method="POST">
-          <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">{{ _('Create a new partition') }}</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body">
-                {{ new_partition_form.hidden_tag() }}
-
-                <div class="form-group">
-                    <label for="{{ new_partition_form.part_type.id }}">{{ new_partition_form.part_type.label }}</label>
-                    {{ new_partition_form.part_type(class_="form-control") }}
-                </div>
-                <div class="form-group">
-                    <label for="{{ new_partition_form.fs.id }}">{{ new_partition_form.fs.label }}</label>
-                    {{ new_partition_form.fs(class_="form-control") }}
-                </div>
-                <div class="form-group">
-                    <label for="{{ new_partition_form.size.id }}">{{ new_partition_form.size.label }}</label>
-                    {% if new_partition_form.size.errors %}
-                        {{ new_partition_form.size(class_="form-control is-invalid") }}
-                    {% else %}
-                        {{ new_partition_form.size(class_="form-control") }}
-                    {% endif %}
-                    {% for error in new_partition_form.size.errors %}
-                        <div class="invalid-feedback">{{ error }}</div>
-                    {% endfor %}
-                </div>
-          </div>
-          <div class="modal-footer">
-            {{ new_partition_form.create(class_="btn btn-primary") }}
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          </div>
-        </div>
-    </form>
-  </div>
-</div>
+<button class="btn btn-success" form="setupForm">
+    {{ _('Accept') }}
+</button>
 
 {% endblock %}
