@@ -208,6 +208,8 @@ def scopes():
 @login_required
 def action_poweroff():
     ips = parse_ips(request.form.to_dict())
+    if not validate_ips(ips):
+        return redirect(url_for('commands'))
     payload = {'clients': list(ips)}
     g.server.post('/poweroff', payload)
     return redirect(url_for('commands'))
@@ -236,6 +238,8 @@ def action_wol():
 def action_setup_show(ips=None):
     if not ips:
         ips = parse_ips(request.args.to_dict())
+    if not validate_ips(ips):
+        return redirect(url_for('commands'))
 
     db_partitions = get_client_setup(ips)
     form = SetupForm()
