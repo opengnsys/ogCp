@@ -210,7 +210,7 @@ def action_poweroff():
     ips = parse_ips(request.form.to_dict())
     payload = {'clients': list(ips)}
     g.server.post('/poweroff', payload)
-    return redirect(url_for("scopes"))
+    return redirect(url_for('commands'))
 
 @app.route('/action/wol', methods=['GET', 'POST'])
 @login_required
@@ -222,14 +222,14 @@ def action_wol():
         payload = {'type': wol_type, 'clients': ips}
         g.server.post('/wol', payload)
         flash(_('Wake On Lan request sent successfully'), category='info')
-        return redirect(url_for("scopes"))
+        return redirect(url_for('commands'))
     else:
         ips = parse_ips(request.args.to_dict())
         form.ips.data = " ".join(ips)
         if validate_ips(ips, min_len=1):
             return render_template('actions/wol.html', form=form)
         else:
-            return redirect(url_for('scopes'))
+            return redirect(url_for('commands'))
 
 @app.route('/action/setup', methods=['GET'])
 @login_required
@@ -301,7 +301,7 @@ def action_setup_modify():
 
         r = g.server.post('/setup', payload=payload)
         if r.status_code == requests.codes.ok:
-            return redirect(url_for("scopes"))
+            return redirect(url_for('commands'))
     return make_response("400 Bad Request", 400)
 
 @app.route('/action/image/restore', methods=['GET', 'POST'])
@@ -334,12 +334,12 @@ def action_image_restore():
                    'id': str(image['id'])}
         g.server.post('/image/restore', payload)
         if r.status_code == requests.codes.ok:
-            return redirect(url_for("scopes"))
+            return redirect(url_for('commands'))
         return make_response("400 Bad Request", 400)
     else:
         ips = parse_ips(request.args.to_dict())
         if not validate_ips(ips):
-            return redirect(url_for('scopes'))
+            return redirect(url_for('commands'))
         form.ips.data = ' '.join(ips)
 
         part_choices = []
@@ -366,11 +366,11 @@ def action_image_restore():
                     part_choices = [part for part in parts]
                 elif part_choices != parts:
                     flash(_(f'Computers have different partition setup'), category='error')
-                    return redirect(url_for("scopes"))
+                    return redirect(url_for('commands'))
 
             else:
                 flash(_(f'ogServer was unable to obtain setup of selected computer {ip}'), category='error')
-                return redirect(url_for("scopes"))
+                return redirect(url_for('commands'))
 
         form.partition.choices = [ (f'{disk_id} {part_id}', _(f'Disk: {disk_id} | Part: {part_id}'))
                                     for disk_id, part_id in part_choices ]
@@ -390,7 +390,7 @@ def action_hardware():
     else:
         ips = parse_ips(request.args.to_dict())
         if not validate_ips(ips, max_len=1):
-            return redirect(url_for('scopes'))
+            return redirect(url_for('commands'))
 
         form.ips.data = ' '.join(ips)
         r = g.server.get('/hardware', payload={'client': list(ips)})
@@ -418,13 +418,13 @@ def action_software():
                                                     'partition': partition})
             if r.status_code == requests.codes.ok:
                 flash(_('Software profile request sent successfully'), category='info')
-                return redirect(url_for("scopes"))
+                return redirect(url_for('commands'))
             flash(_(f'Error processing software profile request: ({r.status})'), category='error')
         return make_response("400 Bad Request", 400)
     else:
         ips = parse_ips(request.args.to_dict())
         if not validate_ips(ips, max_len=1):
-            return redirect(url_for('scopes'))
+            return redirect(url_for('commands'))
 
         form.ips.data = ' '.join(ips)
         r = g.server.get('/client/setup', payload={'client': list(ips)})
@@ -449,12 +449,12 @@ def action_session():
                                                'disk': str(disk),
                                                'partition': str(partition)})
         if r.status_code == requests.codes.ok:
-            return redirect(url_for("scopes"))
+            return redirect(url_for('commands'))
         return make_response("400 Bad Request", 400)
     else:
         ips = parse_ips(request.args.to_dict())
         if not validate_ips(ips, max_len=1):
-            return redirect(url_for('scopes'))
+            return redirect(url_for('commands'))
 
         form.ips.data = ' '.join(ips)
         r = g.server.get('/session', payload={'client': list(ips)})
@@ -471,7 +471,7 @@ def action_client_info():
     form = ClientDetailsForm()
     ips = parse_ips(request.args.to_dict())
     if not validate_ips(ips, max_len=1):
-        return redirect(url_for("scopes"))
+        return redirect(url_for('commands'))
 
     payload = {'client': list(ips)}
     r = g.server.get('/client/info', payload)
@@ -552,7 +552,7 @@ def action_mode():
             flash(_('Client set boot mode request sent successfully'), category='info')
         else:
             flash(_('Ogserver replied with status code not ok'), category='error')
-        return redirect(url_for("scopes"))
+        return redirect(url_for('commands'))
 
     else:
         r = g.server.get('/mode')
@@ -562,7 +562,7 @@ def action_mode():
         ips = parse_ips(request.args.to_dict())
         form.ips.data = " ".join(ips)
         if not validate_ips(ips):
-            return redirect(url_for("scopes"))
+            return redirect(url_for('commands'))
 
         form.ok.render_kw = { 'formaction': url_for('action_mode') }
         scopes, clients = get_scopes(set(ips))
@@ -589,13 +589,13 @@ def action_image_create():
                    "center_id": r.json()["center"]}
         r = g.server.post('/image/create', payload)
         if r.status_code == requests.codes.ok:
-            return redirect(url_for("scopes"))
+            return redirect(url_for('commands'))
         return make_response("400 Bad Request", 400)
     else:
         ips = parse_ips(request.args.to_dict())
         form.ip.data = " ".join(ips)
         if not validate_ips(ips, max_len=1):
-            return redirect(url_for("scopes"))
+            return redirect(url_for('commands'))
 
         r = g.server.get('/client/setup', payload={'client': list(ips)})
         for partition in r.json()['partitions']:
@@ -620,7 +620,7 @@ def action_image_create():
 def action_reboot():
     ips = parse_ips(request.form.to_dict())
     if not validate_ips(ips):
-        return redirect(url_for('scopes'))
+        return redirect(url_for('commands'))
 
     payload = {'clients': list(ips)}
     r = g.server.post('/reboot', payload)
@@ -628,14 +628,14 @@ def action_reboot():
         flash(_('OgServer replied with a non ok status code'), category='error')
     else:
         flash(_('Refresh request processed successfully'), category='info')
-    return redirect(url_for("scopes"))
+    return redirect(url_for('commands'))
 
 @app.route('/action/refresh', methods=['POST'])
 @login_required
 def action_refresh():
     ips = parse_ips(request.form.to_dict())
     if not validate_ips(ips):
-        return redirect(url_for('scopes'))
+        return redirect(url_for('commands'))
 
     payload = {'clients': list(ips)}
     r = g.server.post('/refresh', payload)
@@ -643,7 +643,7 @@ def action_refresh():
         flash(_('OgServer replied with a non ok status code'), category='error')
     else:
         flash(_('Refresh request processed successfully'), category='info')
-    return redirect(url_for("scopes"))
+    return redirect(url_for('commands'))
 
 @app.route('/action/center/add', methods=['GET', 'POST'])
 @login_required
