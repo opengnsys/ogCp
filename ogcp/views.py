@@ -543,6 +543,21 @@ def action_client_add():
         form.create.render_kw = {"formaction": url_for('action_client_add')}
         return render_template('actions/client_details.html', form=form)
 
+@app.route('/action/client/delete', methods=['POST'])
+@login_required
+def action_client_delete():
+    ips = parse_ips(request.form.to_dict())
+    if not validate_ips(ips):
+        return redirect(url_for('scopes'))
+
+    payload = {'clients': list(ips)}
+    r = g.server.post('/client/delete', payload)
+    if r.status_code != requests.codes.ok:
+        flash(_('OgServer replied with a non ok status code'), category='error')
+    else:
+        flash(_('Delete client request processed successfully'), category='info')
+    return redirect(url_for('scopes'))
+
 @app.route('/action/mode', methods=['GET', 'POST'])
 @login_required
 def action_mode():
