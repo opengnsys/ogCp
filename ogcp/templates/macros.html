@@ -47,7 +47,7 @@
     {% endif %}
     <a class="nav-link {% if not scope["scope"] %}disabled{% endif %}" href="#level{{i}}-{{loop.index}}"
                        {% if scope["scope"] %}data-toggle="collapse"{% endif %}>
-      {% if not scope["scope"] %}
+      {% if "state" in scope %}
         <i class="nav-icon fa-circle
                   {% if scope['state'] == 'OPG' %}fas text-warning
                   {% elif scope['state'] == 'BSY' %}fas text-danger
