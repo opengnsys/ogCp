@@ -42,7 +42,10 @@ PART_TYPE_CODES = {
     7: 'NTFS',
     131: 'LINUX',
     202: 'CACHE',
-    218: 'DATA'
+    218: 'DATA',
+    1792: 'NTFS',
+    33536: 'LINUX',
+    61184: 'EFI'
 }
 
 PART_SCHEME_CODES = {
