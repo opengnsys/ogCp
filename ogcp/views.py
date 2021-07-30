@@ -11,7 +11,7 @@ from flask import (
 from ogcp.forms.action_forms import (
     WOLForm, SetupForm, ClientDetailsForm, HardwareForm,
     SessionForm, ImageRestoreForm, ImageCreateForm, SoftwareForm, BootModeForm,
-    RoomForm, DeleteRoomForm, CenterForm
+    RoomForm, DeleteRoomForm, CenterForm, DeleteCenterForm
 )
 from flask_login import (
     current_user, LoginManager,
@@ -680,6 +680,26 @@ def action_center_add():
         return redirect(url_for("scopes"))
     else:
         return render_template('actions/add_center.html', form=form)
+
+@app.route('/action/center/delete', methods=['GET', 'POST'])
+@login_required
+def action_center_delete():
+    form = DeleteCenterForm(request.form)
+    if request.method == 'POST':
+        payload = {"id": form.center.data}
+        r = g.server.post('/center/delete', payload)
+        if r.status_code != requests.codes.ok:
+            flash(_('Server replied with error code when deleting the center'),
+                  category='error')
+        else:
+            flash(_('Center deleted successfully'), category='info')
+        return redirect(url_for("scopes"))
+    else:
+        r = g.server.get('/scopes')
+        centers = parse_scopes_from_tree(r.json(), 'center')
+        centers = [(center['id'], center['name']) for center in centers]
+        form.center.choices = list(centers)
+        return render_template('actions/delete_center.html', form=form)
 
 @app.route('/action/room/add', methods=['GET', 'POST'])
 @login_required

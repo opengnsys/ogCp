@@ -26,4 +26,6 @@
          form="scopesForm" formaction="{{ url_for('action_client_delete') }}" formmethod="post">
   <input class="btn btn-light" type="submit" value="{{ _('Delete room') }}"
          form="scopesForm" formaction="{{ url_for('action_room_delete') }}" formmethod="get">
+  <input class="btn btn-light" type="submit" value="{{ _('Delete center') }}"
+         form="scopesForm" formaction="{{ url_for('action_center_delete') }}" formmethod="get">
 {% endblock %}

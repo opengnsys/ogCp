@@ -109,6 +109,11 @@ class CenterForm(FlaskForm):
     comment = StringField(label=_('Comment'))
     submit = SubmitField(label=_('Submit'))
 
+class DeleteCenterForm(FlaskForm):
+    center = SelectField(label=_('Center'),
+                         validators=[InputRequired()])
+    submit = SubmitField(label=_('Submit'))
+
 class RoomForm(FlaskForm):
     center = SelectField(label=_('Center'),
                          validators=[InputRequired()])
