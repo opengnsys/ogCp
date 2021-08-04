@@ -58,13 +58,11 @@ function AddPartition(evt) {
     const target = $($(evt).data("target"));
     const oldrow = target.find("[data-toggle=fieldset-entry]:last");
     const row = oldrow.clone(true, true);
-    const elem_id = row.find(":input")[0].id;
-    const elem_prefix = elem_id.replace(/(.*)-(\d{1,4})/m, '$1')// max 4 digits for ids in list
+    const elem_id = row.find(".form-control")[0].id;
     const elem_num = parseInt(elem_id.replace(/(.*)-(\d{1,4})/m, '$2')) + 1;
     // Increment WTForms unique identifiers
-    row.children(':input').each(function() {
-        const id = $(this).attr('id').replace(elem_prefix+'-' + (elem_num - 1),
-                                              elem_prefix+'-' + (elem_num));
+    row.find('.form-control').each(function() {
+        const id = $(this).attr('id').replace(/(.*)-(\d{1,4})-(.*)/, `$1-${elem_num}-$3`);
         $(this).attr('name', id).attr('id', id).val('').removeAttr("checked");
     });
     row.show();
@@ -73,5 +71,14 @@ function AddPartition(evt) {
 
 function RemovePartition(evt) {
     const target = $(evt).parent().parent();
+    const table = target.parent();
     target.remove();
+
+    // Reassign rows ids
+    table.find('tr').each(function(index) {
+        $(this).find('.form-control').each(function() {
+            const id = $(this).attr('id').replace(/(.*)-(\d{1,4})-(.*)/, `$1-${index}-$3`);
+            $(this).attr('name', id).attr('id', id);
+        });
+    });
 }
