@@ -33,19 +33,35 @@ FS_CODES = {
     2: 'CACHE',
     6: 'EXT4',
     9: 'FAT32',
-    13: 'NTFS'
+    13: 'NTFS',
+    18: 'EXFAT',
+    19: 'LINUX-SWAP'
 }
 
 PART_TYPE_CODES = {
     0: 'EMPTY',
     1: 'DISK',
+    5: 'EXTENDED',
     7: 'NTFS',
+    11: 'FAT32',
+    23: 'HNTFS',
+    27: 'HFAT32',
+    39: 'HNTFS-WINRE',
+    130: 'LINUX-SWAP',
     131: 'LINUX',
+    142: 'LINUX-LVM',
     202: 'CACHE',
     218: 'DATA',
+    253: 'LINUX-RAID',
     1792: 'NTFS',
+    9984: 'WIN-RECOV',
+    33280: 'LINUX-SWAP',
     33536: 'LINUX',
-    61184: 'EFI'
+    36352: 'LINUX-LVM',
+    51712: 'CACHE',
+    61184: 'EFI',
+    64768: 'LINUX-RAID',
+    65535: 'UNKNOWN'
 }
 
 PART_SCHEME_CODES = {

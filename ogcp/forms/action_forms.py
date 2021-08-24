@@ -26,10 +26,26 @@ class PartitionForm(FlaskForm):
     part_type = SelectField(label=_('Type'),
                             choices=[('LINUX', 'Linux'),
                                      ('NTFS', 'NTFS'),
+                                     ('CACHE', 'CACHE'),
+                                     ('EFI', 'EFI'),
+                                     ('DATA', 'DATA'),
+                                     ('LINUX-SWAP', 'LINUX-SWAP'),
+                                     ('EXTENDED', 'EXTENDED'),
+                                     ('FAT32', 'FAT32'),
+                                     ('LINUX-LVM', 'LINUX-LVM'),
+                                     ('LINUX-RAID', 'LINUX-RAID'),
+                                     ('WIN-RECOV', 'WIN-RECOV'),
+                                     ('HNTFS', 'HNTFS'),
+                                     ('HFAT32', 'HFAT32'),
+                                     ('HNTFS-WINRE', 'HNTFS-WINRE'),
                                      ('EMPTY', 'Empty')])
     fs = SelectField(label=_('Filesystem'),
                      choices=[('EXT4', 'EXT4'),
                               ('NTFS', 'NTFS'),
+                              ('CACHE', 'CACHE'),
+                              ('LINUX-SWAP', 'LINUX-SWAP'),
+                              ('FAT32', 'FAT32'),
+                              ('EXFAT', 'EXFAT'),
                               ('EMPTY', 'Empty')])
     size = IntegerField(label=_('Size (KB)'))
     format_partition = BooleanField(label=_('Format'))
