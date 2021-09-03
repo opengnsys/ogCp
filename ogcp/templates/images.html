@@ -25,5 +25,7 @@
 {% endblock %}
 
 {% block commands %}
+  <input class="btn btn-light" type="submit" value="{{ _('Image details') }}"
+         form="imagesForm" formaction="{{ url_for('action_image_info') }}" formmethod="get">
 {% endblock %}
 

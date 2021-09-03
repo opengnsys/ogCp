@@ -7,7 +7,7 @@
 
 from wtforms import (
     Form, SubmitField, HiddenField, SelectField, BooleanField, IntegerField,
-    StringField, RadioField, FormField, FieldList
+    StringField, RadioField, FormField, FieldList, DecimalField
 )
 from wtforms.validators import InputRequired
 from flask_wtf import FlaskForm
@@ -143,3 +143,12 @@ class DeleteRoomForm(FlaskForm):
     room = SelectField(label=_('Room'),
                        validators=[InputRequired()])
     submit = SubmitField(label=_('Submit'))
+
+class ImageDetailsForm(FlaskForm):
+    id = StringField(label=_('Id'))
+    name = StringField(label=_('Name'))
+    size = DecimalField(label=_('Size (GiB)'))
+    datasize = DecimalField(label=_('Datasize (GiB)'))
+    modified = StringField(label=_('Modified'))
+    permissions = StringField(label=_('Permissions'))
+    software_id = StringField(label=_('Software id'))

@@ -9,7 +9,7 @@ from flask import (
     g, render_template, url_for, flash, redirect, request, jsonify, make_response
 )
 from ogcp.forms.action_forms import (
-    WOLForm, SetupForm, ClientDetailsForm, HardwareForm,
+    WOLForm, SetupForm, ClientDetailsForm, ImageDetailsForm, HardwareForm,
     SessionForm, ImageRestoreForm, ImageCreateForm, SoftwareForm, BootModeForm,
     RoomForm, DeleteRoomForm, CenterForm, DeleteCenterForm
 )
@@ -774,3 +774,27 @@ def images():
     r = g.server.get('/images')
     images = r.json()['images']
     return render_template('images.html', images=images)
+
+@app.route('/action/image/info', methods=['GET'])
+@login_required
+def action_image_info():
+    form = ImageDetailsForm()
+    ids = parse_elements(request.args.to_dict())
+    if not validate_elements(ids, max_len=1):
+        return redirect(url_for('images'))
+
+    id = ids.pop()
+    r = g.server.get('/images')
+    images = r.json()['images']
+    image = next(img for img in images if img['id'] == int(id))
+
+    form.id.data = image['id']
+    form.name.data = image['name']
+    # Bytes to Gibibytes
+    form.size.data = image['size'] / 1024 ** 3
+    form.datasize.data = image['datasize'] / 1024 ** 3
+    form.modified.data = image['modified']
+    form.permissions.data = image['permissions']
+    form.software_id.data = image['software_id']
+
+    return render_template('actions/image_details.html', form=form)
