@@ -767,3 +767,10 @@ def action_room_delete():
 def commands():
     scopes, clients = get_scopes()
     return render_template('commands.html', scopes=scopes, clients=clients)
+
+@app.route('/images/', methods=['GET'])
+@login_required
+def images():
+    r = g.server.get('/images')
+    images = r.json()['images']
+    return render_template('images.html', images=images)
