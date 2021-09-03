@@ -74,24 +74,24 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'login'
 
-def validate_ips(ips, min_len=1, max_len=float('inf')):
+def validate_elements(elements, min_len=1, max_len=float('inf')):
     valid = True
-    if len(ips) < min_len:
-        flash(_(f'Please, select at least {min_len} computer(s)'),
+    if len(elements) < min_len:
+        flash(_(f'Please, select at least {min_len} element(s)'),
               category='error')
         valid = not valid
-    elif len(ips) > max_len:
-        flash(_(f'No more than {max_len} computer(s) can be selected for the given action'),
+    elif len(elements) > max_len:
+        flash(_(f'No more than {max_len} element(s) can be selected for the given action'),
               category='error')
         valid = not valid
     return valid
 
-def parse_ips(checkboxes_dict):
-    ips = set()
-    for key, ips_list in checkboxes_dict.items():
+def parse_elements(checkboxes_dict):
+    elements = set()
+    for key, elements_list in checkboxes_dict.items():
         if key != 'csrf_token':
-            ips.update(ips_list.split(' '))
-    return ips
+            elements.update(elements_list.split(' '))
+    return elements
 
 def get_client_setup(ip):
     payload = payload = {'client': list(ip)}
@@ -226,8 +226,8 @@ def scopes():
 @app.route('/action/poweroff', methods=['POST'])
 @login_required
 def action_poweroff():
-    ips = parse_ips(request.form.to_dict())
-    if not validate_ips(ips):
+    ips = parse_elements(request.form.to_dict())
+    if not validate_elements(ips):
         return redirect(url_for('commands'))
     payload = {'clients': list(ips)}
     g.server.post('/poweroff', payload)
@@ -245,9 +245,9 @@ def action_wol():
         flash(_('Wake On Lan request sent successfully'), category='info')
         return redirect(url_for('commands'))
     else:
-        ips = parse_ips(request.args.to_dict())
+        ips = parse_elements(request.args.to_dict())
         form.ips.data = " ".join(ips)
-        if validate_ips(ips, min_len=1):
+        if validate_elements(ips, min_len=1):
             return render_template('actions/wol.html', form=form)
         else:
             return redirect(url_for('commands'))
@@ -256,8 +256,8 @@ def action_wol():
 @login_required
 def action_setup_show(ips=None):
     if not ips:
-        ips = parse_ips(request.args.to_dict())
-    if not validate_ips(ips):
+        ips = parse_elements(request.args.to_dict())
+    if not validate_elements(ips):
         return redirect(url_for('commands'))
 
     db_partitions = get_client_setup(ips)
@@ -360,8 +360,8 @@ def action_image_restore():
             return redirect(url_for('commands'))
         return make_response("400 Bad Request", 400)
     else:
-        ips = parse_ips(request.args.to_dict())
-        if not validate_ips(ips):
+        ips = parse_elements(request.args.to_dict())
+        if not validate_elements(ips):
             return redirect(url_for('commands'))
         form.ips.data = ' '.join(ips)
 
@@ -411,8 +411,8 @@ def action_hardware():
             return make_response("200 OK", 200)
         return make_response("400 Bad Request", 400)
     else:
-        ips = parse_ips(request.args.to_dict())
-        if not validate_ips(ips, max_len=1):
+        ips = parse_elements(request.args.to_dict())
+        if not validate_elements(ips, max_len=1):
             return redirect(url_for('commands'))
 
         form.ips.data = ' '.join(ips)
@@ -445,8 +445,8 @@ def action_software():
             flash(_(f'Error processing software profile request: ({r.status})'), category='error')
         return make_response("400 Bad Request", 400)
     else:
-        ips = parse_ips(request.args.to_dict())
-        if not validate_ips(ips, max_len=1):
+        ips = parse_elements(request.args.to_dict())
+        if not validate_elements(ips, max_len=1):
             return redirect(url_for('commands'))
 
         form.ips.data = ' '.join(ips)
@@ -475,8 +475,8 @@ def action_session():
             return redirect(url_for('commands'))
         return make_response("400 Bad Request", 400)
     else:
-        ips = parse_ips(request.args.to_dict())
-        if not validate_ips(ips, max_len=1):
+        ips = parse_elements(request.args.to_dict())
+        if not validate_elements(ips, max_len=1):
             return redirect(url_for('commands'))
 
         form.ips.data = ' '.join(ips)
@@ -492,8 +492,8 @@ def action_session():
 @login_required
 def action_client_info():
     form = ClientDetailsForm()
-    ips = parse_ips(request.args.to_dict())
-    if not validate_ips(ips, max_len=1):
+    ips = parse_elements(request.args.to_dict())
+    if not validate_elements(ips, max_len=1):
         return redirect(url_for('commands'))
 
     payload = {'client': list(ips)}
@@ -565,8 +565,8 @@ def action_client_add():
 @app.route('/action/client/delete', methods=['POST'])
 @login_required
 def action_client_delete():
-    ips = parse_ips(request.form.to_dict())
-    if not validate_ips(ips):
+    ips = parse_elements(request.form.to_dict())
+    if not validate_elements(ips):
         return redirect(url_for('scopes'))
 
     payload = {'clients': list(ips)}
@@ -597,9 +597,9 @@ def action_mode():
         available_modes = [(mode, mode) for mode in r.json()['modes']]
         form.boot.choices = list(available_modes)
 
-        ips = parse_ips(request.args.to_dict())
+        ips = parse_elements(request.args.to_dict())
         form.ips.data = " ".join(ips)
-        if not validate_ips(ips):
+        if not validate_elements(ips):
             return redirect(url_for('commands'))
 
         form.ok.render_kw = { 'formaction': url_for('action_mode') }
@@ -630,9 +630,9 @@ def action_image_create():
             return redirect(url_for('commands'))
         return make_response("400 Bad Request", 400)
     else:
-        ips = parse_ips(request.args.to_dict())
+        ips = parse_elements(request.args.to_dict())
         form.ip.data = " ".join(ips)
-        if not validate_ips(ips, max_len=1):
+        if not validate_elements(ips, max_len=1):
             return redirect(url_for('commands'))
 
         r = g.server.get('/client/setup', payload={'client': list(ips)})
@@ -656,8 +656,8 @@ def action_image_create():
 @app.route('/action/reboot', methods=['POST'])
 @login_required
 def action_reboot():
-    ips = parse_ips(request.form.to_dict())
-    if not validate_ips(ips):
+    ips = parse_elements(request.form.to_dict())
+    if not validate_elements(ips):
         return redirect(url_for('commands'))
 
     payload = {'clients': list(ips)}
@@ -671,8 +671,8 @@ def action_reboot():
 @app.route('/action/refresh', methods=['POST'])
 @login_required
 def action_refresh():
-    ips = parse_ips(request.form.to_dict())
-    if not validate_ips(ips):
+    ips = parse_elements(request.form.to_dict())
+    if not validate_elements(ips):
         return redirect(url_for('commands'))
 
     payload = {'clients': list(ips)}
