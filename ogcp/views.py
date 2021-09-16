@@ -311,6 +311,9 @@ def action_setup_modify():
             payload['partition_setup'].append(partition_setup)
             if partition.partition.data in required_partitions:
                 required_partitions.remove(partition.partition.data)
+            if partition.part_type.data == 'CACHE':
+                payload['cache'] = '1'
+                payload['cache_size'] = str(partition.size.data)
 
         for partition in required_partitions:
             empty_part = {
