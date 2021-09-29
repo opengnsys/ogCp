@@ -801,3 +801,20 @@ def action_image_info():
     form.software_id.data = image['software_id']
 
     return render_template('actions/image_details.html', form=form)
+
+@app.route('/action/image/delete', methods=['POST'])
+@login_required
+def action_image_delete():
+    ids = parse_elements(request.form.to_dict())
+    if not validate_elements(ids, max_len=1):
+        return redirect(url_for('images'))
+
+    id = ids.pop()
+    payload = {'image': id}
+    r = g.server.post('/image/delete', payload)
+    if r.status_code != requests.codes.ok:
+        flash(_('OgServer replied with a non ok status code'), category='error')
+    else:
+        flash(_('Delete client request processed successfully'), category='info')
+    return redirect(url_for('images'))
+
