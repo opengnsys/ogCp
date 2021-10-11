@@ -527,7 +527,21 @@ def action_client_info():
     form.room.choices = list(rooms)
 
     form.create.render_kw = {"style": "visibility:hidden;"}
-    return render_template('actions/client_details.html', form=form)
+
+    r = g.server.get('/images')
+    images = r.json()['images']
+
+    setup = get_client_setup(ips)
+
+    for entry in setup:
+        if entry['image'] != 0:
+            image = next(img for img in images if img['id'] == entry['image'])
+            entry['image'] = image['name']
+        else:
+            entry['image'] = ""
+
+    return render_template('actions/client_details.html', form=form,
+                           setup=setup)
 
 @app.route('/action/client/add', methods=['GET', 'POST'])
 @login_required

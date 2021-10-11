@@ -10,4 +10,28 @@
                   button_map={'create': 'primary'},
                   extra_classes="mx-5") }}
 
+<table class="table">
+    <tbody class="text-center">
+        <tr>
+            <th>Partition</th>
+            <th>Type</th>
+            <th>Filesytem</th>
+            <th>Size (KB)</th>
+            <th>Image</th>
+            <th colspan="2"></th>
+        </tr>
+    </tbody>
+    <tbody class="text-center">
+    {% for entry in setup %}
+        <tr>
+            <td>{{ entry.partition }}</td>
+            <td>{{ entry.code }}</td>
+            <td>{{ entry.filesystem }}</td>
+            <td>{{ entry.size }}</td>
+            <td>{{ entry.image }}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
 {% endblock %}
