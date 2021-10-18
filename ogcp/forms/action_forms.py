@@ -80,8 +80,7 @@ class ImageRestoreForm(FlaskForm):
     partition = SelectField(label=_('Partition'), choices=[])
     image = SelectField(label=_('Image'), choices=[])
     method = SelectField(label=_('Method'),
-                         choices=[('UNICAST-CACHE', 'Unicast Cache'),
-                                  ('UNICAST-DIRECT', 'Unicast Direct')])
+                         choices=[('TIPTORRENT', 'TIPTORRENT')])
     restore = SubmitField(label=_('Restore'))
 
 class ClientDetailsForm(FlaskForm):
