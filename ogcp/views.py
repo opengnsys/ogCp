@@ -19,6 +19,8 @@ from flask_login import (
     login_required
 )
 
+from pathlib import Path
+
 from ogcp.models import User
 from ogcp.forms.auth import LoginForm
 from ogcp.og_server import OGServer
@@ -831,4 +833,18 @@ def action_image_delete():
     else:
         flash(_('Delete client request processed successfully'), category='info')
     return redirect(url_for('images'))
+
+@app.route('/action/log', methods=['GET'])
+@login_required
+def action_legacy_log():
+    ips = parse_elements(request.args.to_dict())
+    if not validate_elements(ips, max_len=1):
+        return redirect(url_for('commands'))
+    ip = ips.pop()
+    log_file = Path("/opt/opengnsys/log/clients/" + str(ip) + ".log")
+    log = log_file.read_text()
+    if log:
+        return render_template('actions/legacy/log.html', log=log)
+    else:
+        return redirect(url_for('commands'))
 

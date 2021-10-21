@@ -40,5 +40,7 @@
          form="scopesForm" formaction="{{ url_for('action_image_create') }}" formmethod="get">
   <input class="btn btn-light" type="submit" value="{{ _('Set boot mode') }}"
          form="scopesForm" formaction="{{ url_for('action_mode') }}" formmethod="get">
+  <input class="btn btn-light" type="submit" value="{{ _('Log') }}"
+         form="scopesForm" formaction="{{ url_for('action_legacy_log') }}" formmethod="get">
 {% endblock %}
 
