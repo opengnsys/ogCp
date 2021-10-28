@@ -53,6 +53,17 @@
     </table>
 </form>
 
+<select form="scopesForm" name="disk" >
+    {% for disk in disks %}
+        <option {% if disk == selected_disk %}selected{% endif %}
+                value="{{ disk }}">{{ disk }}</option>
+    {% endfor %}
+</select>
+<button class="btn btn-dark" form="scopesForm" formmethod="get"
+        formaction="{{ url_for('action_setup_show') }}">
+    {{ _('Change disk') }}
+</button>
+
 <button class="btn btn-primary" data-target="#partitionsTable" onclick="AddPartition(this)">
     {{ _('Add a new partition') }}
 </button>

@@ -256,33 +256,45 @@ def action_wol():
 
 @app.route('/action/setup', methods=['GET'])
 @login_required
-def action_setup_show(ips=None):
-    if not ips:
-        ips = parse_elements(request.args.to_dict())
+def action_setup_show():
+    args = request.args.copy()
+
+    default_disk = 1
+    selected_disk = int(args.pop('disk', default_disk))
+
+    ips = parse_elements(args.to_dict())
     if not validate_elements(ips):
         return redirect(url_for('commands'))
 
     db_partitions = get_client_setup(ips)
+    filtered_partitions = [p for p in db_partitions
+                           if p.get('disk') == selected_disk]
+
+    disk_partition = 0
+    disks = [d.get('disk') for d in db_partitions
+             if d.get('partition') == disk_partition]
+
     form = SetupForm()
-
     form.ips.data = " ".join(ips)
-    form.disk.data = db_partitions[0]['disk']
+    form.disk.data = selected_disk
     # If partition table is empty, set MSDOS
-    form.disk_type.data = db_partitions[0]['code'] or 1
+    form.disk_type.data = filtered_partitions[0]['code'] or 1
 
-    disk_size = db_partitions[0]['size']
+    disk_size = filtered_partitions[0]['size']
 
-    # Make form.partition length equal to (db_partitions - 1) length
-    diff = len(db_partitions) - 1 - len(form.partitions)
+    # Make form.partition length equal to (filtered_partitions - 1) length
+    diff = len(filtered_partitions) - 1 - len(form.partitions)
     [form.partitions.append_entry() for _ in range(diff)]
 
-    for partition, db_part in zip(form.partitions, db_partitions[1:]):
+    for partition, db_part in zip(form.partitions, filtered_partitions[1:]):
         partition.partition.data = str(db_part['partition'])
         partition.part_type.data = db_part['code']
         partition.fs.data = db_part['filesystem']
         partition.size.data = db_part['size']
     scopes, _clients = get_scopes(ips)
     return render_template('actions/setup.html',
+                           selected_disk=selected_disk,
+                           disks=disks,
                            form=form,
                            disk_size=disk_size,
                            scopes=scopes)
