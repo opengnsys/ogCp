@@ -101,11 +101,11 @@ def get_client_setup(ip):
     db_partitions = r.json()['partitions']
     for partition in db_partitions:
         if partition['partition'] == 0:
-            partition['code'] = PART_SCHEME_CODES[partition['code']]
+            partition['code'] = PART_SCHEME_CODES.get(partition['code'], 'MSDOS')
         else:
-            partition['code'] = PART_TYPE_CODES[partition['code']]
+            partition['code'] = PART_TYPE_CODES.get(partition['code'], 'EMPTY')
 
-        partition['filesystem'] = FS_CODES[partition['filesystem']]
+        partition['filesystem'] = FS_CODES.get(partition['filesystem'], 'EMPTY')
 
     return db_partitions
 
