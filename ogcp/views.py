@@ -860,3 +860,15 @@ def action_legacy_log():
     else:
         return redirect(url_for('commands'))
 
+@app.route('/action/rt-log', methods=['GET'])
+@login_required
+def action_legacy_rt_log():
+    ips = parse_elements(request.args.to_dict())
+    if not validate_elements(ips, max_len=1):
+        return redirect(url_for('commands'))
+    ip = ips.pop()
+    scheme = "http://"
+    rt_log_path = "/cgi-bin/httpd-log.sh"
+    rt_log_url = scheme + ip + rt_log_path
+    return redirect(rt_log_url)
+
