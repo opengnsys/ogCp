@@ -21,7 +21,7 @@
 {% macro scopes_tree_collapse(scopes) -%}
 
 <ul id="scopes" class="nav flex-column nav-pills">
-  {{ scopes_tree_collapse_level(scopes["scope"], 1) }}
+  {{ scopes_tree_collapse_level(scopes["scope"], 1, "") }}
 </ul>
 <script>
     // Launch the javascript on document ready, so all the global functions exists
@@ -35,7 +35,7 @@
 
 {% endmacro %}
 
-{% macro scopes_tree_collapse_level(scopes, i) -%}
+{% macro scopes_tree_collapse_level(scopes, i, parent_id) -%}
 {% for scope in scopes %}
   <li id="{{ scope["name"] }}_{{ scope["id"] }}" class="nav-item">
     {% if " ".join(scope["ip"]) %}
@@ -44,7 +44,7 @@
                {% if scope.get("selected", False) %}checked{% endif %}
                name="{{ scope["name"] }}_{{ scope["id"] }}" />
     {% endif %}
-    <a class="nav-link {% if not scope["scope"] %}disabled{% endif %}" href="#level{{i}}-{{loop.index}}"
+    <a class="nav-link {% if not scope["scope"] %}disabled{% endif %}" href="#id{{parent_id ~ "_" ~ i ~ "-" ~ loop.index}}"
                        {% if scope["scope"] %}data-toggle="collapse"{% endif %}>
       {% if "state" in scope %}
         <i class="nav-icon fa-circle
@@ -57,8 +57,8 @@
       {{ scope["name"] }}
     </a>
     {% if scope["scope"] %}
-      <ul class="nav flex-column collapse level{{i}}" id="level{{i}}-{{loop.index}}">
-          {{ scopes_tree_collapse_level(scope["scope"], i + 1) }}
+      <ul class="nav flex-column collapse level{{i}}" id="id{{parent_id ~ "_" ~ i ~ "-" ~ loop.index}}">
+          {{ scopes_tree_collapse_level(scope["scope"], i + 1, parent_id ~ "_" ~ i ~ "-" ~ loop.index) }}
       </ul>
     {% endif %}
   </li>
