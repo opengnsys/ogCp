@@ -154,11 +154,30 @@ def get_scopes(ips=set()):
 
     return scopes, clients
 
-@login_manager.user_loader
-def load_user(user_id):
-    if user_id == 1:
-        return User()
+def authenticate_user(username, pwd):
+    for user in app.config['USERS']:
+        if user.get("USER") == username:
+            if user.get("PASS") == pwd:
+                return user
+            else:
+                flash(_('Incorrect password'))
+                return None
+    flash(_('Incorrect user name'))
     return None
+
+def get_user(username):
+    for user in app.config['USERS']:
+        if user.get("USER") == username:
+            return user
+    return None
+
+@login_manager.user_loader
+def load_user(username):
+    if not get_user(username):
+        return None
+
+    user = User(username)
+    return user
 
 @app.before_request
 def load_config():
@@ -194,15 +213,12 @@ def index():
 def login():
     form = LoginForm(request.form)
     if request.method == 'POST' and form.validate():
-        user = User()
         form_user = request.form['user']
         pwd = request.form['pwd']
-        if form_user != app.config['USER']:
-            flash(_('Incorrect user name'))
+        user_dict = authenticate_user(form_user, pwd)
+        if not user_dict:
             return render_template('auth/login.html', form=form)
-        if pwd != app.config['PASS']:
-            flash(_('Incorrect password'))
-            return render_template('auth/login.html', form=form)
+        user = User(form_user)
         login_user(user)
         return redirect(url_for('index'))
     return render_template('auth/login.html', form=LoginForm())
