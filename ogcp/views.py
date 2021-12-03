@@ -145,9 +145,20 @@ def add_state_and_ips(scope, clients, ips):
             scope['selected'] = set(scope['ip']).issubset(ips)
     return scope['ip']
 
+def get_allowed_scopes(scopes, allowed_scopes):
+    for scope in scopes.get('scope'):
+        if scope.get('name') in current_user.scopes:
+            allowed_scopes.append(scope)
+        else:
+            get_allowed_scopes(scope, allowed_scopes)
+
 def get_scopes(ips=set()):
     r = g.server.get('/scopes')
     scopes = r.json()
+    if current_user.scopes:
+        allowed_scopes = []
+        get_allowed_scopes(scopes, allowed_scopes)
+        scopes = {'scope': allowed_scopes}
     r = g.server.get('/clients')
     clients = r.json()
     add_state_and_ips(scopes, clients['clients'], ips)
@@ -173,10 +184,11 @@ def get_user(username):
 
 @login_manager.user_loader
 def load_user(username):
-    if not get_user(username):
+    user_dict = get_user(username)
+    if not user_dict:
         return None
 
-    user = User(username)
+    user = User(username, user_dict.get('SCOPES'))
     return user
 
 @app.before_request
@@ -218,7 +230,7 @@ def login():
         user_dict = authenticate_user(form_user, pwd)
         if not user_dict:
             return render_template('auth/login.html', form=form)
-        user = User(form_user)
+        user = User(form_user, user_dict.get('SCOPES'))
         login_user(user)
         return redirect(url_for('index'))
     return render_template('auth/login.html', form=LoginForm())

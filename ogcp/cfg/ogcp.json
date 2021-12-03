@@ -5,11 +5,15 @@
 	"USERS": [
 		{
 			"USER": "admin",
-			"PASS": "pass"
+			"PASS": "pass",
+			"SCOPES": [ ]
 		},
 		{
 			"USER": "user",
-			"PASS": "pass"
+			"PASS": "pass",
+			"SCOPES": [
+				"Unidad Organizativa (Default)"
+			]
 		}
 	]
 }
