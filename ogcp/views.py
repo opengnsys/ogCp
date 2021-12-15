@@ -11,7 +11,7 @@ from flask import (
 from ogcp.forms.action_forms import (
     WOLForm, SetupForm, ClientDetailsForm, ImageDetailsForm, HardwareForm,
     SessionForm, ImageRestoreForm, ImageCreateForm, SoftwareForm, BootModeForm,
-    RoomForm, DeleteRoomForm, CenterForm, DeleteCenterForm
+    RoomForm, DeleteRoomForm, CenterForm, DeleteCenterForm, OgliveForm
 )
 from flask_login import (
     current_user, LoginManager,
@@ -664,6 +664,43 @@ def action_mode():
         form.ok.render_kw = { 'formaction': url_for('action_mode') }
         scopes, clients = get_scopes(set(ips))
         return render_template('actions/mode.html', form=form, scopes=scopes, clients=clients)
+
+
+@app.route('/action/oglive', methods=['GET', 'POST'])
+@login_required
+def action_oglive():
+    form = OgliveForm(request.form)
+    if request.method == 'POST':
+        ips = form.ips.data.split(' ')
+        payload = {'clients': ips, 'name': form.oglive.data}
+        r = g.server.post('/oglive/set', payload)
+        if r.status_code == requests.codes.ok:
+            flash(_('Client set ogLive request sent successfully'),
+                  category='info')
+        else:
+            flash(_('Ogserver replied with status code not ok'),
+                  category='error')
+        return redirect(url_for('commands'))
+
+    else:
+        r = g.server.get('/oglive/list')
+        if r.status_code != requests.codes.ok:
+            flash(_('Ogserver replied with status code not ok'),
+                  category='error')
+            return redirect(url_for('commands'))
+        available_oglives = [(oglive.get('directory'), oglive.get('directory'))
+                             for oglive in r.json()['oglive']]
+        available_oglives.insert(0, ('default', 'default'))
+        form.oglive.choices = list(available_oglives)
+
+        ips = parse_elements(request.args.to_dict())
+        form.ips.data = " ".join(ips)
+        if not validate_elements(ips):
+            return redirect(url_for('commands'))
+
+        form.ok.render_kw = {'formaction': url_for('action_oglive')}
+        scopes, clients = get_scopes(set(ips))
+        return render_template('actions/oglive.html', form=form, scopes=scopes)
 
 
 @app.route('/action/image/create', methods=['GET', 'POST'])

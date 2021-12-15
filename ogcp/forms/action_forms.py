@@ -110,6 +110,11 @@ class BootModeForm(FlaskForm):
     boot = SelectField(label=_('Boot mode'))
     ok = SubmitField(label=_('Ok'))
 
+class OgliveForm(FlaskForm):
+    ips = HiddenField()
+    oglive = SelectField(label=_('ogLive'))
+    ok = SubmitField(label=_('Ok'))
+
 class ImageCreateForm(FlaskForm):
     ip = HiddenField()
     os = SelectField(label=_('OS'), choices=[])
