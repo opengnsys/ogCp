@@ -559,6 +559,12 @@ def action_client_info():
     form.room.data = db_client['room']
     form.boot.data = db_client['boot']
 
+    r = g.server.get('/oglive/list')
+    available_oglives = r.json()['oglive']
+    for oglive in available_oglives:
+        choice = (oglive.get('directory'), oglive.get('directory'))
+        form.livedir.choices.append(choice)
+
     r = g.server.get('/mode')
     available_modes = [(mode, mode) for mode in r.json()['modes']]
     form.boot.choices = list(available_modes)
