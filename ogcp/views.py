@@ -582,7 +582,7 @@ def action_client_info():
     setup = get_client_setup(ips)
 
     for entry in setup:
-        if entry['image'] != 0:
+        if images and entry['image'] != 0:
             image = next(img for img in images if img['id'] == entry['image'])
             entry['image'] = image['name']
         else:
