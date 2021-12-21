@@ -1,0 +1,514 @@
+# Spanish translations for OgCP.
+# Copyright (C) 2021 Soleta Networks
+# This file is distributed under the same license as the OgCP project.
+# Soleta Networks <opengnsys@soleta.eu>, 2021.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: 1.0.0\n"
+"Report-Msgid-Bugs-To: opengnsys@soleta.eu\n"
+"POT-Creation-Date: 2022-01-11 16:10+0000\n"
+"PO-Revision-Date: 2021-12-23 16:47+0100\n"
+"Last-Translator: Soleta Networks <opengnsys@soleta.eu>\n"
+"Language: es\n"
+"Language-Team: es <opengnsys@soleta.eu>\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.8.0\n"
+
+#: views.py:82
+msgid "Please, select at least {} element(s)"
+msgstr "Por favor, seleccione al menos {} elemento(s)"
+
+#: views.py:86
+msgid "No more than {} element(s) can be selected for the given action"
+msgstr "No se pueden seleccionar más de {} elemento(s) para la acción dada"
+
+#: views.py:174
+msgid "Incorrect password"
+msgstr "Contraseña incorrecta"
+
+#: views.py:176
+msgid "Incorrect user name"
+msgstr "Nombre de usuario incorrecto"
+
+#: views.py:275
+msgid "Wake On Lan request sent successfully"
+msgstr "Wake On Lan enviado con éxito"
+
+#: views.py:436
+msgid "Computers have different partition setup"
+msgstr "Los ordenadores tienen diferentes configuraciones de partición"
+
+#: views.py:440
+msgid "ogServer was unable to obtain setup of selected computer {}"
+msgstr "ogServer no pudo obtener la configuración del ordenador seleccionado {}"
+
+#: views.py:443
+msgid "Disk: {} | Part: {}"
+msgstr "Disco: {} | Partición: {}"
+
+#: views.py:488
+msgid "Software profile request sent successfully"
+msgstr "Solicitud de perfil de software enviado con éxito"
+
+#: views.py:490
+msgid "Error processing software profile request: ({})"
+msgstr "Error procesando la solicitud de perfil de software: ({})"
+
+#: views.py:640 views.py:768 views.py:783 views.py:915
+msgid "OgServer replied with a non ok status code"
+msgstr "OgServer respondió con un código de estado de error"
+
+#: views.py:642 views.py:917
+msgid "Delete client request processed successfully"
+msgstr "Solicitud de eliminar cliente procesada con éxito"
+
+#: views.py:655
+msgid "Client set boot mode request sent successfully"
+msgstr "Solicitud del cambio del modo de inicio del cliente enviado con éxito"
+
+#: views.py:657 views.py:687 views.py:694
+msgid "Ogserver replied with status code not ok"
+msgstr "OgServer respondió con el código de estado de error"
+
+#: views.py:684
+msgid "Client set ogLive request sent successfully"
+msgstr "Solicitud de cambio de ogLive enviada con éxito"
+
+#: views.py:770 views.py:785
+msgid "Refresh request processed successfully"
+msgstr "Solicitud de actualización procesada con éxito"
+
+#: views.py:797
+msgid "Server replied with error code when adding the center"
+msgstr "El servidor respondió con el código de error al agregar el centro."
+
+#: views.py:800
+msgid "Center added successfully"
+msgstr "Centro añadido con éxito"
+
+#: views.py:813
+msgid "Server replied with error code when deleting the center"
+msgstr "El servidor respondió con el código de error al eliminar el centro"
+
+#: views.py:816
+msgid "Center deleted successfully"
+msgstr "Centro eliminado con éxito"
+
+#: views.py:835
+msgid "Server replied with error code when adding the room"
+msgstr "El servidor respondió con el código de error al agregar la sala."
+
+#: views.py:837
+msgid "Room added successfully"
+msgstr "Sala añadida con éxito"
+
+#: views.py:854
+msgid "Server replied with error code when deleting the room"
+msgstr "El servidor respondió con el código de error al eliminar la sala."
+
+#: views.py:857
+msgid "Room deleted successfully"
+msgstr "Sala eliminada con éxito"
+
+#: forms/action_forms.py:19 forms/action_forms.py:27 forms/action_forms.py:57
+#: templates/actions/hardware.html:14
+msgid "Type"
+msgstr "Tipo"
+
+#: forms/action_forms.py:22 forms/action_forms.py:131 forms/action_forms.py:136
+#: forms/action_forms.py:145 forms/action_forms.py:150
+msgid "Submit"
+msgstr "Enviar"
+
+#: forms/action_forms.py:25 forms/action_forms.py:70 forms/action_forms.py:81
+msgid "Partition"
+msgstr "Partición"
+
+#: forms/action_forms.py:43
+msgid "Filesystem"
+msgstr "Sistema de ficheros"
+
+#: forms/action_forms.py:51
+msgid "Size (KB)"
+msgstr "Tamaño (KB)"
+
+#: forms/action_forms.py:52
+msgid "Format"
+msgstr "Formatear"
+
+#: forms/action_forms.py:66 templates/commands.html:25
+msgid "Refresh"
+msgstr "Actualizar"
+
+#: forms/action_forms.py:71
+msgid "View"
+msgstr "Vista"
+
+#: forms/action_forms.py:72
+msgid "Update"
+msgstr "Actualizar"
+
+#: forms/action_forms.py:76
+msgid "Session"
+msgstr "Sesión"
+
+#: forms/action_forms.py:77
+msgid "Run"
+msgstr "Lanzar"
+
+#: forms/action_forms.py:82
+msgid "Image"
+msgstr "Imagen"
+
+#: forms/action_forms.py:83
+msgid "Method"
+msgstr "Método"
+
+#: forms/action_forms.py:85
+msgid "Restore"
+msgstr "Restaurar"
+
+#: forms/action_forms.py:88 forms/action_forms.py:154
+msgid "Name"
+msgstr "Nombre"
+
+#: forms/action_forms.py:89
+msgid "IP"
+msgstr "IP"
+
+#: forms/action_forms.py:90
+msgid "MAC"
+msgstr "MAC"
+
+#: forms/action_forms.py:91
+msgid "Serial Number"
+msgstr "Número de serie"
+
+#: forms/action_forms.py:92 forms/action_forms.py:143
+msgid "Netmask"
+msgstr "Máscara de red"
+
+#: forms/action_forms.py:93 forms/action_forms.py:116
+msgid "ogLive"
+msgstr "ogLive"
+
+#: forms/action_forms.py:95
+msgid "Remote"
+msgstr "Remoto"
+
+#: forms/action_forms.py:96
+msgid "Maintenance"
+msgstr "Mantenimiento"
+
+#: forms/action_forms.py:97
+msgid "Interface"
+msgstr "Interfaz"
+
+#: forms/action_forms.py:101
+msgid "Driver"
+msgstr "Controlador"
+
+#: forms/action_forms.py:103
+msgid "Repository"
+msgstr "Repositorio"
+
+#: forms/action_forms.py:105 forms/action_forms.py:148
+msgid "Room"
+msgstr "Sala"
+
+#: forms/action_forms.py:106
+msgid "Boot Mode"
+msgstr "Modo de arranque"
+
+#: forms/action_forms.py:107 forms/action_forms.py:125
+msgid "Create"
+msgstr "Crear"
+
+#: forms/action_forms.py:111
+msgid "Boot mode"
+msgstr "Modo de arranque"
+
+#: forms/action_forms.py:112 forms/action_forms.py:117
+msgid "Ok"
+msgstr "OK"
+
+#: forms/action_forms.py:121
+msgid "OS"
+msgstr "SO"
+
+#: forms/action_forms.py:122
+msgid "Image name"
+msgstr "Nombre de la imagen"
+
+#: forms/action_forms.py:124
+msgid "Description"
+msgstr "Descripción"
+
+#: forms/action_forms.py:128
+msgid "Center name"
+msgstr "Nombre del centro"
+
+#: forms/action_forms.py:130
+msgid "Comment"
+msgstr "Comentario"
+
+#: forms/action_forms.py:134 forms/action_forms.py:139
+msgid "Center"
+msgstr "Centro"
+
+#: forms/action_forms.py:141
+msgid "Room name"
+msgstr "Nombre de la sala"
+
+#: forms/action_forms.py:153
+msgid "Id"
+msgstr "Id"
+
+#: forms/action_forms.py:155
+msgid "Size (GiB)"
+msgstr "Tamaño (GiB)"
+
+#: forms/action_forms.py:156
+msgid "Datasize (GiB)"
+msgstr "Tamaño de los datos (GiB)"
+
+#: forms/action_forms.py:157
+msgid "Modified"
+msgstr "Modificado"
+
+#: forms/action_forms.py:158
+msgid "Permissions"
+msgstr "Permisos"
+
+#: forms/action_forms.py:159
+msgid "Software id"
+msgstr "ID de software"
+
+#: forms/auth.py:19
+msgid "User"
+msgstr "Usuario"
+
+#: forms/auth.py:23
+msgid "Password"
+msgstr "Contraseña"
+
+#: forms/auth.py:27 templates/nav.html:41
+msgid "Login"
+msgstr "Acceso"
+
+#: templates/commands.html:19
+msgid "Power on (WoL)"
+msgstr "Encendido (WoL)"
+
+#: templates/commands.html:21
+msgid "Power off"
+msgstr "Apagado"
+
+#: templates/commands.html:23
+msgid "Reboot"
+msgstr "Reiniciar"
+
+#: templates/commands.html:27
+msgid "Hardware"
+msgstr "Hardware"
+
+#: templates/commands.html:29
+msgid "Software"
+msgstr "Software"
+
+#: templates/actions/session.html:6 templates/commands.html:31
+msgid "Start session"
+msgstr "Iniciar sesión"
+
+#: templates/commands.html:33
+msgid "Restore Image"
+msgstr "Restaurar imagen"
+
+#: templates/commands.html:35
+msgid "Partition & Format"
+msgstr "Particionar y formatear"
+
+#: templates/actions/client_details.html:6 templates/commands.html:37
+msgid "Client details"
+msgstr "Detalles del cliente"
+
+#: templates/commands.html:39
+msgid "Create image"
+msgstr "Crear imagen"
+
+#: templates/commands.html:41
+msgid "Set boot mode"
+msgstr "Seleccionar el modo de arranque"
+
+#: templates/commands.html:43
+msgid "Set ogLive"
+msgstr "Seleccionar ogLive"
+
+#: templates/commands.html:45
+msgid "Log"
+msgstr "Log"
+
+#: templates/commands.html:47
+msgid "Real time log"
+msgstr "Log en tiempo real"
+
+#: templates/dashboard.html:9
+msgid "Connected clients (ogClient)"
+msgstr "Clientes conectados (ogClient)"
+
+#: templates/dashboard.html:21
+msgid "Latest images"
+msgstr "Últimas imágenes"
+
+#: templates/dashboard.html:40
+msgid "Disk stats"
+msgstr "Estadisticas de disco"
+
+#: templates/dashboard.html:46
+msgid "Disk size"
+msgstr "Capacidad del disco"
+
+#: templates/dashboard.html:49
+msgid "used"
+msgstr "ocupado"
+
+#: templates/dashboard.html:52
+msgid "available"
+msgstr "disponible"
+
+#: templates/dashboard.html:55
+msgid "use"
+msgstr "ocupado"
+
+#: templates/dashboard.html:74
+msgid "Number of images"
+msgstr "Número de imágenes"
+
+#: templates/dashboard.html:93
+msgid "default"
+msgstr "predeterminado"
+
+#: templates/error.html:6
+msgid "Error!"
+msgstr "¡Error!"
+
+#: templates/actions/image_details.html:6 templates/images.html:28
+msgid "Image details"
+msgstr "Detalles de la imagen"
+
+#: templates/images.html:30
+msgid "Delete image"
+msgstr "Eliminar Imagen"
+
+#: templates/nav.html:11
+msgid "Dashboard"
+msgstr "Panel principal"
+
+#: templates/nav.html:14
+msgid "Scopes"
+msgstr "Ámbito"
+
+#: templates/nav.html:17
+msgid "Commands"
+msgstr "Comandos"
+
+#: templates/nav.html:20
+msgid "Images"
+msgstr "Imágenes"
+
+#: templates/nav.html:23
+msgid "Tasks"
+msgstr "Tareas"
+
+#: templates/nav.html:26
+msgid "Schedule"
+msgstr "Programaciones"
+
+#: templates/nav.html:35
+msgid "Logout"
+msgstr "Cerrar sesión"
+
+#: templates/scopes.html:19
+msgid "Add client"
+msgstr "Añadir cliente"
+
+#: templates/scopes.html:21
+msgid "Add room"
+msgstr "Añadir sala"
+
+#: templates/scopes.html:23
+msgid "Add center"
+msgstr "Añadir centro"
+
+#: templates/scopes.html:25
+msgid "Delete client"
+msgstr "Eliminar cliente"
+
+#: templates/scopes.html:27
+msgid "Delete room"
+msgstr "Eliminar sala"
+
+#: templates/scopes.html:29
+msgid "Delete center"
+msgstr "Eliminar centro"
+
+#: templates/actions/add_center.html:6
+msgid "Add center form"
+msgstr "Formulario para añadir un centro"
+
+#: templates/actions/add_room.html:6
+msgid "Add room form"
+msgstr "Formulario para añadir una sala"
+
+#: templates/actions/delete_center.html:6
+msgid "Delete center form"
+msgstr "Formulario para eliminar un centro"
+
+#: templates/actions/delete_room.html:6
+msgid "Delete room form"
+msgstr "Formulario para eliminar una sala"
+
+#: templates/actions/hardware.html:6
+msgid "Hardware inventory"
+msgstr "Inventario de hardware"
+
+#: templates/actions/hardware.html:13
+msgid "Item"
+msgstr "Articulo"
+
+#: templates/actions/image_create.html:6
+msgid "Create a partition image"
+msgstr "Crear una imagen de partición"
+
+#: templates/actions/setup.html:5
+msgid "Partition and Format"
+msgstr "Partición y formato"
+
+#: templates/actions/setup.html:47
+msgid "Remove"
+msgstr "Eliminar"
+
+#: templates/actions/setup.html:64
+msgid "Change disk"
+msgstr "Cambiar de disco"
+
+#: templates/actions/setup.html:68
+msgid "Add a new partition"
+msgstr "Añadir una nueva partición"
+
+#: templates/actions/setup.html:72
+msgid "Accept"
+msgstr "Aceptar"
+
+#: templates/actions/software.html:6
+msgid "Software Inventory"
+msgstr "Inventario de software"
+
+#: templates/actions/legacy/log.html:6
+msgid "Client log"
+msgstr "Registro de clientes"
+

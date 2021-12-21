@@ -20,4 +20,8 @@ csrf = CSRFProtect(app)
 bootstrap = Bootstrap(app)
 
 
+@babel.localeselector
+def localeselector():
+    return app.config.get('LANG', 'en')
+
 import ogcp.views
