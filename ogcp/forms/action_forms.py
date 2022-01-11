@@ -11,19 +11,20 @@ from wtforms import (
 )
 from wtforms.validators import InputRequired
 from flask_wtf import FlaskForm
+from flask_babel import lazy_gettext as _l
 from flask_babel import _
 
 class WOLForm(FlaskForm):
     ips = HiddenField()
-    wol_type = SelectField(label=_('Type'),
+    wol_type = SelectField(label=_l('Type'),
                            choices=[('broadcast', 'Broadcast'),
                                     ('unicast', 'Unicast')])
-    submit = SubmitField(label=_('Submit'))
+    submit = SubmitField(label=_l('Submit'))
 
 class PartitionForm(FlaskForm):
-    partition = SelectField(label=_('Partition'),
+    partition = SelectField(label=_l('Partition'),
                             choices=range(1,10))
-    part_type = SelectField(label=_('Type'),
+    part_type = SelectField(label=_l('Type'),
                             choices=[('LINUX', 'Linux'),
                                      ('NTFS', 'NTFS'),
                                      ('CACHE', 'CACHE'),
@@ -39,7 +40,7 @@ class PartitionForm(FlaskForm):
                                      ('HFAT32', 'HFAT32'),
                                      ('HNTFS-WINRE', 'HNTFS-WINRE'),
                                      ('EMPTY', 'Empty')])
-    fs = SelectField(label=_('Filesystem'),
+    fs = SelectField(label=_l('Filesystem'),
                      choices=[('EXT4', 'EXT4'),
                               ('NTFS', 'NTFS'),
                               ('CACHE', 'CACHE'),
@@ -47,13 +48,13 @@ class PartitionForm(FlaskForm):
                               ('FAT32', 'FAT32'),
                               ('EXFAT', 'EXFAT'),
                               ('EMPTY', 'Empty')])
-    size = IntegerField(label=_('Size (KB)'))
-    format_partition = BooleanField(label=_('Format'))
+    size = IntegerField(label=_l('Size (KB)'))
+    format_partition = BooleanField(label=_l('Format'))
 
 class SetupForm(FlaskForm):
     ips = HiddenField()
     disk = HiddenField()
-    disk_type = SelectField(label=_('Type'),
+    disk_type = SelectField(label=_l('Type'),
                             choices=[('MSDOS', 'MSDOS'),
                                      ('GPT', 'GPT')])
     partitions = FieldList(FormField(PartitionForm),
@@ -62,97 +63,97 @@ class SetupForm(FlaskForm):
 
 class HardwareForm(FlaskForm):
     ips = HiddenField()
-    refresh = SubmitField(label=_('Refresh'))
+    refresh = SubmitField(label=_l('Refresh'))
 
 class SoftwareForm(FlaskForm):
     ips = HiddenField()
-    os = SelectField(label=_('Partition'), choices=[])
-    view = SubmitField(label=_('View'))
-    update = SubmitField(label=_('Update'))
+    os = SelectField(label=_l('Partition'), choices=[])
+    view = SubmitField(label=_l('View'))
+    update = SubmitField(label=_l('Update'))
 
 class SessionForm(FlaskForm):
     ips = HiddenField()
-    os = RadioField(label=_('Session'), choices=[])
-    run = SubmitField(label=_('Run'))
+    os = RadioField(label=_l('Session'), choices=[])
+    run = SubmitField(label=_l('Run'))
 
 class ImageRestoreForm(FlaskForm):
     ips = HiddenField()
-    partition = SelectField(label=_('Partition'), choices=[])
-    image = SelectField(label=_('Image'), choices=[])
-    method = SelectField(label=_('Method'),
+    partition = SelectField(label=_l('Partition'), choices=[])
+    image = SelectField(label=_l('Image'), choices=[])
+    method = SelectField(label=_l('Method'),
                          choices=[('TIPTORRENT', 'TIPTORRENT')])
-    restore = SubmitField(label=_('Restore'))
+    restore = SubmitField(label=_l('Restore'))
 
 class ClientDetailsForm(FlaskForm):
-    name = StringField(label=_('Name'))
-    ip = StringField(label=_('IP'))
-    mac = StringField(label=_('MAC'))
-    serial_number = StringField(label=_('Serial Number'))
-    netmask = StringField(label=_('Netmask'))
-    livedir = SelectField(label=_('ogLive'),
+    name = StringField(label=_l('Name'))
+    ip = StringField(label=_l('IP'))
+    mac = StringField(label=_l('MAC'))
+    serial_number = StringField(label=_l('Serial Number'))
+    netmask = StringField(label=_l('Netmask'))
+    livedir = SelectField(label=_l('ogLive'),
                           choices=[('ogLive', 'Default'),])
-    remote = BooleanField(label=_('Remote'))
-    maintenance = BooleanField(label=_('Maintenance'))
-    netiface = SelectField(label=_('Interface'),
+    remote = BooleanField(label=_l('Remote'))
+    maintenance = BooleanField(label=_l('Maintenance'))
+    netiface = SelectField(label=_l('Interface'),
                            choices=[('eth0', 'eth0'),
                                     ('eth1', 'eth1'),
                                     ('eth2', 'eth2')])
-    netdriver = SelectField(label=_('Driver'),
+    netdriver = SelectField(label=_l('Driver'),
                             choices=[('generic', 'generic')])
-    repo = SelectField(label=_('Repository'),
+    repo = SelectField(label=_l('Repository'),
                        choices=[(1, 'Default')])
-    room = SelectField(label=_('Room'))
-    boot = SelectField(label=_('Boot Mode'))
-    create = SubmitField(label=_('Create'))
+    room = SelectField(label=_l('Room'))
+    boot = SelectField(label=_l('Boot Mode'))
+    create = SubmitField(label=_l('Create'))
 
 class BootModeForm(FlaskForm):
     ips = HiddenField()
-    boot = SelectField(label=_('Boot mode'))
-    ok = SubmitField(label=_('Ok'))
+    boot = SelectField(label=_l('Boot mode'))
+    ok = SubmitField(label=_l('Ok'))
 
 class OgliveForm(FlaskForm):
     ips = HiddenField()
-    oglive = SelectField(label=_('ogLive'))
-    ok = SubmitField(label=_('Ok'))
+    oglive = SelectField(label=_l('ogLive'))
+    ok = SubmitField(label=_l('Ok'))
 
 class ImageCreateForm(FlaskForm):
     ip = HiddenField()
-    os = SelectField(label=_('OS'), choices=[])
-    name = StringField(label=_('Image name'),
+    os = SelectField(label=_l('OS'), choices=[])
+    name = StringField(label=_l('Image name'),
                        validators=[InputRequired()])
-    description = StringField(label=_('Description'))
-    create = SubmitField(label=_('Create'))
+    description = StringField(label=_l('Description'))
+    create = SubmitField(label=_l('Create'))
 
 class CenterForm(FlaskForm):
-    name = StringField(label=_('Center name'),
+    name = StringField(label=_l('Center name'),
                        validators=[InputRequired()])
-    comment = StringField(label=_('Comment'))
-    submit = SubmitField(label=_('Submit'))
+    comment = StringField(label=_l('Comment'))
+    submit = SubmitField(label=_l('Submit'))
 
 class DeleteCenterForm(FlaskForm):
-    center = SelectField(label=_('Center'),
+    center = SelectField(label=_l('Center'),
                          validators=[InputRequired()])
-    submit = SubmitField(label=_('Submit'))
+    submit = SubmitField(label=_l('Submit'))
 
 class RoomForm(FlaskForm):
-    center = SelectField(label=_('Center'),
+    center = SelectField(label=_l('Center'),
                          validators=[InputRequired()])
-    name = StringField(label=_('Room name'),
+    name = StringField(label=_l('Room name'),
                        validators=[InputRequired()])
-    netmask = StringField(label=_('Netmask'),
+    netmask = StringField(label=_l('Netmask'),
                           validators=[InputRequired()])
-    submit = SubmitField(label=_('Submit'))
+    submit = SubmitField(label=_l('Submit'))
 
 class DeleteRoomForm(FlaskForm):
-    room = SelectField(label=_('Room'),
+    room = SelectField(label=_l('Room'),
                        validators=[InputRequired()])
-    submit = SubmitField(label=_('Submit'))
+    submit = SubmitField(label=_l('Submit'))
 
 class ImageDetailsForm(FlaskForm):
-    id = StringField(label=_('Id'))
-    name = StringField(label=_('Name'))
-    size = DecimalField(label=_('Size (GiB)'))
-    datasize = DecimalField(label=_('Datasize (GiB)'))
-    modified = StringField(label=_('Modified'))
-    permissions = StringField(label=_('Permissions'))
-    software_id = StringField(label=_('Software id'))
+    id = StringField(label=_l('Id'))
+    name = StringField(label=_l('Name'))
+    size = DecimalField(label=_l('Size (GiB)'))
+    datasize = DecimalField(label=_l('Datasize (GiB)'))
+    modified = StringField(label=_l('Modified'))
+    permissions = StringField(label=_l('Permissions'))
+    software_id = StringField(label=_l('Software id'))

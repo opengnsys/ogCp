@@ -11,17 +11,18 @@ from wtforms import (
 )
 from wtforms.validators import InputRequired
 from flask_wtf import FlaskForm
+from flask_babel import lazy_gettext as _l
 from flask_babel import _
 
 class LoginForm(FlaskForm):
     user = StringField(
-        label=_('User'),
+        label=_l('User'),
         validators=[InputRequired()]
     )
     pwd = PasswordField(
-        label=_('Password'),
+        label=_l('Password'),
         validators=[InputRequired()]
     )
     submit = SubmitField(
-        label=_('Login')
+        label=_l('Login')
     )
