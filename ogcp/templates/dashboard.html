@@ -6,7 +6,7 @@
   <div class="col-{{ colsize }}">
     <div class="card text-center">
       <div class="card-header">
-        Connected clients (ogClient)
+        {{ _('Connected clients (ogClient)') }}
       </div>
       <div class="card-body">
         <p class="card-text">{{ clients['clients'] | length }}</p>
@@ -18,7 +18,7 @@
   <div class="col-{{ colsize }}">
     <div class="card text-center">
       <div class="card-header">
-        Latest images
+        {{ _('Latest images') }}
       </div>
         {% for image in images[:10] %}
           <ul class="list-group list-group-horizontal">
@@ -37,22 +37,22 @@
   <div class="col-{{ colsize }}">
     <div class="card text-center">
       <div class="card-header">
-        Disk stats
+        {{ _('Disk stats') }}
       </div>
       <div class="card-body">
         <canvas id="diskChart" class="mb-2"></canvas>
         <ul class="list-group list-group-horizontal">
           <li class="list-group-item w-50">
-            Disk size
+            {{ _('Disk size') }}
           </li>
           <li class="list-group-item w-50">
-            used
+            {{ _('used') }}
           </li>
           <li class="list-group-item w-50">
-            available
+            {{ _('available') }}
           </li>
           <li class="list-group-item w-50">
-            use(%)
+            {{ _('use') }}(%)
           </li>
         </ul>
         <ul class="list-group list-group-horizontal">
@@ -71,7 +71,7 @@
         </ul>
       </div>
       <div class="card-header">
-        Number of images
+        {{ _('Number of images') }}
       </div>
       <div class="card-body">
         <p class="card-text">{{ images | length }}</p>
@@ -90,7 +90,7 @@
             <li class="list-group-item">
               {{ oglive['directory'] }}
             {% if loop.index0 == oglive_list['default'] %}
-              (default)
+              ({{ _('default') }})
             {% endif %}
             </li>
           {% endfor %}
