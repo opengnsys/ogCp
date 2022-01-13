@@ -79,11 +79,11 @@ login_manager.login_view = 'login'
 def validate_elements(elements, min_len=1, max_len=float('inf')):
     valid = True
     if len(elements) < min_len:
-        flash(_(f'Please, select at least {min_len} element(s)'),
+        flash(_('Please, select at least {} element(s)').format(min_len),
               category='error')
         valid = not valid
     elif len(elements) > max_len:
-        flash(_(f'No more than {max_len} element(s) can be selected for the given action'),
+        flash(_('No more than {} element(s) can be selected for the given action').format(max_len),
               category='error')
         valid = not valid
     return valid
@@ -437,10 +437,10 @@ def action_image_restore():
                     return redirect(url_for('commands'))
 
             else:
-                flash(_(f'ogServer was unable to obtain setup of selected computer {ip}'), category='error')
+                flash(_('ogServer was unable to obtain setup of selected computer {}').format(ip), category='error')
                 return redirect(url_for('commands'))
 
-        form.partition.choices = [ (f'{disk_id} {part_id}', _(f'Disk: {disk_id} | Part: {part_id}'))
+        form.partition.choices = [ (f'{disk_id} {part_id}', _('Disk: {} | Part: {}').format(disk_id, part_id))
                                     for disk_id, part_id in part_choices ]
 
         return render_template('actions/image_restore.html', form=form)
@@ -487,7 +487,7 @@ def action_software():
             if r.status_code == requests.codes.ok:
                 flash(_('Software profile request sent successfully'), category='info')
                 return redirect(url_for('commands'))
-            flash(_(f'Error processing software profile request: ({r.status})'), category='error')
+            flash(_('Error processing software profile request: ({})').format(r.status), category='error')
         return make_response("400 Bad Request", 400)
     else:
         ips = parse_elements(request.args.to_dict())
