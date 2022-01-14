@@ -611,9 +611,12 @@ def action_client_add():
                    "serial_number": form.serial_number.data}
 
         r = g.server.post('/client/add', payload)
-        if r.status_code == requests.codes.ok:
-            return make_response("200 OK", 200)
-        return make_response("400 Bad Request", 400)
+        if r.status_code != requests.codes.ok:
+            flash(_('ogServer: error adding client'),
+                  category='error')
+        else:
+            flash(_('Client added successfully'), category='info')
+        return redirect(url_for("scopes"))
     else:
         r = g.server.get('/mode')
         available_modes = [(mode, mode) for mode in r.json()['modes']]
