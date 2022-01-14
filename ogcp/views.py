@@ -11,7 +11,8 @@ from flask import (
 from ogcp.forms.action_forms import (
     WOLForm, SetupForm, ClientDetailsForm, ImageDetailsForm, HardwareForm,
     SessionForm, ImageRestoreForm, ImageCreateForm, SoftwareForm, BootModeForm,
-    RoomForm, DeleteRoomForm, CenterForm, DeleteCenterForm, OgliveForm
+    RoomForm, DeleteRoomForm, CenterForm, DeleteCenterForm, OgliveForm,
+    GenericForm
 )
 from flask_login import (
     current_user, LoginManager,
@@ -630,20 +631,33 @@ def action_client_add():
         form.create.render_kw = {"formaction": url_for('action_client_add')}
         return render_template('actions/client_details.html', form=form)
 
-@app.route('/action/client/delete', methods=['POST'])
+@app.route('/action/client/delete', methods=['GET', 'POST'])
 @login_required
 def action_client_delete():
-    ips = parse_elements(request.form.to_dict())
-    if not validate_elements(ips):
-        return redirect(url_for('scopes'))
+    form = GenericForm(request.form)
+    if request.method == 'POST':
+        ips = form.ips.data.split(' ')
+        if not validate_elements(ips):
+            return redirect(url_for('scopes'))
 
-    payload = {'clients': list(ips)}
-    r = g.server.post('/client/delete', payload)
-    if r.status_code != requests.codes.ok:
-        flash(_('OgServer replied with a non ok status code'), category='error')
+        payload = {'clients': ips}
+        r = g.server.post('/client/delete', payload)
+        if r.status_code != requests.codes.ok:
+            flash(_('ogServer: error deleting client'),
+                  category='error')
+        else:
+            flash(_('Client deleted successfully'),
+                  category='info')
+        return redirect(url_for('scopes'))
     else:
-        flash(_('Delete client request processed successfully'), category='info')
-    return redirect(url_for('scopes'))
+        ips = parse_elements(request.args.to_dict())
+        form.ips.data = " ".join(ips)
+        if validate_elements(ips):
+            scopes, clients = get_scopes(set(ips))
+            return render_template('actions/delete_client.html', form=form,
+                                   scopes=scopes)
+        else:
+            return redirect(url_for('scopes'))
 
 @app.route('/action/mode', methods=['GET', 'POST'])
 @login_required

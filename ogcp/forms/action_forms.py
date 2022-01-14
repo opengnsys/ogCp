@@ -14,6 +14,12 @@ from flask_wtf import FlaskForm
 from flask_babel import lazy_gettext as _l
 from flask_babel import _
 
+
+class GenericForm(FlaskForm):
+    ips = HiddenField()
+    submit = SubmitField(label=_l('Submit'))
+
+
 class WOLForm(FlaskForm):
     ips = HiddenField()
     wol_type = SelectField(label=_l('Type'),

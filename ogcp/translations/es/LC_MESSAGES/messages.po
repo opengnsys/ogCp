@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  1.0.0\n"
 "Report-Msgid-Bugs-To: opengnsys@soleta.eu\n"
-"POT-Creation-Date: 2022-01-14 09:01+0100\n"
+"POT-Creation-Date: 2022-01-19 13:06+0100\n"
 "PO-Revision-Date: 2021-12-23 16:47+0100\n"
 "Last-Translator: Soleta Networks <opengnsys@soleta.eu>\n"
 "Language: es\n"
@@ -18,281 +18,290 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.8.0\n"
 
-#: views.py:82
+#: views.py:83
 msgid "Please, select at least {} element(s)"
 msgstr "Por favor, seleccione al menos {} elemento(s)"
 
-#: views.py:86
+#: views.py:87
 msgid "No more than {} element(s) can be selected for the given action"
 msgstr "No se pueden seleccionar más de {} elemento(s) para la acción dada"
 
-#: views.py:174
+#: views.py:175
 msgid "Incorrect password"
 msgstr "Contraseña incorrecta"
 
-#: views.py:176
+#: views.py:177
 msgid "Incorrect user name"
 msgstr "Nombre de usuario incorrecto"
 
-#: views.py:275
+#: views.py:276
 msgid "Wake On Lan request sent successfully"
 msgstr "Wake On Lan enviado con éxito"
 
-#: views.py:436
+#: views.py:437
 msgid "Computers have different partition setup"
 msgstr "Los ordenadores tienen diferentes configuraciones de partición"
 
-#: views.py:440
+#: views.py:441
 msgid "ogServer was unable to obtain setup of selected computer {}"
 msgstr "ogServer no pudo obtener la configuración del ordenador seleccionado {}"
 
-#: views.py:443
+#: views.py:444
 msgid "Disk: {} | Part: {}"
 msgstr "Disco: {} | Partición: {}"
 
-#: views.py:488
+#: views.py:489
 msgid "Software profile request sent successfully"
 msgstr "Solicitud de perfil de software enviado con éxito"
 
-#: views.py:490
+#: views.py:491
 msgid "Error processing software profile request: ({})"
 msgstr "Error procesando la solicitud de perfil de software: ({})"
 
-#: views.py:615
+#: views.py:616
 msgid "ogServer: error adding client"
 msgstr "ogServer: error al añadir cliente"
 
-#: views.py:618
+#: views.py:619
 msgid "Client added successfully"
 msgstr "Cliente añadido con éxito"
 
-#: views.py:643 views.py:771 views.py:786 views.py:918
-msgid "OgServer replied with a non ok status code"
-msgstr "OgServer respondió con un código de estado de error"
+#: views.py:646
+msgid "ogServer: error deleting client"
+msgstr "ogServer: error al eliminar cliente"
 
-#: views.py:645 views.py:920
-msgid "Delete client request processed successfully"
-msgstr "Solicitud de eliminar cliente procesada con éxito"
+#: views.py:649
+msgid "Client deleted successfully"
+msgstr "Cliente eliminado con éxito"
 
-#: views.py:658
+#: views.py:671
 msgid "Client set boot mode request sent successfully"
 msgstr "Solicitud del cambio del modo de inicio del cliente enviado con éxito"
 
-#: views.py:660 views.py:690 views.py:697
+#: views.py:673 views.py:703 views.py:710
 msgid "Ogserver replied with status code not ok"
 msgstr "OgServer respondió con el código de estado de error"
 
-#: views.py:687
+#: views.py:700
 msgid "Client set ogLive request sent successfully"
 msgstr "Solicitud de cambio de ogLive enviada con éxito"
 
-#: views.py:773 views.py:788
+#: views.py:784 views.py:799 views.py:931
+msgid "OgServer replied with a non ok status code"
+msgstr "OgServer respondió con un código de estado de error"
+
+#: views.py:786 views.py:801
 msgid "Refresh request processed successfully"
 msgstr "Solicitud de actualización procesada con éxito"
 
-#: views.py:800
+#: views.py:813
 msgid "Server replied with error code when adding the center"
 msgstr "El servidor respondió con el código de error al agregar el centro."
 
-#: views.py:803
+#: views.py:816
 msgid "Center added successfully"
 msgstr "Centro añadido con éxito"
 
-#: views.py:816
+#: views.py:829
 msgid "Server replied with error code when deleting the center"
 msgstr "El servidor respondió con el código de error al eliminar el centro"
 
-#: views.py:819
+#: views.py:832
 msgid "Center deleted successfully"
 msgstr "Centro eliminado con éxito"
 
-#: views.py:838
+#: views.py:851
 msgid "Server replied with error code when adding the room"
 msgstr "El servidor respondió con el código de error al agregar la sala."
 
-#: views.py:840
+#: views.py:853
 msgid "Room added successfully"
 msgstr "Sala añadida con éxito"
 
-#: views.py:857
+#: views.py:870
 msgid "Server replied with error code when deleting the room"
 msgstr "El servidor respondió con el código de error al eliminar la sala."
 
-#: views.py:860
+#: views.py:873
 msgid "Room deleted successfully"
 msgstr "Sala eliminada con éxito"
 
-#: forms/action_forms.py:19 forms/action_forms.py:27 forms/action_forms.py:57
+#: views.py:933
+msgid "Delete client request processed successfully"
+msgstr "Solicitud de eliminar cliente procesada con éxito"
+
+#: forms/action_forms.py:20 forms/action_forms.py:28 forms/action_forms.py:137
+#: forms/action_forms.py:142 forms/action_forms.py:151
+#: forms/action_forms.py:156
+msgid "Submit"
+msgstr "Enviar"
+
+#: forms/action_forms.py:25 forms/action_forms.py:33 forms/action_forms.py:63
 #: templates/actions/hardware.html:14
 msgid "Type"
 msgstr "Tipo"
 
-#: forms/action_forms.py:22 forms/action_forms.py:131 forms/action_forms.py:136
-#: forms/action_forms.py:145 forms/action_forms.py:150
-msgid "Submit"
-msgstr "Enviar"
-
-#: forms/action_forms.py:25 forms/action_forms.py:70 forms/action_forms.py:81
+#: forms/action_forms.py:31 forms/action_forms.py:76 forms/action_forms.py:87
 msgid "Partition"
 msgstr "Partición"
 
-#: forms/action_forms.py:43
+#: forms/action_forms.py:49
 msgid "Filesystem"
 msgstr "Sistema de ficheros"
 
-#: forms/action_forms.py:51
+#: forms/action_forms.py:57
 msgid "Size (KB)"
 msgstr "Tamaño (KB)"
 
-#: forms/action_forms.py:52
+#: forms/action_forms.py:58
 msgid "Format"
 msgstr "Formatear"
 
-#: forms/action_forms.py:66 templates/commands.html:25
+#: forms/action_forms.py:72 templates/commands.html:25
 msgid "Refresh"
 msgstr "Actualizar"
 
-#: forms/action_forms.py:71
+#: forms/action_forms.py:77
 msgid "View"
 msgstr "Vista"
 
-#: forms/action_forms.py:72
+#: forms/action_forms.py:78
 msgid "Update"
 msgstr "Actualizar"
 
-#: forms/action_forms.py:76
+#: forms/action_forms.py:82
 msgid "Session"
 msgstr "Sesión"
 
-#: forms/action_forms.py:77
+#: forms/action_forms.py:83
 msgid "Run"
 msgstr "Lanzar"
 
-#: forms/action_forms.py:82
+#: forms/action_forms.py:88
 msgid "Image"
 msgstr "Imagen"
 
-#: forms/action_forms.py:83
+#: forms/action_forms.py:89
 msgid "Method"
 msgstr "Método"
 
-#: forms/action_forms.py:85
+#: forms/action_forms.py:91
 msgid "Restore"
 msgstr "Restaurar"
 
-#: forms/action_forms.py:88 forms/action_forms.py:154
+#: forms/action_forms.py:94 forms/action_forms.py:160
 msgid "Name"
 msgstr "Nombre"
 
-#: forms/action_forms.py:89
+#: forms/action_forms.py:95
 msgid "IP"
 msgstr "IP"
 
-#: forms/action_forms.py:90
+#: forms/action_forms.py:96
 msgid "MAC"
 msgstr "MAC"
 
-#: forms/action_forms.py:91
+#: forms/action_forms.py:97
 msgid "Serial Number"
 msgstr "Número de serie"
 
-#: forms/action_forms.py:92 forms/action_forms.py:143
+#: forms/action_forms.py:98 forms/action_forms.py:149
 msgid "Netmask"
 msgstr "Máscara de red"
 
-#: forms/action_forms.py:93 forms/action_forms.py:116
+#: forms/action_forms.py:99 forms/action_forms.py:122
 msgid "ogLive"
 msgstr "ogLive"
 
-#: forms/action_forms.py:95
+#: forms/action_forms.py:101
 msgid "Remote"
 msgstr "Remoto"
 
-#: forms/action_forms.py:96
+#: forms/action_forms.py:102
 msgid "Maintenance"
 msgstr "Mantenimiento"
 
-#: forms/action_forms.py:97
+#: forms/action_forms.py:103
 msgid "Interface"
 msgstr "Interfaz"
 
-#: forms/action_forms.py:101
+#: forms/action_forms.py:107
 msgid "Driver"
 msgstr "Controlador"
 
-#: forms/action_forms.py:103
+#: forms/action_forms.py:109
 msgid "Repository"
 msgstr "Repositorio"
 
-#: forms/action_forms.py:105 forms/action_forms.py:148
+#: forms/action_forms.py:111 forms/action_forms.py:154
 msgid "Room"
 msgstr "Sala"
 
-#: forms/action_forms.py:106
+#: forms/action_forms.py:112
 msgid "Boot Mode"
 msgstr "Modo de arranque"
 
-#: forms/action_forms.py:107 forms/action_forms.py:125
+#: forms/action_forms.py:113 forms/action_forms.py:131
 msgid "Create"
 msgstr "Crear"
 
-#: forms/action_forms.py:111
+#: forms/action_forms.py:117
 msgid "Boot mode"
 msgstr "Modo de arranque"
 
-#: forms/action_forms.py:112 forms/action_forms.py:117
+#: forms/action_forms.py:118 forms/action_forms.py:123
 msgid "Ok"
 msgstr "OK"
 
-#: forms/action_forms.py:121
+#: forms/action_forms.py:127
 msgid "OS"
 msgstr "SO"
 
-#: forms/action_forms.py:122
+#: forms/action_forms.py:128
 msgid "Image name"
 msgstr "Nombre de la imagen"
 
-#: forms/action_forms.py:124
+#: forms/action_forms.py:130
 msgid "Description"
 msgstr "Descripción"
 
-#: forms/action_forms.py:128
+#: forms/action_forms.py:134
 msgid "Center name"
 msgstr "Nombre del centro"
 
-#: forms/action_forms.py:130
+#: forms/action_forms.py:136
 msgid "Comment"
 msgstr "Comentario"
 
-#: forms/action_forms.py:134 forms/action_forms.py:139
+#: forms/action_forms.py:140 forms/action_forms.py:145
 msgid "Center"
 msgstr "Centro"
 
-#: forms/action_forms.py:141
+#: forms/action_forms.py:147
 msgid "Room name"
 msgstr "Nombre de la sala"
 
-#: forms/action_forms.py:153
+#: forms/action_forms.py:159
 msgid "Id"
 msgstr "Id"
 
-#: forms/action_forms.py:155
+#: forms/action_forms.py:161
 msgid "Size (GiB)"
 msgstr "Tamaño (GiB)"
 
-#: forms/action_forms.py:156
+#: forms/action_forms.py:162
 msgid "Datasize (GiB)"
 msgstr "Tamaño de los datos (GiB)"
 
-#: forms/action_forms.py:157
+#: forms/action_forms.py:163
 msgid "Modified"
 msgstr "Modificado"
 
-#: forms/action_forms.py:158
+#: forms/action_forms.py:164
 msgid "Permissions"
 msgstr "Permisos"
 
-#: forms/action_forms.py:159
+#: forms/action_forms.py:165
 msgid "Software id"
 msgstr "ID de software"
 
@@ -475,6 +484,11 @@ msgstr "Formulario para añadir una sala"
 #: templates/actions/delete_center.html:6
 msgid "Delete center form"
 msgstr "Formulario para eliminar un centro"
+
+#: templates/actions/delete_client.html:9
+#, python-format
+msgid "Delete %(ip_count)d client(s)"
+msgstr "Elimina %(ip_count)d cliente(s)"
 
 #: templates/actions/delete_room.html:6
 msgid "Delete room form"
