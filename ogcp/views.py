@@ -309,7 +309,7 @@ def action_setup_show():
     # If partition table is empty, set MSDOS
     form.disk_type.data = filtered_partitions[0]['code'] or 1
 
-    disk_size = filtered_partitions[0]['size']
+    disk_size = filtered_partitions[0]['size'] // 1024
 
     # Make form.partition length equal to (filtered_partitions - 1) length
     diff = len(filtered_partitions) - 1 - len(form.partitions)
@@ -319,7 +319,7 @@ def action_setup_show():
         partition.partition.data = str(db_part['partition'])
         partition.part_type.data = db_part['code']
         partition.fs.data = db_part['filesystem']
-        partition.size.data = db_part['size']
+        partition.size.data = db_part['size'] // 1024
     scopes, _clients = get_scopes(ips)
     return render_template('actions/setup.html',
                            selected_disk=selected_disk,
@@ -349,14 +349,14 @@ def action_setup_modify():
             partition_setup = {'partition': str(partition.partition.data),
                                'code': str(partition.part_type.data),
                                'filesystem': str(partition.fs.data),
-                               'size': str(partition.size.data),
+                               'size': str(partition.size.data * 1024),
                                'format': str(int(partition.format_partition.data))}
             payload['partition_setup'].append(partition_setup)
             if partition.partition.data in required_partitions:
                 required_partitions.remove(partition.partition.data)
             if partition.part_type.data == 'CACHE':
                 payload['cache'] = '1'
-                payload['cache_size'] = str(partition.size.data)
+                payload['cache_size'] = str(partition.size.data * 1024)
 
         for partition in required_partitions:
             empty_part = {

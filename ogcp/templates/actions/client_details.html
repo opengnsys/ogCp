@@ -16,7 +16,7 @@
             <th>Partition</th>
             <th>Type</th>
             <th>Filesytem</th>
-            <th>Size (KB)</th>
+            <th>Size (MB)</th>
             <th>Image</th>
             <th colspan="2"></th>
         </tr>
@@ -27,7 +27,7 @@
             <td>{{ entry.partition }}</td>
             <td>{{ entry.code }}</td>
             <td>{{ entry.filesystem }}</td>
-            <td>{{ entry.size }}</td>
+            <td>{{ entry.size // 1024}}</td>
             <td>{{ entry.image }}</td>
         </tr>
     {% endfor %}
