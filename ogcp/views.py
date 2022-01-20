@@ -581,6 +581,8 @@ def action_client_info():
     images = r.json()['images']
 
     setup = get_client_setup(ips)
+    if setup and setup[0].get('code') == 'MSDOS':
+        setup[0]['code'] = 'MBR'
 
     for entry in setup:
         if images and entry['image'] != 0:

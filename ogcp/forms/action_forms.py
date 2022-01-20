@@ -61,7 +61,7 @@ class SetupForm(FlaskForm):
     ips = HiddenField()
     disk = HiddenField()
     disk_type = SelectField(label=_l('Type'),
-                            choices=[('MSDOS', 'MSDOS'),
+                            choices=[('MSDOS', 'MBR'),
                                      ('GPT', 'GPT')])
     partitions = FieldList(FormField(PartitionForm),
                            min_entries=1,
