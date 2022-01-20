@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  1.0.0\n"
 "Report-Msgid-Bugs-To: opengnsys@soleta.eu\n"
-"POT-Creation-Date: 2022-01-20 12:35+0100\n"
+"POT-Creation-Date: 2022-01-20 13:33+0100\n"
 "PO-Revision-Date: 2021-12-23 16:47+0100\n"
 "Last-Translator: Soleta Networks <opengnsys@soleta.eu>\n"
 "Language: es\n"
@@ -94,47 +94,55 @@ msgstr "OgServer respondió con el código de estado de error"
 msgid "Client set ogLive request sent successfully"
 msgstr "Solicitud de cambio de ogLive enviada con éxito"
 
-#: views.py:806 views.py:821 views.py:953
+#: views.py:808
+msgid "ogServer: error rebooting client"
+msgstr "ogServer: error al reiniciar cliente"
+
+#: views.py:811
+msgid "Client rebooted successfully"
+msgstr "Cliente reiniciado con éxito"
+
+#: views.py:835 views.py:967
 msgid "OgServer replied with a non ok status code"
 msgstr "OgServer respondió con un código de estado de error"
 
-#: views.py:808 views.py:823
+#: views.py:837
 msgid "Refresh request processed successfully"
 msgstr "Solicitud de actualización procesada con éxito"
 
-#: views.py:835
+#: views.py:849
 msgid "Server replied with error code when adding the center"
 msgstr "El servidor respondió con el código de error al agregar el centro."
 
-#: views.py:838
+#: views.py:852
 msgid "Center added successfully"
 msgstr "Centro añadido con éxito"
 
-#: views.py:851
+#: views.py:865
 msgid "Server replied with error code when deleting the center"
 msgstr "El servidor respondió con el código de error al eliminar el centro"
 
-#: views.py:854
+#: views.py:868
 msgid "Center deleted successfully"
 msgstr "Centro eliminado con éxito"
 
-#: views.py:873
+#: views.py:887
 msgid "Server replied with error code when adding the room"
 msgstr "El servidor respondió con el código de error al agregar la sala."
 
-#: views.py:875
+#: views.py:889
 msgid "Room added successfully"
 msgstr "Sala añadida con éxito"
 
-#: views.py:892
+#: views.py:906
 msgid "Server replied with error code when deleting the room"
 msgstr "El servidor respondió con el código de error al eliminar la sala."
 
-#: views.py:895
+#: views.py:909
 msgid "Room deleted successfully"
 msgstr "Sala eliminada con éxito"
 
-#: views.py:955
+#: views.py:969
 msgid "Delete client request processed successfully"
 msgstr "Solicitud de eliminar cliente procesada con éxito"
 
@@ -518,6 +526,11 @@ msgstr "Crear una imagen de partición"
 #, python-format
 msgid "Power off %(ip_count)d client(s)"
 msgstr "Apaga %(ip_count)d cliente(s)"
+
+#: templates/actions/reboot.html:9
+#, python-format
+msgid "Reboot %(ip_count)d client(s)"
+msgstr "Reinicia %(ip_count)d cliente(s)"
 
 #: templates/actions/setup.html:5
 msgid "Partition and Format"

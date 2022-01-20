@@ -793,20 +793,34 @@ def action_image_create():
             form.os.choices.append((choice_value, choice_name))
         return render_template('actions/image_create.html', form=form)
 
-@app.route('/action/reboot', methods=['POST'])
+@app.route('/action/reboot', methods=['GET', 'POST'])
 @login_required
 def action_reboot():
-    ips = parse_elements(request.form.to_dict())
-    if not validate_elements(ips):
-        return redirect(url_for('commands'))
+    form = GenericForm(request.form)
+    if request.method == 'POST':
+        ips = form.ips.data.split(' ')
+        if not validate_elements(ips):
+            return redirect(url_for('commands'))
 
-    payload = {'clients': list(ips)}
-    r = g.server.post('/reboot', payload)
-    if r.status_code != requests.codes.ok:
-        flash(_('OgServer replied with a non ok status code'), category='error')
+        payload = {'clients': ips}
+        r = g.server.post('/reboot', payload)
+        if r.status_code != requests.codes.ok:
+            flash(_('ogServer: error rebooting client'),
+                  category='error')
+        else:
+            flash(_('Client rebooted successfully'),
+                  category='info')
+        return redirect(url_for('commands'))
     else:
-        flash(_('Refresh request processed successfully'), category='info')
-    return redirect(url_for('commands'))
+        ips = parse_elements(request.args.to_dict())
+        form.ips.data = " ".join(ips)
+        if validate_elements(ips):
+            scopes, clients = get_scopes(set(ips))
+            return render_template('actions/reboot.html', form=form,
+                                   scopes=scopes)
+        else:
+            return redirect(url_for('commands'))
+
 
 @app.route('/action/refresh', methods=['POST'])
 @login_required
