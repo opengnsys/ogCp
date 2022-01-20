@@ -254,15 +254,34 @@ def scopes():
     scopes, clients = get_scopes()
     return render_template('scopes.html', scopes=scopes, clients=clients)
 
-@app.route('/action/poweroff', methods=['POST'])
+@app.route('/action/poweroff', methods=['GET', 'POST'])
 @login_required
 def action_poweroff():
-    ips = parse_elements(request.form.to_dict())
-    if not validate_elements(ips):
+    form = GenericForm(request.form)
+    if request.method == 'POST':
+        ips = form.ips.data.split(' ')
+        if not validate_elements(ips):
+            return redirect(url_for('commands'))
+
+        payload = {'clients': ips}
+        r = g.server.post('/poweroff', payload)
+        if r.status_code != requests.codes.ok:
+            flash(_('ogServer: error powering off client'),
+                  category='error')
+        else:
+            flash(_('Client powered off successfully'),
+                  category='info')
         return redirect(url_for('commands'))
-    payload = {'clients': list(ips)}
-    g.server.post('/poweroff', payload)
-    return redirect(url_for('commands'))
+    else:
+        ips = parse_elements(request.args.to_dict())
+        form.ips.data = " ".join(ips)
+        if validate_elements(ips):
+            scopes, clients = get_scopes(set(ips))
+            return render_template('actions/poweroff.html', form=form,
+                                   scopes=scopes)
+        else:
+            return redirect(url_for('commands'))
+
 
 @app.route('/action/wol', methods=['GET', 'POST'])
 @login_required

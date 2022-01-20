@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  1.0.0\n"
 "Report-Msgid-Bugs-To: opengnsys@soleta.eu\n"
-"POT-Creation-Date: 2022-01-19 13:06+0100\n"
+"POT-Creation-Date: 2022-01-20 12:35+0100\n"
 "PO-Revision-Date: 2021-12-23 16:47+0100\n"
 "Last-Translator: Soleta Networks <opengnsys@soleta.eu>\n"
 "Language: es\n"
@@ -34,99 +34,107 @@ msgstr "Contraseña incorrecta"
 msgid "Incorrect user name"
 msgstr "Nombre de usuario incorrecto"
 
-#: views.py:276
+#: views.py:269
+msgid "ogServer: error powering off client"
+msgstr "ogServer: error al apagar cliente"
+
+#: views.py:272
+msgid "Client powered off successfully"
+msgstr "Cliente apagado con éxito"
+
+#: views.py:295
 msgid "Wake On Lan request sent successfully"
 msgstr "Wake On Lan enviado con éxito"
 
-#: views.py:437
+#: views.py:456
 msgid "Computers have different partition setup"
 msgstr "Los ordenadores tienen diferentes configuraciones de partición"
 
-#: views.py:441
+#: views.py:460
 msgid "ogServer was unable to obtain setup of selected computer {}"
 msgstr "ogServer no pudo obtener la configuración del ordenador seleccionado {}"
 
-#: views.py:444
+#: views.py:463
 msgid "Disk: {} | Part: {}"
 msgstr "Disco: {} | Partición: {}"
 
-#: views.py:489
+#: views.py:508
 msgid "Software profile request sent successfully"
 msgstr "Solicitud de perfil de software enviado con éxito"
 
-#: views.py:491
+#: views.py:510
 msgid "Error processing software profile request: ({})"
 msgstr "Error procesando la solicitud de perfil de software: ({})"
 
-#: views.py:616
+#: views.py:637
 msgid "ogServer: error adding client"
 msgstr "ogServer: error al añadir cliente"
 
-#: views.py:619
+#: views.py:640
 msgid "Client added successfully"
 msgstr "Cliente añadido con éxito"
 
-#: views.py:646
+#: views.py:667
 msgid "ogServer: error deleting client"
 msgstr "ogServer: error al eliminar cliente"
 
-#: views.py:649
+#: views.py:670
 msgid "Client deleted successfully"
 msgstr "Cliente eliminado con éxito"
 
-#: views.py:671
+#: views.py:693
 msgid "Client set boot mode request sent successfully"
 msgstr "Solicitud del cambio del modo de inicio del cliente enviado con éxito"
 
-#: views.py:673 views.py:703 views.py:710
+#: views.py:695 views.py:725 views.py:732
 msgid "Ogserver replied with status code not ok"
 msgstr "OgServer respondió con el código de estado de error"
 
-#: views.py:700
+#: views.py:722
 msgid "Client set ogLive request sent successfully"
 msgstr "Solicitud de cambio de ogLive enviada con éxito"
 
-#: views.py:784 views.py:799 views.py:931
+#: views.py:806 views.py:821 views.py:953
 msgid "OgServer replied with a non ok status code"
 msgstr "OgServer respondió con un código de estado de error"
 
-#: views.py:786 views.py:801
+#: views.py:808 views.py:823
 msgid "Refresh request processed successfully"
 msgstr "Solicitud de actualización procesada con éxito"
 
-#: views.py:813
+#: views.py:835
 msgid "Server replied with error code when adding the center"
 msgstr "El servidor respondió con el código de error al agregar el centro."
 
-#: views.py:816
+#: views.py:838
 msgid "Center added successfully"
 msgstr "Centro añadido con éxito"
 
-#: views.py:829
+#: views.py:851
 msgid "Server replied with error code when deleting the center"
 msgstr "El servidor respondió con el código de error al eliminar el centro"
 
-#: views.py:832
+#: views.py:854
 msgid "Center deleted successfully"
 msgstr "Centro eliminado con éxito"
 
-#: views.py:851
+#: views.py:873
 msgid "Server replied with error code when adding the room"
 msgstr "El servidor respondió con el código de error al agregar la sala."
 
-#: views.py:853
+#: views.py:875
 msgid "Room added successfully"
 msgstr "Sala añadida con éxito"
 
-#: views.py:870
+#: views.py:892
 msgid "Server replied with error code when deleting the room"
 msgstr "El servidor respondió con el código de error al eliminar la sala."
 
-#: views.py:873
+#: views.py:895
 msgid "Room deleted successfully"
 msgstr "Sala eliminada con éxito"
 
-#: views.py:933
+#: views.py:955
 msgid "Delete client request processed successfully"
 msgstr "Solicitud de eliminar cliente procesada con éxito"
 
@@ -505,6 +513,11 @@ msgstr "Articulo"
 #: templates/actions/image_create.html:6
 msgid "Create a partition image"
 msgstr "Crear una imagen de partición"
+
+#: templates/actions/poweroff.html:9
+#, python-format
+msgid "Power off %(ip_count)d client(s)"
+msgstr "Apaga %(ip_count)d cliente(s)"
 
 #: templates/actions/setup.html:5
 msgid "Partition and Format"
