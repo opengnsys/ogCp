@@ -2,6 +2,25 @@ const Endpoint = '/scopes/status';
 const Interval = 1000;
 let updateTimeoutId = null;
 
+function keepScopesTreeState() {
+    const scopes_tree = $('#scopes .collapse')
+
+    scopes_tree.on('hidden.bs.collapse', function (event) {
+        event.stopPropagation();
+        localStorage.removeItem(this.id);
+    });
+    scopes_tree.on('shown.bs.collapse', function (event) {
+        event.stopPropagation();
+        localStorage.setItem(this.id, 'show');
+    });
+
+    scopes_tree.each(function () {
+        if (localStorage.getItem(this.id) == 'show') {
+            $(this).collapse('show');
+        }
+    });
+}
+
 function updateScopeState() {
     if (updateTimeoutId) {
         clearTimeout(updateTimeoutId);
