@@ -1,0 +1,20 @@
+{% extends 'images.html' %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block content %}
+
+{{ args }}
+
+<h1 class="m-5">
+  {{ _('Delete image %(image_name)s', image_name=image_name) }}
+</h1>
+
+{{ wtf.quick_form(form,
+                  action=url_for('action_image_delete'),
+                  method='post',
+                  button_map={'submit': 'primary'},
+                  extra_classes="mx-5") }}
+
+{% endblock %}
+
+

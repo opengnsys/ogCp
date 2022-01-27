@@ -953,21 +953,35 @@ def action_image_info():
 
     return render_template('actions/image_details.html', form=form)
 
-@app.route('/action/image/delete', methods=['POST'])
+@app.route('/action/image/delete', methods=['GET', 'POST'])
 @login_required
 def action_image_delete():
-    ids = parse_elements(request.form.to_dict())
-    if not validate_elements(ids, max_len=1):
+    form = GenericForm(request.form)
+    if request.method == 'POST':
+        ids = form.ids.data.split(' ')
+        if not validate_elements(ids, max_len=1):
+            return redirect(url_for('images'))
+        id = ids.pop()
+        payload = {'image': id}
+        r = g.server.post('/image/delete', payload)
+        if r.status_code != requests.codes.ok:
+            flash(_('OgServer replied with a non ok status code'), category='error')
+        else:
+            flash(_('Image deletion request sent successfully'), category='info')
         return redirect(url_for('images'))
-
-    id = ids.pop()
-    payload = {'image': id}
-    r = g.server.post('/image/delete', payload)
-    if r.status_code != requests.codes.ok:
-        flash(_('OgServer replied with a non ok status code'), category='error')
     else:
-        flash(_('Delete client request processed successfully'), category='info')
-    return redirect(url_for('images'))
+        images = [(name, imgid) for name, imgid in request.args.to_dict().items() if name != "csrf_token"]
+        if not validate_elements(images, max_len=1):
+            return redirect(url_for('images'))
+        image_name, image_id = images[0]
+        r = g.server.get('/images')
+        form.ids.data = image_id
+        if not validate_elements(images, max_len=1):
+            flash(_('Please select one image to delete'), category='error')
+            return redirect(url_for('images'))
+        return render_template('actions/delete_image.html', form=form,
+                               image_name=image_name.split('_', 1)[0], image_id=image_id,
+                               images=r.json()['images'])
 
 @app.route('/action/log', methods=['GET'])
 @login_required

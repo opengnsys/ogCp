@@ -17,6 +17,7 @@ from flask_babel import _
 
 class GenericForm(FlaskForm):
     ips = HiddenField()
+    ids = HiddenField()
     submit = SubmitField(label=_l('Submit'))
 
 
