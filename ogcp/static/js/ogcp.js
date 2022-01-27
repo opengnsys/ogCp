@@ -2,6 +2,23 @@ const Endpoint = '/scopes/status';
 const Interval = 1000;
 let updateTimeoutId = null;
 
+function keepSelectedClients() {
+    const checkboxes = $('input:checkbox[form|="scopesForm"]')
+
+    checkboxes.on('change', function (event) {
+        if (this.checked)
+            localStorage.setItem(this.name, "check");
+        else
+            localStorage.removeItem(this.name);
+    });
+
+    checkboxes.each(function () {
+        if (localStorage.getItem(this.name) == 'check') {
+            this.checked = true;
+        }
+    });
+}
+
 function keepScopesTreeState() {
     const scopes_tree = $('#scopes .collapse')
 
