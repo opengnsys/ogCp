@@ -42,9 +42,16 @@
          form="scopesForm" formaction="{{ url_for('action_mode') }}" formmethod="get">
   <input class="btn btn-light" type="submit" value="{{ _('Set ogLive') }}"
          form="scopesForm" formaction="{{ url_for('action_oglive') }}" formmethod="get">
-  <input class="btn btn-light" type="submit" value="{{ _('Log') }}"
-         form="scopesForm" formaction="{{ url_for('action_legacy_log') }}" formmethod="get">
-  <input class="btn btn-light" type="submit" value="{{ _('Real time log') }}"
-         form="scopesForm" formaction="{{ url_for('action_legacy_rt_log') }}" formmethod="get">
+  <div class="dropdown btn">
+    <button class="btn btn-secondary btn-light dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-expanded="false">
+      Logs
+    </button>
+    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+    <input class="btn btn-light dropdown-item" type="submit" value="{{ _('Log') }}"
+           form="scopesForm" formaction="{{ url_for('action_legacy_log') }}" formmethod="get">
+    <input class="btn btn-light dropdown-item" type="submit" value="{{ _('Real time log') }}"
+           form="scopesForm" formaction="{{ url_for('action_legacy_rt_log') }}" formmethod="get">
+    </div>
+  </div>
 {% endblock %}
 
