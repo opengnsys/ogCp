@@ -2,14 +2,18 @@ const Endpoint = '/scopes/status';
 const Interval = 1000;
 let updateTimeoutId = null;
 
+function storeCheckboxStatus(checkbox) {
+        if (checkbox.checked)
+            localStorage.setItem(checkbox.name, "check");
+        else
+            localStorage.removeItem(checkbox.name);
+}
+
 function keepSelectedClients() {
     const checkboxes = $('input:checkbox[form|="scopesForm"]')
 
     checkboxes.on('change', function (event) {
-        if (this.checked)
-            localStorage.setItem(this.name, "check");
-        else
-            localStorage.removeItem(this.name);
+            storeCheckboxStatus(this);
     });
 
     checkboxes.each(function () {
