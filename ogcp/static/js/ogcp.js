@@ -9,6 +9,19 @@ function storeCheckboxStatus(checkbox) {
             localStorage.removeItem(checkbox.name);
 }
 
+function checkChildrenCheckboxes() {
+    const checkboxes = $('input:checkbox[form|="scopesForm"]')
+
+    checkboxes.on('change', function () {
+        const checked = this.checked
+        const children = $('input:checkbox', this.parentNode).not(this)
+        children.each(function () {
+            this.checked = checked;
+            storeCheckboxStatus(this);
+        });
+    });
+}
+
 function keepSelectedClients() {
     const checkboxes = $('input:checkbox[form|="scopesForm"]')
 
