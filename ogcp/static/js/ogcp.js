@@ -2,6 +2,34 @@ const Endpoint = '/scopes/status';
 const Interval = 1000;
 let updateTimeoutId = null;
 
+function showSelectedClient(client_checkbox) {
+    const container = $('#selected-clients');
+    const pill_id = 'pill-' + client_checkbox.name.replaceAll('.', '_');
+
+    if (client_checkbox.checked) {
+        if (!($('#' + pill_id).length))
+            $(container).append('<div class="badge badge-pill badge-light" ' +
+                                'id="'+ pill_id + '">' + client_checkbox.name +
+                                '<br>' + client_checkbox.value + '</div>');
+        return;
+    }
+
+    $('#' + pill_id).remove();
+}
+
+function showSelectedClientsOnEvents() {
+    const checkboxes = $('input:checkbox[form|="scopesForm"]');
+    const container = $('#selected-clients');
+
+    const client_checkboxes = checkboxes.filter(function () {
+        return $(this).siblings().length == "1";
+    });
+
+    client_checkboxes.on('change show-client', function () {
+        showSelectedClient(this);
+    });
+}
+
 function storeCheckboxStatus(checkbox) {
         if (checkbox.checked)
             localStorage.setItem(checkbox.name, "check");
@@ -18,6 +46,7 @@ function checkChildrenCheckboxes() {
         children.each(function () {
             this.checked = checked;
             storeCheckboxStatus(this);
+            $(this).trigger('show-client');
         });
     });
 }
@@ -32,6 +61,7 @@ function keepSelectedClients() {
     checkboxes.each(function () {
         if (localStorage.getItem(this.name) == 'check') {
             this.checked = true;
+            $(this).trigger('show-client');
         }
     });
 }

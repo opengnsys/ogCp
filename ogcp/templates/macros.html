@@ -8,6 +8,7 @@
     // in the scope
     document.addEventListener('readystatechange', () => {
         if (document.readyState === 'complete') {
+            showSelectedClientsOnEvents();
             updateScopeState();
             keepScopesTreeState();
             keepSelectedClients();
@@ -46,4 +47,8 @@
     {% endif %}
   </li>
 {% endfor %}
+{% endmacro %}
+
+{% macro selected_clients() -%}
+<div id="selected-clients" class="d-flex flex-wrap justify-content-center"></div>
 {% endmacro %}
