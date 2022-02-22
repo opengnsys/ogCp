@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  1.0.0\n"
 "Report-Msgid-Bugs-To: opengnsys@soleta.eu\n"
-"POT-Creation-Date: 2022-01-27 15:17+0100\n"
+"POT-Creation-Date: 2022-02-22 16:53+0100\n"
 "PO-Revision-Date: 2021-12-23 16:47+0100\n"
 "Last-Translator: Soleta Networks <opengnsys@soleta.eu>\n"
 "Language: es\n"
@@ -146,7 +146,7 @@ msgstr "Sala eliminada con éxito"
 msgid "Image deletion request sent successfully"
 msgstr "La imagen ha sido borrada"
 
-#: views.py:977
+#: views.py:980
 msgid "Please select one image to delete"
 msgstr "Solo puede seleccionar una imagen para borrar"
 
@@ -197,7 +197,7 @@ msgstr "Sesión"
 msgid "Run"
 msgstr "Lanzar"
 
-#: forms/action_forms.py:89
+#: forms/action_forms.py:89 templates/commands.html:64
 msgid "Image"
 msgstr "Imagen"
 
@@ -333,99 +333,143 @@ msgstr "Usuario"
 msgid "Password"
 msgstr "Contraseña"
 
-#: forms/auth.py:27 templates/nav.html:41
+#: forms/auth.py:27 templates/base.html:58
 msgid "Login"
 msgstr "Acceso"
 
-#: templates/commands.html:19
-msgid "Power on (WoL)"
-msgstr "Encendido (WoL)"
+#: templates/base.html:28
+msgid "Dashboard"
+msgstr "Panel principal"
 
-#: templates/commands.html:21
-msgid "Power off"
-msgstr "Apagado"
+#: templates/base.html:31
+msgid "Scopes"
+msgstr "Ámbito"
 
-#: templates/commands.html:23
-msgid "Reboot"
-msgstr "Reiniciar"
+#: templates/base.html:34
+msgid "Commands"
+msgstr "Comandos"
 
-#: templates/commands.html:27
-msgid "Hardware"
-msgstr "Hardware"
+#: templates/base.html:37
+msgid "Images"
+msgstr "Imágenes"
 
-#: templates/commands.html:29
-msgid "Software"
-msgstr "Software"
+#: templates/base.html:40
+msgid "Tasks"
+msgstr "Tareas"
 
-#: templates/actions/session.html:6 templates/commands.html:31
+#: templates/base.html:43
+msgid "Schedule"
+msgstr "Programaciones"
+
+#: templates/base.html:52
+msgid "Logout"
+msgstr "Cerrar sesión"
+
+#: templates/commands.html:22
+msgid "Client"
+msgstr "Cliente"
+
+#: templates/actions/session.html:6 templates/commands.html:27
 msgid "Start session"
 msgstr "Iniciar sesión"
 
-#: templates/commands.html:33
-msgid "Restore Image"
-msgstr "Restaurar imagen"
-
-#: templates/commands.html:35
-msgid "Partition & Format"
-msgstr "Particionar y formatear"
-
-#: templates/actions/client_details.html:6 templates/commands.html:37
+#: templates/actions/client_details.html:6 templates/commands.html:29
 msgid "Client details"
 msgstr "Detalles del cliente"
 
-#: templates/commands.html:39
-msgid "Create image"
-msgstr "Crear imagen"
+#: templates/commands.html:36
+msgid "Setup"
+msgstr "Configurar"
 
-#: templates/commands.html:41
+#: templates/commands.html:39
 msgid "Set boot mode"
 msgstr "Seleccionar el modo de arranque"
 
-#: templates/commands.html:43
+#: templates/commands.html:41
 msgid "Set ogLive"
 msgstr "Seleccionar ogLive"
 
-#: templates/commands.html:45
-msgid "Log"
-msgstr "Log"
+#: templates/commands.html:43
+msgid "Partition & Format"
+msgstr "Particionar y formatear"
 
-#: templates/commands.html:47
+#: templates/commands.html:50
+msgid "Power"
+msgstr "Power"
+
+#: templates/commands.html:53
+msgid "Power on (WoL)"
+msgstr "Encendido (WoL)"
+
+#: templates/commands.html:55
+msgid "Power off"
+msgstr "Apagado"
+
+#: templates/commands.html:57
+msgid "Reboot"
+msgstr "Reiniciar"
+
+#: templates/commands.html:67
+msgid "Restore Image"
+msgstr "Restaurar imagen"
+
+#: templates/commands.html:69
+msgid "Create image"
+msgstr "Crear imagen"
+
+#: templates/commands.html:76
+msgid "Inventory"
+msgstr "Inventario"
+
+#: templates/commands.html:79
+msgid "Hardware"
+msgstr "Hardware"
+
+#: templates/commands.html:81
+msgid "Software"
+msgstr "Software"
+
+#: templates/commands.html:91
+msgid "System log"
+msgstr "Log histórico"
+
+#: templates/commands.html:93
 msgid "Real time log"
 msgstr "Log en tiempo real"
 
-#: templates/dashboard.html:9
+#: templates/dashboard.html:11
 msgid "Connected clients (ogClient)"
 msgstr "Clientes conectados (ogClient)"
 
-#: templates/dashboard.html:21
+#: templates/dashboard.html:23
 msgid "Latest images"
 msgstr "Últimas imágenes"
 
-#: templates/dashboard.html:40
+#: templates/dashboard.html:42
 msgid "Disk stats"
 msgstr "Estadisticas de disco"
 
-#: templates/dashboard.html:46
+#: templates/dashboard.html:48
 msgid "Disk size"
 msgstr "Capacidad del disco"
 
-#: templates/dashboard.html:49
+#: templates/dashboard.html:51
 msgid "used"
 msgstr "ocupado"
 
-#: templates/dashboard.html:52
+#: templates/dashboard.html:54
 msgid "available"
 msgstr "disponible"
 
-#: templates/dashboard.html:55
+#: templates/dashboard.html:57
 msgid "use"
 msgstr "ocupado"
 
-#: templates/dashboard.html:74
+#: templates/dashboard.html:76
 msgid "Number of images"
 msgstr "Número de imágenes"
 
-#: templates/dashboard.html:93
+#: templates/dashboard.html:95
 msgid "default"
 msgstr "predeterminado"
 
@@ -440,34 +484,6 @@ msgstr "Detalles de la imagen"
 #: templates/images.html:30
 msgid "Delete image"
 msgstr "Eliminar Imagen"
-
-#: templates/nav.html:11
-msgid "Dashboard"
-msgstr "Panel principal"
-
-#: templates/nav.html:14
-msgid "Scopes"
-msgstr "Ámbito"
-
-#: templates/nav.html:17
-msgid "Commands"
-msgstr "Comandos"
-
-#: templates/nav.html:20
-msgid "Images"
-msgstr "Imágenes"
-
-#: templates/nav.html:23
-msgid "Tasks"
-msgstr "Tareas"
-
-#: templates/nav.html:26
-msgid "Schedule"
-msgstr "Programaciones"
-
-#: templates/nav.html:35
-msgid "Logout"
-msgstr "Cerrar sesión"
 
 #: templates/scopes.html:19
 msgid "Add client"
@@ -541,23 +557,23 @@ msgstr "Apaga %(ip_count)d cliente(s)"
 msgid "Reboot %(ip_count)d client(s)"
 msgstr "Reinicia %(ip_count)d cliente(s)"
 
-#: templates/actions/setup.html:5
+#: templates/actions/setup.html:7
 msgid "Partition and Format"
 msgstr "Partición y formato"
 
-#: templates/actions/setup.html:47
+#: templates/actions/setup.html:49
 msgid "Remove"
 msgstr "Eliminar"
 
-#: templates/actions/setup.html:64
+#: templates/actions/setup.html:66
 msgid "Change disk"
 msgstr "Cambiar de disco"
 
-#: templates/actions/setup.html:68
+#: templates/actions/setup.html:70
 msgid "Add a new partition"
 msgstr "Añadir una nueva partición"
 
-#: templates/actions/setup.html:72
+#: templates/actions/setup.html:74
 msgid "Accept"
 msgstr "Aceptar"
 
@@ -568,3 +584,7 @@ msgstr "Inventario de software"
 #: templates/actions/legacy/log.html:6
 msgid "Client log"
 msgstr "Registro de clientes"
+
+#~ msgid "Log"
+#~ msgstr "Log"
+
