@@ -15,8 +15,53 @@
 </head>
 <body>
     <div class="main d-flex flex-column align-items-stretch h-100">
-        {% include 'nav.html' %}
-        {% block nav %}{% endblock %}
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <a class="navbar-brand" href="#">OpenGnsys</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+                    {% if current_user.is_authenticated %}
+                    <li class="nav-item {% block nav_dashboard%}{% endblock %}">
+                        <a class="nav-link" href="{{ url_for('index') }}">{{ _('Dashboard') }}<span class="sr-only">(current)</span></a>
+                    </li>
+		    <li class="nav-item {% block nav_scopes%}{% endblock %}">
+                        <a class="nav-link" href="{{ url_for('scopes') }}">{{ _('Scopes') }}</a>
+                    </li>
+                    <li class="nav-item {% block nav_commands%}{% endblock %}">
+                        <a class="nav-link" href="{{ url_for('commands') }}">{{ _('Commands') }}</a>
+                    </li>
+                    <li class="nav-item {% block nav_images%}{% endblock %}">
+                        <a class="nav-link" href="{{ url_for('images') }}">{{ _('Images') }}</a>
+                    </li>
+                    <li class="nav-item {% if request.endpoint == "tasks" %}active{% endif %}">
+                        <a class="nav-link" href="#">{{ _('Tasks') }}</a>
+                    </li>
+                    <li class="nav-item {% if request.endpoint == "schedule" %}active{% endif %}">
+                        <a class="nav-link" href="#">{{ _('Schedule') }}</a>
+                    </li>
+                    {% endif %}
+                </ul>
+
+                <ul class="nav navbar-nav navbar-right">
+                    {% if current_user.is_authenticated %}
+
+                    <li class="nav-item">
+                        <a class="btn btn-danger" href="{{ url_for('logout') }}">{{ _('Logout') }}</a>
+                    </li>
+
+                    {% else %}
+
+                    <li class="nav-item">
+                        <a class="btn btn-primary" href="{{ url_for('login') }}">{{ _('Login') }}</a>
+                    </li>
+
+                    {% endif %}
+                </ul>
+            </div>
+        </nav>
         <div class="container-fluid flex-grow-1">
             {% block container %}
             <div class="row h-100">
