@@ -88,7 +88,7 @@
       Logs
     </button>
     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-    <input class="btn btn-light dropdown-item{% block nav_logs_log %}{% endblock %}" type="submit" value="{{ _('Log') }}"
+    <input class="btn btn-light dropdown-item{% block nav_logs_log %}{% endblock %}" type="submit" value="{{ _('System log') }}"
            form="scopesForm" formaction="{{ url_for('action_legacy_log') }}" formmethod="get">
     <input class="btn btn-light dropdown-item{% block nav_logs_rt %}{% endblock %}" type="submit" value="{{ _('Real time log') }}"
            form="scopesForm" formaction="{{ url_for('action_legacy_rt_log') }}" formmethod="get">
