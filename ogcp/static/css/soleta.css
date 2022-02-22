@@ -23,6 +23,9 @@ html, body {
 .nav-link {
   padding: 0;
 }
+.active > .nav-link {
+  font-weight: bold;
+}
 
 .text-wol {
   color: #99791a !important;
