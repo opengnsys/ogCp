@@ -477,6 +477,7 @@ def action_hardware():
         return make_response("400 Bad Request", 400)
     else:
         ips = parse_elements(request.args.to_dict())
+        scopes, _clients = get_scopes(ips)
         if not validate_elements(ips, max_len=1):
             return redirect(url_for('commands'))
 
@@ -484,7 +485,7 @@ def action_hardware():
         r = g.server.get('/hardware', payload={'client': list(ips)})
         hardware = r.json()['hardware']
         return render_template('actions/hardware.html', form=form,
-                               hardware=hardware)
+                               hardware=hardware, scopes=scopes)
 
 @app.route('/action/software', methods=['GET', 'POST'])
 @login_required
