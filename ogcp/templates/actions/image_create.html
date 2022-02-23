@@ -7,12 +7,6 @@
 
 <h2 class="mx-5">Selected client: {{ form.ip.data }}</h1>
 
-<ul class="list-group mx-5 list-group-horizontal-sm">
-{% for ip in ip_list %}
-    <li class="list-group-item flex-fill list-group-item-info">{{ ip }}</li>
-{% endfor %}
-</ul>
-
 {{ wtf.quick_form(form,
                   action=url_for('action_image_create'),
                   method='post',
