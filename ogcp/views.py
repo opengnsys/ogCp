@@ -390,7 +390,8 @@ def action_setup_modify():
         r = g.server.post('/setup', payload=payload)
         if r.status_code == requests.codes.ok:
             return redirect(url_for('commands'))
-    return make_response("400 Bad Request", 400)
+    flash(_(f'Invalid setup form'), category='error')
+    return redirect(url_for('commands'))
 
 @app.route('/action/image/restore', methods=['GET', 'POST'])
 @login_required
