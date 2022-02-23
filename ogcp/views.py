@@ -411,7 +411,8 @@ def action_image_restore():
         images_list = r.json()['images']
         image = search_image(images_list, int(image_id))
         if not image:
-            return make_response("400 Bad Request", 400)
+            flash(_(f'Image to restore was not found'), category='error')
+            return redirect(url_for('commands'))
 
         payload = {'disk': disk,
                    'partition': partition,
@@ -423,8 +424,10 @@ def action_image_restore():
                    'id': str(image['id'])}
         g.server.post('/image/restore', payload)
         if r.status_code == requests.codes.ok:
-            return redirect(url_for('commands'))
-        return make_response("400 Bad Request", 400)
+            flash(_(f'Image restore command sent sucessfully'), category='info')
+        else:
+            flash(_(f'There was a problem sending the image restore command'), category='error')
+        return redirect(url_for('commands'))
     else:
         ips = parse_elements(request.args.to_dict())
         if not validate_elements(ips):
