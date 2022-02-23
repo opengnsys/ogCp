@@ -1,5 +1,6 @@
 {% extends 'scopes.html' %}
 {% import "bootstrap/wtf.html" as wtf %}
+{% import "macros.html" as macros %}
 
 {% block content %}
 
@@ -9,11 +10,7 @@
   {{ _('Delete %(ip_count)d client(s)', ip_count=ip_count) }}
 </h1>
 
-<ul class="list-group mx-5 list-group-horizontal-sm">
-{% for ip in ip_list %}
-    <li class="list-group-item flex-fill list-group-item-info">{{ ip }}</li>
-{% endfor %}
-</ul>
+{{ macros.cmd_selected_clients(ip_list) }}
 
 {{ wtf.quick_form(form,
                   action=url_for('action_client_delete'),

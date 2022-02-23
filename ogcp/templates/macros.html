@@ -52,3 +52,11 @@
 {% macro selected_clients() -%}
 <div id="selected-clients" class="d-flex flex-wrap justify-content-center"></div>
 {% endmacro %}
+
+{% macro cmd_selected_clients(ip_list) -%}
+<ul class="list-group mx-5 list-group-horizontal-sm">
+{% for ip in ip_list %}
+    <li class="list-group-item flex-fill list-group-item-info">{{ ip }}</li>
+{% endfor %}
+</ul>
+{% endmacro %}

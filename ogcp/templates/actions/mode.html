@@ -1,5 +1,6 @@
 {% extends 'commands.html' %}
 {% import "bootstrap/wtf.html" as wtf %}
+{% import "macros.html" as macros %}
 
 {% block content %}
 
@@ -7,11 +8,7 @@
 {% set ip_count = ip_list | length %}
 <h1 class="m-5">Changing boot mode of {{ip_count}} {%if ip_count > 1%}computers{% else %}computer{% endif %}</h1>
 
-<ul class="list-group mx-5 list-group-horizontal-sm">
-{% for ip in ip_list %}
-    <li class="list-group-item flex-fill list-group-item-info">{{ ip }}</li>
-{% endfor %}
-</ul>
+{{ macros.cmd_selected_clients(ip_list) }}
 
 {{ wtf.quick_form(form,
                   action=url_for('action_mode'),
