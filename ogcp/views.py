@@ -505,19 +505,24 @@ def action_software():
                                                'disk': int(disk),
                                                'partition': int(partition)})
             if r.status_code == requests.codes.ok:
-                return r.json()
-
+                software = r.json()['software']
+                scopes, clients = get_scopes(set(ips))
+                return render_template('actions/software_list.html',
+                                       software=software, form=form, scopes=scopes)
         elif form.update.data:
             r = g.server.post('/software', payload={'clients': ips,
                                                     'disk': disk,
                                                     'partition': partition})
             if r.status_code == requests.codes.ok:
                 flash(_('Software profile request sent successfully'), category='info')
-                return redirect(url_for('commands'))
-            flash(_('Error processing software profile request: ({})').format(r.status), category='error')
-        return make_response("400 Bad Request", 400)
+            else:
+                flash(_('Error processing software profile request: ({})').format(r.status), category='error')
+        else:
+            flash(_('Error processing software profile form'), category='error')
+        return redirect(url_for('commands'))
     else:
         ips = parse_elements(request.args.to_dict())
+        scopes, clients = get_scopes(set(ips))
         if not validate_elements(ips, max_len=1):
             return redirect(url_for('commands'))
 
@@ -531,7 +536,7 @@ def action_software():
                  f"| {PART_TYPE_CODES[part.get('code')]} "
                  f"{FS_CODES[part.get('filesystem')]}")
             )
-    return render_template('actions/software.html', form=form)
+    return render_template('actions/software.html', form=form, scopes=scopes)
 
 @app.route('/action/session', methods=['GET', 'POST'])
 @login_required

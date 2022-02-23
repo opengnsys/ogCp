@@ -1,0 +1,29 @@
+{% extends 'commands.html' %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block nav_inventory %} active{% endblock %}
+{% block nav_inventory_software %} active{% endblock %}
+{% block content %}
+
+<h1 class="m-5">{{_('Software inventory')}}</h1>
+
+<h2 class="mb-3 mx-5">{{ _('Selected client:') }} {{ form.ips.data }}</h1>
+
+<table class="table table-striped">
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col">{{ _('Item') }}</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for item in software %}
+        <tr>
+            <td>{{ item }}</td>
+        </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+
+{% endblock %}
+
