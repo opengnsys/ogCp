@@ -36,12 +36,6 @@
                     <li class="nav-item {% block nav_images%}{% endblock %}">
                         <a class="nav-link" href="{{ url_for('images') }}">{{ _('Images') }}</a>
                     </li>
-                    <li class="nav-item {% if request.endpoint == "tasks" %}active{% endif %}">
-                        <a class="nav-link" href="#">{{ _('Tasks') }}</a>
-                    </li>
-                    <li class="nav-item {% if request.endpoint == "schedule" %}active{% endif %}">
-                        <a class="nav-link" href="#">{{ _('Schedule') }}</a>
-                    </li>
                     {% endif %}
                 </ul>
 
