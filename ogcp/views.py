@@ -473,8 +473,10 @@ def action_hardware():
         ips = form.ips.data.split(' ')
         r = g.server.post('/hardware', payload={'clients': ips})
         if r.status_code == requests.codes.ok:
-            return make_response("200 OK", 200)
-        return make_response("400 Bad Request", 400)
+            flash(_(f'Hardware inventory command has been sent'), category='info')
+        else:
+            flash(_(f'There was a problem sending the hardware inventory command'), category='error')
+        return redirect(url_for('commands'))
     else:
         ips = parse_elements(request.args.to_dict())
         scopes, _clients = get_scopes(ips)
