@@ -104,6 +104,26 @@ function updateScopeState() {
     }, Interval);
 }
 
+function updatePillStatus(state, pill) {
+    const pillCls = ['badge', 'badge-pill', 'badge-info',
+                     'badge-danger', 'badge-success', 'badge-warning',
+                     'badge-wol', 'badge-light'];
+    pill.classList.remove(...pillCls);
+    let newPillCls = [];
+    if (state === 'OPG') {
+        newPillCls.push('badge', 'badge-pill', 'badge-warning');
+    } else if (state === 'BSY') {
+        newPillCls.push('badge', 'badge-pill', 'badge-danger');
+    } else if (state === 'VDI') {
+        newPillCls.push('badge', 'badge-pill', 'badge-success');
+    } else if (state === 'WOL_SENT') {
+        newPillCls.push('badge', 'badge-pill', 'badge-wol');
+    } else {
+        newPillCls.push('badge', 'badge-pill', 'badge-light');
+    }
+    pill.classList.add(...newPillCls);
+}
+
 function updateScopes(scopes) {
     scopes.forEach((scope) => {
         if (scope.state) {
@@ -125,6 +145,11 @@ function updateScopes(scopes) {
                 newIconCls.push('far');
             }
             iconEl.classList.add(...newIconCls);
+
+            const pillScopeId = `pill-${scopeId}`;
+            const pillEl = document.querySelector(`#${pillScopeId}`);
+            if (pillEl)
+                updatePillStatus(scope.state, pillEl);
         }
         if (scope.scope) {
             // This is a level so we should update all childs
