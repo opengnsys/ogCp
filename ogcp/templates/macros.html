@@ -21,7 +21,7 @@
 
 {% macro scopes_tree_collapse_level(scopes, i, parent_id) -%}
 {% for scope in scopes %}
-  <li id="{{ scope["name"] }}_{{ scope["id"] }}" class="nav-item">
+  <li id="{{ scope["name"]|replace(".", "_") }}_{{ scope["id"] }}" class="nav-item">
     {% if " ".join(scope["ip"]) %}
         <input class="form-check-input" type="checkbox" form="scopesForm"
                value="{{ " ".join(scope["ip"]) }}"

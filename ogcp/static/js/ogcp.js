@@ -107,7 +107,7 @@ function updateScopeState() {
 function updateScopes(scopes) {
     scopes.forEach((scope) => {
         if (scope.state) {
-            const scopeId = `${scope.name}_${scope.id}`;
+            const scopeId = `${scope.name}_${scope.id}`.replaceAll('.', '_');
             const iconEl = document.querySelector(`#${scopeId} .nav-icon`);
             const iconCls = ['fas', 'far', 'text-danger', 'text-success',
                              'text-warning', 'text-wol'];
