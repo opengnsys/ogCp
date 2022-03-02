@@ -10,7 +10,7 @@
   {{ _('Reboot %(ip_count)d client(s)', ip_count=ip_count) }}
 </h1>
 
-{{ macros.cmd_selected_clients(ip_list) }}
+{{ macros.cmd_selected_clients(selected_clients) }}
 
 {{ wtf.quick_form(form,
                   action=url_for('action_reboot'),

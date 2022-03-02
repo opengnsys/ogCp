@@ -277,7 +277,9 @@ def action_poweroff():
         form.ips.data = " ".join(ips)
         if validate_elements(ips):
             scopes, clients = get_scopes(set(ips))
+            selected_clients = list(get_selected_clients(scopes['scope']).items())
             return render_template('actions/poweroff.html', form=form,
+                                   selected_clients=selected_clients,
                                    scopes=scopes)
         else:
             return redirect(url_for('commands'))
@@ -299,7 +301,9 @@ def action_wol():
         form.ips.data = " ".join(ips)
         if validate_elements(ips, min_len=1):
             scopes, clients = get_scopes(set(ips))
+            selected_clients = list(get_selected_clients(scopes['scope']).items())
             return render_template('actions/wol.html', form=form,
+                                   selected_clients=selected_clients,
                                    scopes=scopes)
         else:
             return redirect(url_for('commands'))
@@ -470,8 +474,10 @@ def action_image_restore():
                                     for disk_id, part_id in part_choices ]
 
         scopes, clients = get_scopes(set(ips))
+        selected_clients = list(get_selected_clients(scopes['scope']).items())
 
         return render_template('actions/image_restore.html', form=form,
+                               selected_clients=selected_clients,
                                scopes=scopes)
 
 @app.route('/action/hardware', methods=['GET', 'POST'])
@@ -569,7 +575,9 @@ def action_session():
                       f"{os['name']} ({os['disk']},{os['partition']})")
             form.os.choices.append(choice)
         scopes, clients = get_scopes(set(ips))
+        selected_clients = list(get_selected_clients(scopes['scope']).items())
         return render_template('actions/session.html', form=form,
+                               selected_clients=selected_clients,
                                scopes=scopes)
 
 @app.route('/action/client/info', methods=['GET'])
@@ -673,6 +681,20 @@ def action_client_add():
         form.create.render_kw = {"formaction": url_for('action_client_add')}
         return render_template('actions/client_details.html', form=form)
 
+def get_selected_clients(scopes):
+    selected_clients = dict()
+
+    for scope in scopes:
+        scope_type = scope.get('type')
+        selected = scope.get('selected')
+        if ((scope_type == 'computer') and selected):
+            name_id = scope.get('name') + '_' + str(scope.get('id'))
+            selected_clients[name_id] = scope.get('ip')[0]
+        else:
+            selected_clients.update(get_selected_clients(scope['scope']))
+
+    return selected_clients
+
 @app.route('/action/client/delete', methods=['GET', 'POST'])
 @login_required
 def action_client_delete():
@@ -696,7 +718,9 @@ def action_client_delete():
         form.ips.data = " ".join(ips)
         if validate_elements(ips):
             scopes, clients = get_scopes(set(ips))
+            selected_clients = list(get_selected_clients(scopes['scope']).items())
             return render_template('actions/delete_client.html', form=form,
+                                   selected_clients=selected_clients,
                                    scopes=scopes)
         else:
             return redirect(url_for('scopes'))
@@ -728,7 +752,10 @@ def action_mode():
 
         form.ok.render_kw = { 'formaction': url_for('action_mode') }
         scopes, clients = get_scopes(set(ips))
-        return render_template('actions/mode.html', form=form, scopes=scopes, clients=clients)
+        selected_clients = list(get_selected_clients(scopes['scope']).items())
+        return render_template('actions/mode.html', form=form, scopes=scopes,
+                               selected_clients=selected_clients,
+                               clients=clients)
 
 
 @app.route('/action/oglive', methods=['GET', 'POST'])
@@ -765,7 +792,9 @@ def action_oglive():
 
         form.ok.render_kw = {'formaction': url_for('action_oglive')}
         scopes, clients = get_scopes(set(ips))
-        return render_template('actions/oglive.html', form=form, scopes=scopes)
+        selected_clients = list(get_selected_clients(scopes['scope']).items())
+        return render_template('actions/oglive.html', form=form, scopes=scopes,
+                               selected_clients=selected_clients)
 
 
 @app.route('/action/image/create', methods=['GET', 'POST'])
@@ -839,7 +868,9 @@ def action_reboot():
         form.ips.data = " ".join(ips)
         if validate_elements(ips):
             scopes, clients = get_scopes(set(ips))
+            selected_clients = list(get_selected_clients(scopes['scope']).items())
             return render_template('actions/reboot.html', form=form,
+                                   selected_clients=selected_clients,
                                    scopes=scopes)
         else:
             return redirect(url_for('commands'))

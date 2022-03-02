@@ -53,14 +53,16 @@
 <div id="selected-clients" class="d-flex flex-wrap justify-content-center"></div>
 {% endmacro %}
 
-{% macro cmd_selected_clients(ip_list) -%}
-<ul class="list-group mx-5 list-group-horizontal-sm d-flex flex-wrap">
-{% set max_clients = 50 %}
-{% for ip in ip_list[:max_clients] %}
-    <li class="list-group-item flex-fill list-group-item-info">{{ ip }}</li>
-    {% if loop.last %}
-        <li class="list-group-item flex-fill list-group-item-info">...</li>
+{% macro cmd_selected_clients(selected_clients) -%}
+<div class="d-flex flex-wrap justify-content-center">
+    {% set max_clients = 50 %}
+    {% for name_id, ip in selected_clients[:max_clients] %}
+    <div id="pill-{{ name_id|replace(".", "_") }}" class="badge badge-pill badge-light">
+        {{ name_id }}<br>{{ ip }}
+    </div>
+    {% if loop.last and (selected_clients|length > max_clients) %}
+        <div class="badge badge-pill badge-light">...</div>
     {% endif %}
 {% endfor %}
-</ul>
+</div>
 {% endmacro %}

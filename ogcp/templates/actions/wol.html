@@ -8,7 +8,7 @@
 {% set ip_count = ip_list | length %}
 <h1 class="m-5">Powering on {{ip_count}} {%if ip_count > 1%}computers{% else %}computer{% endif %}</h1>
 
-{{ macros.cmd_selected_clients(ip_list) }}
+{{ macros.cmd_selected_clients(selected_clients) }}
 
 {{ wtf.quick_form(form,
                   action=url_for('action_wol'),
