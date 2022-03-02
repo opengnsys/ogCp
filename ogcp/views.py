@@ -298,7 +298,9 @@ def action_wol():
         ips = parse_elements(request.args.to_dict())
         form.ips.data = " ".join(ips)
         if validate_elements(ips, min_len=1):
-            return render_template('actions/wol.html', form=form)
+            scopes, clients = get_scopes(set(ips))
+            return render_template('actions/wol.html', form=form,
+                                   scopes=scopes)
         else:
             return redirect(url_for('commands'))
 
@@ -467,7 +469,10 @@ def action_image_restore():
         form.partition.choices = [ (f'{disk_id} {part_id}', _('Disk: {} | Part: {}').format(disk_id, part_id))
                                     for disk_id, part_id in part_choices ]
 
-        return render_template('actions/image_restore.html', form=form)
+        scopes, clients = get_scopes(set(ips))
+
+        return render_template('actions/image_restore.html', form=form,
+                               scopes=scopes)
 
 @app.route('/action/hardware', methods=['GET', 'POST'])
 @login_required
@@ -563,7 +568,9 @@ def action_session():
             choice = (f"{os['disk']} {os['partition']}",
                       f"{os['name']} ({os['disk']},{os['partition']})")
             form.os.choices.append(choice)
-        return render_template('actions/session.html', form=form)
+        scopes, clients = get_scopes(set(ips))
+        return render_template('actions/session.html', form=form,
+                               scopes=scopes)
 
 @app.route('/action/client/info', methods=['GET'])
 @login_required
@@ -622,8 +629,10 @@ def action_client_info():
         else:
             entry['image'] = ""
 
+    scopes, clients = get_scopes(set(ips))
+
     return render_template('actions/client_details.html', form=form,
-                           setup=setup)
+                           scopes=scopes, setup=setup)
 
 @app.route('/action/client/add', methods=['GET', 'POST'])
 @login_required
@@ -803,7 +812,9 @@ def action_image_create():
                            f"{_('Partition')} {part_id} | "
                            f"{_('FS')} {FS_CODES[fs_id]}")
             form.os.choices.append((choice_value, choice_name))
-        return render_template('actions/image_create.html', form=form)
+        scopes, clients = get_scopes(set(ips))
+        return render_template('actions/image_create.html', form=form,
+                               scopes=scopes)
 
 @app.route('/action/reboot', methods=['GET', 'POST'])
 @login_required
@@ -1005,7 +1016,9 @@ def action_legacy_log():
     log_file = Path("/opt/opengnsys/log/clients/" + str(ip) + ".log")
     log = log_file.read_text()
     if log:
-        return render_template('actions/legacy/log.html', log=log)
+        scopes, clients = get_scopes(set(ips))
+        return render_template('actions/legacy/log.html', log=log,
+                               scopes=scopes)
     else:
         return redirect(url_for('commands'))
 
