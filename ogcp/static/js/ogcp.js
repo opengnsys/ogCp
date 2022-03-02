@@ -14,7 +14,7 @@ function showSelectedClient(client_checkbox) {
         return;
     }
 
-    $('#' + pill_id).remove();
+    $('#' + pill_id, container).remove();
 }
 
 function showSelectedClientsOnEvents() {
