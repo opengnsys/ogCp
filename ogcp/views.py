@@ -908,7 +908,9 @@ def action_center_add():
             flash(_('Center added successfully'), category='info')
         return redirect(url_for("scopes"))
     else:
-        return render_template('actions/add_center.html', form=form)
+        scopes, clients = get_scopes()
+        return render_template('actions/add_center.html', form=form,
+                               scopes=scopes)
 
 @app.route('/action/center/delete', methods=['GET', 'POST'])
 @login_required
@@ -928,7 +930,9 @@ def action_center_delete():
         centers = parse_scopes_from_tree(r.json(), 'center')
         centers = [(center['id'], center['name']) for center in centers]
         form.center.choices = list(centers)
-        return render_template('actions/delete_center.html', form=form)
+        scopes, clients = get_scopes()
+        return render_template('actions/delete_center.html', form=form,
+                               scopes=scopes)
 
 @app.route('/action/room/add', methods=['GET', 'POST'])
 @login_required
@@ -949,7 +953,9 @@ def action_room_add():
         centers = parse_scopes_from_tree(r.json(), 'center')
         centers = [(center['id'], center['name']) for center in centers]
         form.center.choices = list(centers)
-        return render_template('actions/add_room.html', form=form)
+        scopes, clients = get_scopes()
+        return render_template('actions/add_room.html', form=form,
+                               scopes=scopes)
 
 @app.route('/action/room/delete', methods=['GET', 'POST'])
 @login_required
@@ -970,7 +976,9 @@ def action_room_delete():
         rooms = [(room['id'], room['name'] + " (" + room['parent'] + ")")
                  for room in rooms]
         form.room.choices = list(rooms)
-        return render_template('actions/delete_room.html', form=form)
+        scopes, clients = get_scopes()
+        return render_template('actions/delete_room.html', form=form,
+                               scopes=scopes)
 
 @app.route('/commands/', methods=['GET'])
 @login_required
