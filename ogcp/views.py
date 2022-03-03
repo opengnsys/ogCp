@@ -640,7 +640,7 @@ def action_client_info():
     scopes, clients = get_scopes(set(ips))
 
     return render_template('actions/client_details.html', form=form,
-                           scopes=scopes, setup=setup)
+                           parent="commands.html", scopes=scopes, setup=setup)
 
 @app.route('/action/client/add', methods=['GET', 'POST'])
 @login_required
@@ -679,7 +679,9 @@ def action_client_add():
         form.room.choices = list(rooms)
 
         form.create.render_kw = {"formaction": url_for('action_client_add')}
-        return render_template('actions/client_details.html', form=form)
+        scopes, clients = get_scopes()
+        return render_template('actions/client_details.html', form=form,
+                               parent="scopes.html", scopes=scopes)
 
 def get_selected_clients(scopes):
     selected_clients = dict()
