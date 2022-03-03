@@ -1015,7 +1015,10 @@ def action_image_info():
     form.permissions.data = image['permissions']
     form.software_id.data = image['software_id']
 
-    return render_template('actions/image_details.html', form=form)
+    images = g.server.get('/images').json()['images']
+
+    return render_template('actions/image_details.html', form=form,
+                           images=images)
 
 @app.route('/action/image/delete', methods=['GET', 'POST'])
 @login_required
