@@ -1,6 +1,8 @@
 {% extends 'commands.html' %}
 {% import "bootstrap/wtf.html" as wtf %}
 
+{% block nav_client %} active{% endblock %}
+{% block nav_client_session %} active{% endblock %}
 {% block content %}
 
 {% set ip_list = form.ips.data.split(' ') %}

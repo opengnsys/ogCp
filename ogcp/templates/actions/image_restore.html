@@ -2,6 +2,8 @@
 {% import "bootstrap/wtf.html" as wtf %}
 {% import "macros.html" as macros %}
 
+{% block nav_image %} active{% endblock %}
+{% block nav_image_restore %} active{% endblock %}
 {% block content %}
 
 {% set ip_list = form.ips.data.split(' ') %}
