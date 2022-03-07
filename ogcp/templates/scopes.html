@@ -16,18 +16,39 @@
 {% endblock %}
 
 {% block commands %}
-  <input class="btn btn-light" type="submit" value="{{ _('Add client') }}"
-         form="scopesForm" formaction="{{ url_for('action_client_add') }}" formmethod="get">
-  <input class="btn btn-light" type="submit" value="{{ _('Add room') }}"
-         form="scopesForm" formaction="{{ url_for('action_room_add') }}" formmethod="get">
-  <input class="btn btn-light" type="submit" value="{{ _('Add center') }}"
-         form="scopesForm" formaction="{{ url_for('action_center_add') }}" formmethod="get">
-  <input class="btn btn-light" type="submit" value="{{ _('Delete client') }}"
-         form="scopesForm" formaction="{{ url_for('action_client_delete') }}" formmethod="get">
-  <input class="btn btn-light" type="submit" value="{{ _('Delete room') }}"
-         form="scopesForm" formaction="{{ url_for('action_room_delete') }}" formmethod="get">
-  <input class="btn btn-light" type="submit" value="{{ _('Delete center') }}"
-         form="scopesForm" formaction="{{ url_for('action_center_delete') }}" formmethod="get">
+  <div class="dropdown btn">
+    <button class="btn btn-secondary btn-light dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-expanded="false">
+        {{ _('Client') }}
+    </button>
+    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+      <input class="btn btn-light dropdown-item" type="submit" value="{{ _('Add client') }}"
+             form="scopesForm" formaction="{{ url_for('action_client_add') }}" formmethod="get">
+      <input class="btn btn-light dropdown-item" type="submit" value="{{ _('Delete client') }}"
+             form="scopesForm" formaction="{{ url_for('action_client_delete') }}" formmethod="get">
+    </div>
+  </div>
+  <div class="dropdown btn">
+    <button class="btn btn-secondary btn-light dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-expanded="false">
+        {{ _('Room') }}
+    </button>
+    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+      <input class="btn btn-light dropdown-item" type="submit" value="{{ _('Add room') }}"
+             form="scopesForm" formaction="{{ url_for('action_room_add') }}" formmethod="get">
+      <input class="btn btn-light dropdown-item" type="submit" value="{{ _('Delete room') }}"
+             form="scopesForm" formaction="{{ url_for('action_room_delete') }}" formmethod="get">
+    </div>
+  </div>
+  <div class="dropdown btn">
+    <button class="btn btn-secondary btn-light dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-expanded="false">
+        {{ _('Center') }}
+    </button>
+    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+      <input class="btn btn-light dropdown-item" type="submit" value="{{ _('Add center') }}"
+             form="scopesForm" formaction="{{ url_for('action_center_add') }}" formmethod="get">
+      <input class="btn btn-light dropdown-item" type="submit" value="{{ _('Delete center') }}"
+             form="scopesForm" formaction="{{ url_for('action_center_delete') }}" formmethod="get">
+    </div>
+  </div>
 {% endblock %}
 
 {% block content %}
