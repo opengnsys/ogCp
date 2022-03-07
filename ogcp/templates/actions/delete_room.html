@@ -1,6 +1,8 @@
 {% extends 'scopes.html' %}
 {% import "bootstrap/wtf.html" as wtf %}
 
+{% block nav_room %} active{% endblock %}
+{% block nav_room_delete %} active{% endblock %}
 {% block content %}
 
 <h1 class="m-5">{{_('Delete room form')}}</h1>
