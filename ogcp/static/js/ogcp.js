@@ -105,23 +105,20 @@ function updateScopeState() {
 }
 
 function updatePillStatus(state, pill) {
-    const pillCls = ['badge', 'badge-pill', 'badge-info',
-                     'badge-danger', 'badge-success', 'badge-warning',
+    const pillCls = ['badge-danger', 'badge-success', 'badge-warning',
                      'badge-wol', 'badge-light'];
     pill.classList.remove(...pillCls);
-    let newPillCls = [];
     if (state === 'OPG') {
-        newPillCls.push('badge', 'badge-pill', 'badge-warning');
+        pill.classList.add('badge-warning');
     } else if (state === 'BSY') {
-        newPillCls.push('badge', 'badge-pill', 'badge-danger');
+        pill.classList.add('badge-danger');
     } else if (state === 'VDI') {
-        newPillCls.push('badge', 'badge-pill', 'badge-success');
+        pill.classList.add('badge-success');
     } else if (state === 'WOL_SENT') {
-        newPillCls.push('badge', 'badge-pill', 'badge-wol');
+        pill.classList.add('badge-wol');
     } else {
-        newPillCls.push('badge', 'badge-pill', 'badge-light');
+        pill.classList.add('badge-light');
     }
-    pill.classList.add(...newPillCls);
 }
 
 function updateScopes(scopes) {
