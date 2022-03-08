@@ -35,3 +35,7 @@ html, body {
   color: white !important;
   background-color: #99791a !important;
 }
+
+.og-pill {
+  width: 11em;
+}

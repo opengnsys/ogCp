@@ -58,7 +58,7 @@
 <div class="d-flex flex-wrap justify-content-center">
     {% set max_clients = 50 %}
     {% for name_id, ip in selected_clients[:max_clients] %}
-    <div id="pill-{{ name_id|replace(".", "_") }}" class="badge badge-pill badge-light">
+    <div id="pill-{{ name_id|replace(".", "_") }}" class="badge badge-pill og-pill badge-light">
         {{ name_id }}<br>{{ ip }}
     </div>
     {% if loop.last and (selected_clients|length > max_clients) %}

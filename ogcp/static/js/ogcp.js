@@ -8,7 +8,7 @@ function showSelectedClient(client_checkbox) {
 
     if (client_checkbox.checked) {
         if (!($('#' + pill_id).length))
-            $(container).append('<div class="badge badge-pill badge-light" ' +
+            $(container).append('<div class="badge badge-pill og-pill badge-light" ' +
                                 'id="'+ pill_id + '">' + client_checkbox.name +
                                 '<br>' + client_checkbox.value + '</div>');
         return;
