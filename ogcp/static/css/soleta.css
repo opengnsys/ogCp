@@ -25,6 +25,8 @@ html, body {
 }
 .active > .nav-link {
   font-weight: bold;
+  background: slategrey;
+  border-radius: 10rem;
 }
 
 .text-wol {
