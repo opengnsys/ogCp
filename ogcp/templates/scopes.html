@@ -49,6 +49,11 @@
              form="scopesForm" formaction="{{ url_for('action_center_delete') }}" formmethod="get">
     </div>
   </div>
+  {% if btn_back %}
+    <button class="btn btn-danger ml-3" type="button" id="backButton" onclick="history.back()">
+      {{ _("Back") }}
+    </button>
+  {% endif %}
 {% endblock %}
 
 {% block content %}
