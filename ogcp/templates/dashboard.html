@@ -4,16 +4,31 @@
 
 {% block content %}
 <div class="row">
-  <!-- connected clients -->
   <div class="col-{{ colsize }}">
-    <div class="card text-center">
-      <div class="card-header">
+    <ul class="list-group list-group-horizontal">
+      <li class="list-group-item w-50">
+        {{ _('Date') }}
+      </li>
+      <li class="list-group-item w-50">
+        <p class="card-text">{{ time_dict['now'] }}</p>
+      </li>
+    </ul>
+    <ul class="list-group list-group-horizontal">
+      <li class="list-group-item w-50">
+        {{ _('Uptime') }}
+      </li>
+      <li class="list-group-item w-50">
+        <p class="card-text">{{ time_dict['boot'] }}</p>
+      </li>
+    </ul>
+    <ul class="list-group list-group-horizontal">
+      <li class="list-group-item w-50">
         {{ _('Connected clients (ogClient)') }}
-      </div>
-      <div class="card-body">
+      </li>
+      <li class="list-group-item w-50">
         <p class="card-text">{{ clients['clients'] | length }}</p>
-      </div>
-    </div>
+      </li>
+    </ul>
   </div>
 
   <!-- latest images -->
@@ -99,6 +114,78 @@
         </ul>
     </div>
   </div>
+
+  <!-- Memory stats -->
+  <div class="col-{{ colsize }}">
+    <div class="card text-center">
+      <div class="card-header">
+        {{ _('Memory') }}
+      </div>
+      <div class="card-body">
+        <canvas id="memoryChart" class="mb-2"></canvas>
+        <ul class="list-group list-group-horizontal">
+          <li class="list-group-item w-50">
+            {{ _('Memory size') }}
+          </li>
+          <li class="list-group-item w-50">
+            {{ _('used') }} (%)
+          </li>
+          <li class="list-group-item w-50">
+            {{ _('available') }} (%)
+          </li>
+        </ul>
+        <ul class="list-group list-group-horizontal">
+          <li class="list-group-item w-50">
+            {{ (stats['memory']['size'] / 2**30)|round(3) }} Gbytes
+          </li>
+          <li class="list-group-item w-50">
+            {{ ((stats['memory']['size'] - stats['memory']['free']) / 2**30)|round(3) }} Gbytes
+            ({{ (((stats['memory']['size'] - stats['memory']['free']) / stats['memory']['size']) * 100)|int }}%)
+          </li>
+          <li class="list-group-item w-50">
+            {{ (stats['memory']['free'] / 2**30)|round(3) }} Gbytes
+            ({{ ((stats['memory']['free'] / stats['memory']['size']) * 100)|int }}%)
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Swap stats -->
+  <div class="col-{{ colsize }}">
+    <div class="card text-center">
+      <div class="card-header">
+        {{ _('Swap') }}
+      </div>
+      <div class="card-body">
+        <canvas id="swapChart" class="mb-2"></canvas>
+        <ul class="list-group list-group-horizontal">
+          <li class="list-group-item w-50">
+            {{ _('swap size') }}
+          </li>
+          <li class="list-group-item w-50">
+            {{ _('used') }} (%)
+          </li>
+          <li class="list-group-item w-50">
+            {{ _('available') }} (%)
+          </li>
+        </ul>
+        <ul class="list-group list-group-horizontal">
+          <li class="list-group-item w-50">
+            {{ (stats['swap']['size'] / 2**30)|round(3) }} Gbytes
+          </li>
+          <li class="list-group-item w-50">
+            {{ ((stats['swap']['size'] - stats['swap']['free']) / 2**30)|round(3) }} Gbytes
+            ({{ (((stats['swap']['size'] - stats['swap']['free']) / stats['swap']['size']) * 100)|int }}%)
+          </li>
+          <li class="list-group-item w-50">
+            {{ (stats['swap']['free'] / 2**30)|round(3) }} Gbytes
+            ({{ ((stats['swap']['free'] / stats['swap']['size']) * 100)|int }}%)
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
 </div>
 {% endblock %}
 
@@ -138,6 +225,76 @@
   var diskChart = new Chart(
     document.getElementById('diskChart'),
     diskChartConfig,
+  );
+  const memoryChartConfig = {
+    type: 'doughnut',
+    data: {
+      labels: ['Used', 'Available'],
+      datasets: [
+        {
+          label: 'Memory usage',
+          data: [
+            {{ ((stats['memory']['size'] - stats['memory']['free']) / 2**30)|round(3) }},
+            {{ (stats['memory']['free'] / 2**30)|round(3) }},
+          ],
+          backgroundColor: [
+            'rgb(179, 180, 146)',
+            'rgb(203, 184, 169)',
+          ],
+        },
+      ],
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: {
+          position: 'top',
+        },
+        title: {
+          display: true,
+          text: 'Chart.js Doughnut Chart'
+        },
+      },
+    },
+  };
+  var memoryChart = new Chart(
+    document.getElementById('memoryChart'),
+    memoryChartConfig,
+  );
+  const swapChartConfig = {
+    type: 'doughnut',
+    data: {
+      labels: ['Used', 'Available'],
+      datasets: [
+        {
+          label: 'Swap usage',
+          data: [
+            {{ ((stats['swap']['size'] - stats['swap']['free']) / 2**30)|round(3) }},
+            {{ (stats['swap']['free'] / 2**30)|round(3) }},
+          ],
+          backgroundColor: [
+            'rgb(191, 171, 37)',
+            'rgb(216, 164, 127)',
+          ],
+        },
+      ],
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: {
+          position: 'top',
+        },
+        title: {
+          display: true,
+          text: 'Chart.js Doughnut Chart'
+        },
+      },
+    },
+  };
+  var swapChart = new Chart(
+    document.getElementById('swapChart'),
+    swapChartConfig,
   );
 </script>
 {% endblock %}

@@ -183,6 +183,25 @@ def get_user(username):
             return user
     return None
 
+
+intervals = (
+    (_('days'), 86400),    # 60 * 60 * 24
+    (_('hours'), 3600),    # 60 * 60
+    (_('minutes'), 60),
+)
+
+
+def display_time(seconds):
+    result = []
+
+    for name, count in intervals:
+        value = seconds // count
+        if value:
+            seconds -= value * count
+            result.append("{} {}".format(value, name))
+    return ', '.join(result)
+
+
 @login_manager.user_loader
 def load_user(username):
     user_dict = get_user(username)
@@ -218,9 +237,15 @@ def index():
     images.sort(key=image_modified_date_from_str, reverse=True)
     disk = images_response.json()['disk']
     oglive_list = g.server.get('/oglive/list').json()
+    stats = g.server.get('/stats').json()
+    timestamp = datetime.datetime.fromtimestamp(stats.get('time').get('now'))
+    now = timestamp.strftime('%Y-%m-%d  %H:%M:%S')
+    boot = display_time(stats.get('time').get('boot'))
+    time_dict = {'now': now, 'boot': boot}
     return render_template('dashboard.html', clients=clients,
                            images=images, disk=disk, colsize="6",
-                           oglive_list=oglive_list)
+                           oglive_list=oglive_list, stats=stats,
+                           time_dict=time_dict)
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
