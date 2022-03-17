@@ -29,25 +29,14 @@
         <p class="card-text">{{ clients['clients'] | length }}</p>
       </li>
     </ul>
-  </div>
-
-  <!-- latest images -->
-  <div class="col-{{ colsize }}">
-    <div class="card text-center">
-      <div class="card-header">
-        {{ _('Latest images') }}
-      </div>
-        {% for image in images[:10] %}
-          <ul class="list-group list-group-horizontal">
-            <li class="list-group-item w-50">
-              {{ image['name'] }}
-            </li>
-            <li class="list-group-item w-50">
-              {{ image['modified'] }}
-            </li>
-          </ul>
-        {% endfor %}
-    </div>
+    <ul class="list-group list-group-horizontal">
+      <li class="list-group-item w-50">
+        {{ _('Number of images') }}
+      </li>
+      <li class="list-group-item w-50">
+        <p class="card-text">{{ images | length }}</p>
+      </li>
+    </ul>
   </div>
 
   <!-- disk stats -->
@@ -63,13 +52,10 @@
             {{ _('Disk size') }}
           </li>
           <li class="list-group-item w-50">
-            {{ _('used') }}
+            {{ _('used') }} (%)
           </li>
           <li class="list-group-item w-50">
-            {{ _('available') }}
-          </li>
-          <li class="list-group-item w-50">
-            {{ _('use') }}(%)
+            {{ _('available') }} (%)
           </li>
         </ul>
         <ul class="list-group list-group-horizontal">
@@ -78,40 +64,14 @@
           </li>
           <li class="list-group-item w-50">
             {{ (disk['total'] - disk['free']) // 2**30 }} Gbytes
+            ({{ (((disk['total'] - disk['free']) / disk['total']) * 100)|int }}%)
           </li>
           <li class="list-group-item w-50">
             {{ disk['free'] // 2**30 }} Gbytes
-          </li>
-          <li class="list-group-item w-50">
-            {{ (((disk['total'] - disk['free']) / disk['total']) * 100)|int }}%
+            ({{ ((disk['free'] / disk['total']) * 100)|int }}%)
           </li>
         </ul>
       </div>
-      <div class="card-header">
-        {{ _('Number of images') }}
-      </div>
-      <div class="card-body">
-        <p class="card-text">{{ images | length }}</p>
-      </div>
-    </div>
-  </div>
-
-  <!-- ogLives -->
-  <div class="col-{{ colsize }}">
-    <div class="card text-center">
-      <div class="card-header">
-        ogLives
-      </div>
-        <ul class="list-group">
-          {% for oglive in oglive_list['oglive'] %}
-            <li class="list-group-item">
-              {{ oglive['directory'] }}
-            {% if loop.index0 == oglive_list['default'] %}
-              ({{ _('default') }})
-            {% endif %}
-            </li>
-          {% endfor %}
-        </ul>
     </div>
   </div>
 
@@ -184,6 +144,44 @@
           </li>
         </ul>
       </div>
+    </div>
+  </div>
+
+  <!-- latest images -->
+  <div class="col-{{ colsize }}">
+    <div class="card text-center">
+      <div class="card-header">
+        {{ _('Latest images') }}
+      </div>
+        {% for image in images[:10] %}
+          <ul class="list-group list-group-horizontal">
+            <li class="list-group-item w-50">
+              {{ image['name'] }}
+            </li>
+            <li class="list-group-item w-50">
+              {{ image['modified'] }}
+            </li>
+          </ul>
+        {% endfor %}
+    </div>
+  </div>
+
+  <!-- ogLives -->
+  <div class="col-{{ colsize }}">
+    <div class="card text-center">
+      <div class="card-header">
+        {{ _('ogLive images') }}
+      </div>
+        <ul class="list-group">
+          {% for oglive in oglive_list['oglive'] %}
+            <li class="list-group-item">
+              {{ oglive['directory'] }}
+            {% if loop.index0 == oglive_list['default'] %}
+              ({{ _('default') }})
+            {% endif %}
+            </li>
+          {% endfor %}
+        </ul>
     </div>
   </div>
 </div>
