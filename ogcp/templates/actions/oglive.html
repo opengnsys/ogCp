@@ -11,7 +11,9 @@
 
 {% set ip_list = form.ips.data.split(' ') %}
 {% set ip_count = ip_list | length %}
-<h1 class="m-5">Changing ogLive of {{ip_count}} {%if ip_count > 1%}computers{% else %}computer{% endif %}</h1>
+<h1 class="m-5">
+  {{ _('Changing ogLive of %(ip_count)d computer(s)', ip_count=ip_count) }}
+</h1>
 
 {{ macros.cmd_selected_clients(selected_clients) }}
 
