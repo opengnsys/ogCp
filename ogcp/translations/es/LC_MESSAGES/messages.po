@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  1.0.0\n"
 "Report-Msgid-Bugs-To: opengnsys@soleta.eu\n"
-"POT-Creation-Date: 2022-02-22 16:53+0100\n"
+"POT-Creation-Date: 2022-03-22 10:59+0100\n"
 "PO-Revision-Date: 2021-12-23 16:47+0100\n"
 "Last-Translator: Soleta Networks <opengnsys@soleta.eu>\n"
 "Language: es\n"
@@ -18,135 +18,175 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.8.0\n"
 
-#: views.py:83
+#: views.py:84
 msgid "Please, select at least {} element(s)"
 msgstr "Por favor, seleccione al menos {} elemento(s)"
 
-#: views.py:87
+#: views.py:88
 msgid "No more than {} element(s) can be selected for the given action"
 msgstr "No se pueden seleccionar más de {} elemento(s) para la acción dada"
 
-#: views.py:175
+#: views.py:176
 msgid "Incorrect password"
 msgstr "Contraseña incorrecta"
 
-#: views.py:177
+#: views.py:178
 msgid "Incorrect user name"
 msgstr "Nombre de usuario incorrecto"
 
-#: views.py:269
+#: views.py:189
+msgid "days"
+msgstr "días"
+
+#: views.py:190
+msgid "hours"
+msgstr "horas"
+
+#: views.py:191
+msgid "minutes"
+msgstr "minutos"
+
+#: views.py:295
 msgid "ogServer: error powering off client"
 msgstr "ogServer: error al apagar cliente"
 
-#: views.py:272
+#: views.py:298
 msgid "Client powered off successfully"
 msgstr "Cliente apagado con éxito"
 
-#: views.py:295
+#: views.py:323
 msgid "Wake On Lan request sent successfully"
 msgstr "Wake On Lan enviado con éxito"
 
-#: views.py:456
+#: views.py:425
+msgid "Invalid setup form"
+msgstr "Configuración inválida"
+
+#: views.py:446
+msgid "Image to restore was not found"
+msgstr "Imagen no encontrada"
+
+#: views.py:459
+msgid "Image restore command sent sucessfully"
+msgstr "Restauración de imagen enviada correctamente"
+
+#: views.py:461
+msgid "There was a problem sending the image restore command"
+msgstr "Ocurrió un problema en la restauración de la imagen"
+
+#: views.py:492
 msgid "Computers have different partition setup"
 msgstr "Los ordenadores tienen diferentes configuraciones de partición"
 
-#: views.py:460
+#: views.py:496
 msgid "ogServer was unable to obtain setup of selected computer {}"
 msgstr "ogServer no pudo obtener la configuración del ordenador seleccionado {}"
 
-#: views.py:463
+#: views.py:499
 msgid "Disk: {} | Part: {}"
 msgstr "Disco: {} | Partición: {}"
 
-#: views.py:508
+#: views.py:517
+msgid "Hardware inventory command has been sent"
+msgstr "Creación de inventario hardware enviado con éxito"
+
+#: views.py:519
+msgid "There was a problem sending the hardware inventory command"
+msgstr "Ocurrió un problema en la creación del inventario hardware"
+
+#: views.py:554
 msgid "Software profile request sent successfully"
 msgstr "Solicitud de perfil de software enviado con éxito"
 
-#: views.py:510
+#: views.py:556
 msgid "Error processing software profile request: ({})"
 msgstr "Error procesando la solicitud de perfil de software: ({})"
 
-#: views.py:637
+#: views.py:558
+msgid "Error processing software profile form"
+msgstr "Error al procesar el perfil software"
+
+#: views.py:692
 msgid "ogServer: error adding client"
 msgstr "ogServer: error al añadir cliente"
 
-#: views.py:640
+#: views.py:695
 msgid "Client added successfully"
 msgstr "Cliente añadido con éxito"
 
-#: views.py:667
+#: views.py:738
 msgid "ogServer: error deleting client"
 msgstr "ogServer: error al eliminar cliente"
 
-#: views.py:670
+#: views.py:741
 msgid "Client deleted successfully"
 msgstr "Cliente eliminado con éxito"
 
-#: views.py:693
+#: views.py:766
 msgid "Client set boot mode request sent successfully"
 msgstr "Solicitud del cambio del modo de inicio del cliente enviado con éxito"
 
-#: views.py:695 views.py:725 views.py:732
+#: views.py:768 views.py:801 views.py:808
 msgid "Ogserver replied with status code not ok"
 msgstr "OgServer respondió con el código de estado de error"
 
-#: views.py:722
+#: views.py:798
 msgid "Client set ogLive request sent successfully"
 msgstr "Solicitud de cambio de ogLive enviada con éxito"
 
-#: views.py:808
+#: views.py:888
 msgid "ogServer: error rebooting client"
 msgstr "ogServer: error al reiniciar cliente"
 
-#: views.py:811
+#: views.py:891
 msgid "Client rebooted successfully"
 msgstr "Cliente reiniciado con éxito"
 
-#: views.py:835 views.py:968
+#: views.py:917 views.py:1061
 msgid "OgServer replied with a non ok status code"
 msgstr "OgServer respondió con un código de estado de error"
 
-#: views.py:837
+#: views.py:919
 msgid "Refresh request processed successfully"
 msgstr "Solicitud de actualización procesada con éxito"
 
-#: views.py:849
+#: views.py:931
 msgid "Server replied with error code when adding the center"
 msgstr "El servidor respondió con el código de error al agregar el centro."
 
-#: views.py:852
+#: views.py:934
 msgid "Center added successfully"
 msgstr "Centro añadido con éxito"
 
-#: views.py:865
+#: views.py:949
 msgid "Server replied with error code when deleting the center"
 msgstr "El servidor respondió con el código de error al eliminar el centro"
 
-#: views.py:868
+#: views.py:952
 msgid "Center deleted successfully"
 msgstr "Centro eliminado con éxito"
 
-#: views.py:887
+#: views.py:973
 msgid "Server replied with error code when adding the room"
 msgstr "El servidor respondió con el código de error al agregar la sala."
 
-#: views.py:889
+#: views.py:975
 msgid "Room added successfully"
 msgstr "Sala añadida con éxito"
 
-#: views.py:906
+#: views.py:994
 msgid "Server replied with error code when deleting the room"
 msgstr "El servidor respondió con el código de error al eliminar la sala."
 
-#: views.py:909
+#: views.py:997
 msgid "Room deleted successfully"
 msgstr "Sala eliminada con éxito"
 
-#: views.py:970
+#: views.py:1063
 msgid "Image deletion request sent successfully"
 msgstr "La imagen ha sido borrada"
 
-#: views.py:980
+#: views.py:1073
 msgid "Please select one image to delete"
 msgstr "Solo puede seleccionar una imagen para borrar"
 
@@ -157,15 +197,18 @@ msgid "Submit"
 msgstr "Enviar"
 
 #: forms/action_forms.py:26 forms/action_forms.py:34 forms/action_forms.py:64
-#: templates/actions/hardware.html:14
+#: templates/actions/client_details.html:23 templates/actions/hardware.html:25
+#: templates/actions/setup.html:33
 msgid "Type"
 msgstr "Tipo"
 
 #: forms/action_forms.py:32 forms/action_forms.py:77 forms/action_forms.py:88
+#: templates/actions/client_details.html:22 templates/actions/setup.html:32
 msgid "Partition"
 msgstr "Partición"
 
-#: forms/action_forms.py:50
+#: forms/action_forms.py:50 templates/actions/client_details.html:24
+#: templates/actions/setup.html:34
 msgid "Filesystem"
 msgstr "Sistema de ficheros"
 
@@ -197,7 +240,8 @@ msgstr "Sesión"
 msgid "Run"
 msgstr "Lanzar"
 
-#: forms/action_forms.py:89 templates/commands.html:64
+#: forms/action_forms.py:89 templates/actions/client_details.html:26
+#: templates/commands.html:64
 msgid "Image"
 msgstr "Imagen"
 
@@ -253,7 +297,7 @@ msgstr "Controlador"
 msgid "Repository"
 msgstr "Repositorio"
 
-#: forms/action_forms.py:112 forms/action_forms.py:155
+#: forms/action_forms.py:112 forms/action_forms.py:155 templates/scopes.html:32
 msgid "Room"
 msgstr "Sala"
 
@@ -293,7 +337,7 @@ msgstr "Nombre del centro"
 msgid "Comment"
 msgstr "Comentario"
 
-#: forms/action_forms.py:141 forms/action_forms.py:146
+#: forms/action_forms.py:141 forms/action_forms.py:146 templates/scopes.html:43
 msgid "Center"
 msgstr "Centro"
 
@@ -333,7 +377,7 @@ msgstr "Usuario"
 msgid "Password"
 msgstr "Contraseña"
 
-#: forms/auth.py:27 templates/base.html:58
+#: forms/auth.py:27 templates/base.html:52
 msgid "Login"
 msgstr "Acceso"
 
@@ -353,27 +397,19 @@ msgstr "Comandos"
 msgid "Images"
 msgstr "Imágenes"
 
-#: templates/base.html:40
-msgid "Tasks"
-msgstr "Tareas"
-
-#: templates/base.html:43
-msgid "Schedule"
-msgstr "Programaciones"
-
-#: templates/base.html:52
+#: templates/base.html:46
 msgid "Logout"
 msgstr "Cerrar sesión"
 
-#: templates/commands.html:22
+#: templates/commands.html:22 templates/scopes.html:21
 msgid "Client"
 msgstr "Cliente"
 
-#: templates/actions/session.html:6 templates/commands.html:27
+#: templates/commands.html:27
 msgid "Start session"
 msgstr "Iniciar sesión"
 
-#: templates/actions/client_details.html:6 templates/commands.html:29
+#: templates/actions/client_details.html:12 templates/commands.html:29
 msgid "Client details"
 msgstr "Detalles del cliente"
 
@@ -437,39 +473,70 @@ msgstr "Log histórico"
 msgid "Real time log"
 msgstr "Log en tiempo real"
 
-#: templates/dashboard.html:11
+#: templates/commands.html:100 templates/images.html:34
+#: templates/scopes.html:54
+msgid "Back"
+msgstr "Atrás"
+
+#: templates/dashboard.html:10
+msgid "Date"
+msgstr "Fecha"
+
+#: templates/dashboard.html:18
+msgid "Uptime"
+msgstr "Tiempo encendído"
+
+#: templates/dashboard.html:26
 msgid "Connected clients (ogClient)"
 msgstr "Clientes conectados (ogClient)"
 
-#: templates/dashboard.html:23
-msgid "Latest images"
-msgstr "Últimas imágenes"
-
-#: templates/dashboard.html:42
-msgid "Disk stats"
-msgstr "Estadisticas de disco"
-
-#: templates/dashboard.html:48
-msgid "Disk size"
-msgstr "Capacidad del disco"
-
-#: templates/dashboard.html:51
-msgid "used"
-msgstr "ocupado"
-
-#: templates/dashboard.html:54
-msgid "available"
-msgstr "disponible"
-
-#: templates/dashboard.html:57
-msgid "use"
-msgstr "ocupado"
-
-#: templates/dashboard.html:76
+#: templates/dashboard.html:34
 msgid "Number of images"
 msgstr "Número de imágenes"
 
-#: templates/dashboard.html:95
+#: templates/dashboard.html:46
+msgid "Disk stats"
+msgstr "Estadisticas de disco"
+
+#: templates/dashboard.html:52
+msgid "Disk size"
+msgstr "Capacidad del disco"
+
+#: templates/dashboard.html:55 templates/dashboard.html:91
+#: templates/dashboard.html:127
+msgid "used"
+msgstr "ocupado"
+
+#: templates/dashboard.html:58 templates/dashboard.html:94
+#: templates/dashboard.html:130
+msgid "available"
+msgstr "disponible"
+
+#: templates/dashboard.html:82
+msgid "Memory"
+msgstr "Memoria"
+
+#: templates/dashboard.html:88
+msgid "Memory size"
+msgstr "Tamaño de memoria"
+
+#: templates/dashboard.html:118
+msgid "Swap"
+msgstr "Swap"
+
+#: templates/dashboard.html:124
+msgid "swap size"
+msgstr "Tamaño de swap"
+
+#: templates/dashboard.html:154
+msgid "Latest images"
+msgstr "Últimas imágenes"
+
+#: templates/dashboard.html:173
+msgid "ogLive images"
+msgstr "Imagenes de ogLive"
+
+#: templates/dashboard.html:180
 msgid "default"
 msgstr "predeterminado"
 
@@ -477,7 +544,7 @@ msgstr "predeterminado"
 msgid "Error!"
 msgstr "¡Error!"
 
-#: templates/actions/image_details.html:6 templates/images.html:28
+#: templates/actions/image_details.html:8 templates/images.html:28
 msgid "Image details"
 msgstr "Detalles de la imagen"
 
@@ -485,106 +552,143 @@ msgstr "Detalles de la imagen"
 msgid "Delete image"
 msgstr "Eliminar Imagen"
 
-#: templates/scopes.html:19
+#: templates/macros.html:53
+msgid "Selected clients"
+msgstr "Clientes seleccionados"
+
+#: templates/scopes.html:24
 msgid "Add client"
 msgstr "Añadir cliente"
 
-#: templates/scopes.html:21
-msgid "Add room"
-msgstr "Añadir sala"
-
-#: templates/scopes.html:23
-msgid "Add center"
-msgstr "Añadir centro"
-
-#: templates/scopes.html:25
+#: templates/scopes.html:26
 msgid "Delete client"
 msgstr "Eliminar cliente"
 
-#: templates/scopes.html:27
+#: templates/actions/add_room.html:11 templates/scopes.html:35
+msgid "Add room"
+msgstr "Añadir sala"
+
+#: templates/actions/delete_room.html:11 templates/scopes.html:37
 msgid "Delete room"
 msgstr "Eliminar sala"
 
-#: templates/scopes.html:29
+#: templates/actions/add_center.html:11 templates/scopes.html:46
+msgid "Add center"
+msgstr "Añadir centro"
+
+#: templates/actions/delete_center.html:11 templates/scopes.html:48
 msgid "Delete center"
 msgstr "Eliminar centro"
 
-#: templates/actions/add_center.html:6
-msgid "Add center form"
-msgstr "Formulario para añadir un centro"
+#: templates/actions/client_details.html:25 templates/actions/setup.html:35
+msgid "Size"
+msgstr "Tamaño"
 
-#: templates/actions/add_room.html:6
-msgid "Add room form"
-msgstr "Formulario para añadir una sala"
-
-#: templates/actions/delete_center.html:6
-msgid "Delete center form"
-msgstr "Formulario para eliminar un centro"
-
-#: templates/actions/delete_client.html:9
+#: templates/actions/delete_client.html:15
 #, python-format
 msgid "Delete %(ip_count)d client(s)"
 msgstr "Elimina %(ip_count)d cliente(s)"
 
-#: templates/actions/delete_image.html:9
+#: templates/actions/delete_image.html:12
 #, python-format
 msgid "Delete image %(image_name)s"
 msgstr "Borrar imagen %(image_name)s"
 
-#: templates/actions/delete_room.html:6
-msgid "Delete room form"
-msgstr "Formulario para eliminar una sala"
-
-#: templates/actions/hardware.html:6
+#: templates/actions/hardware.html:11
 msgid "Hardware inventory"
 msgstr "Inventario de hardware"
 
-#: templates/actions/hardware.html:13
+#: templates/actions/hardware.html:13 templates/actions/software_list.html:13
+msgid "Selected client:"
+msgstr "Cliente selecionado:"
+
+#: templates/actions/hardware.html:24 templates/actions/software_list.html:18
 msgid "Item"
 msgstr "Articulo"
 
-#: templates/actions/image_create.html:6
+#: templates/actions/image_create.html:11
 msgid "Create a partition image"
 msgstr "Crear una imagen de partición"
 
-#: templates/actions/poweroff.html:9
+#: templates/actions/image_create.html:14
+msgid "Selected client"
+msgstr "Cliente seleccionado"
+
+#: templates/actions/image_restore.html:15
+#, python-format
+msgid "Restore partition image to %(ip_count)d computer(s)"
+msgstr "Restaura imagen en %(ip_count)d cliente(s)"
+
+#: templates/actions/mode.html:15
+#, python-format
+msgid "Changing boot mode of %(ip_count)d computer(s)"
+msgstr "Cambia el modo de arranque de %(ip_count)d cliente(s)"
+
+#: templates/actions/oglive.html:15
+#, python-format
+msgid "Changing ogLive of %(ip_count)d computer(s)"
+msgstr "Cambia el ogLive de %(ip_count)d cliente(s)"
+
+#: templates/actions/poweroff.html:15
 #, python-format
 msgid "Power off %(ip_count)d client(s)"
 msgstr "Apaga %(ip_count)d cliente(s)"
 
-#: templates/actions/reboot.html:9
+#: templates/actions/reboot.html:15
 #, python-format
 msgid "Reboot %(ip_count)d client(s)"
 msgstr "Reinicia %(ip_count)d cliente(s)"
 
-#: templates/actions/setup.html:7
+#: templates/actions/session.html:14
+#, python-format
+msgid "Start %(ip_count)d client(s) session"
+msgstr "Inicia sesión de %(ip_count)d cliente(s)"
+
+#: templates/actions/setup.html:10
 msgid "Partition and Format"
 msgstr "Partición y formato"
 
-#: templates/actions/setup.html:49
+#: templates/actions/setup.html:16
+msgid "Partition Table Type"
+msgstr "Tipo de tabla de particiones"
+
+#: templates/actions/setup.html:17
+msgid "Total Disk Size"
+msgstr "Tamaño total del disco"
+
+#: templates/actions/setup.html:36
+msgid "Format?"
+msgstr "¿Formatear?"
+
+#: templates/actions/setup.html:52
 msgid "Remove"
 msgstr "Eliminar"
 
-#: templates/actions/setup.html:66
+#: templates/actions/setup.html:69
 msgid "Change disk"
 msgstr "Cambiar de disco"
 
-#: templates/actions/setup.html:70
+#: templates/actions/setup.html:73
 msgid "Add a new partition"
 msgstr "Añadir una nueva partición"
 
-#: templates/actions/setup.html:74
+#: templates/actions/setup.html:77
 msgid "Accept"
 msgstr "Aceptar"
 
-#: templates/actions/software.html:6
+#: templates/actions/software.html:11
 msgid "Software Inventory"
 msgstr "Inventario de software"
 
-#: templates/actions/legacy/log.html:6
+#: templates/actions/software_list.html:11
+msgid "Software inventory"
+msgstr "Inventario software"
+
+#: templates/actions/wol.html:15
+#, python-format
+msgid "Powering on %(ip_count)d computer(s)"
+msgstr "Enciende %(ip_count)d cliente(s)"
+
+#: templates/actions/legacy/log.html:8
 msgid "Client log"
 msgstr "Registro de clientes"
-
-#~ msgid "Log"
-#~ msgstr "Log"
-
