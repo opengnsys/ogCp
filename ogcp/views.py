@@ -25,6 +25,7 @@ from pathlib import Path
 from ogcp.models import User
 from ogcp.forms.auth import LoginForm
 from ogcp.og_server import OGServer
+from flask_babel import lazy_gettext as _l
 from flask_babel import _
 from ogcp import app
 import requests
@@ -185,9 +186,9 @@ def get_user(username):
 
 
 intervals = (
-    (_('days'), 86400),    # 60 * 60 * 24
-    (_('hours'), 3600),    # 60 * 60
-    (_('minutes'), 60),
+    (_l('days'), 86400),    # 60 * 60 * 24
+    (_l('hours'), 3600),    # 60 * 60
+    (_l('minutes'), 60),
 )
 
 
