@@ -118,6 +118,7 @@
         {{ _('Swap') }}
       </div>
       <div class="card-body">
+        {% if stats['swap']['size'] %}
         <canvas id="swapChart" class="mb-2"></canvas>
         <ul class="list-group list-group-horizontal">
           <li class="list-group-item w-50">
@@ -143,6 +144,9 @@
             ({{ ((stats['swap']['free'] / stats['swap']['size']) * 100)|int }}%)
           </li>
         </ul>
+        {% else %}
+        <h2>No swap</h2>
+        {% endif %}
       </div>
     </div>
   </div>
@@ -259,6 +263,7 @@
     document.getElementById('memoryChart'),
     memoryChartConfig,
   );
+  {% if stats['swap']['size'] %}
   const swapChartConfig = {
     type: 'doughnut',
     data: {
@@ -294,5 +299,6 @@
     document.getElementById('swapChart'),
     swapChartConfig,
   );
+  {% endif %}
 </script>
 {% endblock %}
