@@ -21,7 +21,7 @@
 
 {% macro scopes_tree_collapse_level(scopes, i, parent_id, state) -%}
 {% for scope in scopes %}
-  <li id="{{ scope["name"]|replace(".", "_") }}_{{ scope["id"] }}" class="nav-item">
+  <li id="{{ scope["name"]|replace(".", "_")|replace(" ", "_") }}_{{ scope["id"] }}" class="nav-item">
     {% if " ".join(scope["ip"]) %}
         <input class="form-check-input" type="checkbox" form="scopesForm"
                value="{{ " ".join(scope["ip"]) }}" {{ state }}
@@ -58,7 +58,7 @@
 <div class="d-flex flex-wrap justify-content-center">
     {% set max_clients = 50 %}
     {% for name_id, ip in selected_clients[:max_clients] %}
-    <div id="pill-{{ name_id|replace(".", "_") }}" class="badge badge-pill og-pill badge-light">
+    <div id="pill-{{ name_id|replace(".", "_")|replace(" ", "_") }}" class="badge badge-pill og-pill badge-light">
         {{ name_id }}<br>{{ ip }}
     </div>
     {% if loop.last and (selected_clients|length > max_clients) %}

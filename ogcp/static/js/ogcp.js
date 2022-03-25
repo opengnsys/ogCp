@@ -4,7 +4,7 @@ let updateTimeoutId = null;
 
 function showSelectedClient(client_checkbox) {
     const container = $('#selected-clients');
-    const pill_id = 'pill-' + client_checkbox.name.replaceAll('.', '_');
+    const pill_id = 'pill-' + client_checkbox.name.replaceAll(/[.]|[ ]/g, '_');
 
     if (client_checkbox.checked) {
         if (!($('#' + pill_id).length))
@@ -124,7 +124,7 @@ function updatePillStatus(state, pill) {
 function updateScopes(scopes) {
     scopes.forEach((scope) => {
         if (scope.state) {
-            const scopeId = `${scope.name}_${scope.id}`.replaceAll('.', '_');
+            const scopeId = `${scope.name}_${scope.id}`.replaceAll(/[.]|[ ]/g, '_');
             const iconEl = document.querySelector(`#${scopeId} .nav-icon`);
             const iconCls = ['fas', 'far', 'text-danger', 'text-success',
                              'text-warning', 'text-wol'];
