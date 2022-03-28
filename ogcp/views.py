@@ -242,7 +242,8 @@ def index():
     timestamp = datetime.datetime.fromtimestamp(stats.get('time').get('now'))
     now = timestamp.strftime('%Y-%m-%d  %H:%M:%S')
     boot = display_time(stats.get('time').get('boot'))
-    time_dict = {'now': now, 'boot': boot}
+    start = display_time(stats.get('time').get('start'))
+    time_dict = {'now': now, 'boot': boot, 'start': start}
     return render_template('dashboard.html', clients=clients,
                            images=images, disk=disk, colsize="6",
                            oglive_list=oglive_list, stats=stats,

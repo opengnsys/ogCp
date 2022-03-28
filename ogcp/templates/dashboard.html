@@ -23,6 +23,14 @@
     </ul>
     <ul class="list-group list-group-horizontal">
       <li class="list-group-item w-50">
+        {{ _('ogServer uptime') }}
+      </li>
+      <li class="list-group-item w-50">
+        <p class="card-text">{{ time_dict['start'] }}</p>
+      </li>
+    </ul>
+    <ul class="list-group list-group-horizontal">
+      <li class="list-group-item w-50">
         {{ _('Connected clients (ogClient)') }}
       </li>
       <li class="list-group-item w-50">
