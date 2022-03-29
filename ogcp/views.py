@@ -98,7 +98,7 @@ def parse_elements(checkboxes_dict):
     return elements
 
 def get_client_setup(ip):
-    payload = payload = {'client': list(ip)}
+    payload = {'client': [ip]}
     r = g.server.get('/client/setup', payload)
     db_partitions = r.json()['partitions']
     for partition in db_partitions:
@@ -347,7 +347,8 @@ def action_setup_show():
     if not validate_elements(ips):
         return redirect(url_for('commands'))
 
-    db_partitions = get_client_setup(ips)
+    ip = list(ips)[0]
+    db_partitions = get_client_setup(ip)
     filtered_partitions = [p for p in db_partitions
                            if p.get('disk') == selected_disk]
 
@@ -652,7 +653,8 @@ def action_client_info():
     r = g.server.get('/images')
     images = r.json()['images']
 
-    setup = get_client_setup(ips)
+    ip = list(ips)[0]
+    setup = get_client_setup(ip)
     if setup and setup[0].get('code') == 'MSDOS':
         setup[0]['code'] = 'MBR'
 
