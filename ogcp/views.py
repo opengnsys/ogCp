@@ -386,7 +386,6 @@ def action_setup_modify():
     form = SetupForm(request.form)
     if form.validate():
         ips = form.ips.data.split(' ')
-        db_partitions = get_client_setup(ips)
 
         payload = {'clients': ips,
                    'disk': str(form.disk.data),
