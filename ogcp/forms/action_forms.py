@@ -58,6 +58,12 @@ class PartitionForm(FlaskForm):
     size = IntegerField(label=_l('Size (KB)'))
     format_partition = BooleanField(label=_l('Format'))
 
+class SelectClientForm(FlaskForm):
+    ips = HiddenField()
+    selected_client = SelectField(label=_l('Select one client as reference to '
+                                           'define the partition scheme'))
+    ok = SubmitField(label=_l('Ok'))
+
 class SetupForm(FlaskForm):
     ips = HiddenField()
     disk = HiddenField()

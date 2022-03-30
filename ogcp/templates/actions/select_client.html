@@ -1,0 +1,26 @@
+{% extends 'commands.html' %}
+{% import 'bootstrap/wtf.html' as wtf %}
+{% import 'macros.html' as macros %}
+
+{% set sidebar_state = 'disabled' %}
+{% set btn_back = true %}
+
+{% block nav_image %} active{% endblock %}
+{% block nav_image_restore %} active{% endblock %}
+{% block content %}
+
+{% set ip_list = form.ips.data.split(' ') %}
+{% set ip_count = ip_list | length %}
+<h1 class="m-5">
+  {{ _('Partitioning %(ip_count)d client(s)', ip_count=ip_count) }}
+</h1>
+
+{{ macros.cmd_selected_clients(selected_clients) }}
+
+{{ wtf.quick_form(form,
+                  action=url_for('action_setup_show'),
+                  method='get',
+                  button_map={'restore': 'primary'},
+                  extra_classes='m-5') }}
+
+{% endblock %}

@@ -12,7 +12,7 @@ from ogcp.forms.action_forms import (
     WOLForm, SetupForm, ClientDetailsForm, ImageDetailsForm, HardwareForm,
     SessionForm, ImageRestoreForm, ImageCreateForm, SoftwareForm, BootModeForm,
     RoomForm, DeleteRoomForm, CenterForm, DeleteCenterForm, OgliveForm,
-    GenericForm
+    GenericForm, SelectClientForm
 )
 from flask_login import (
     current_user, LoginManager,
@@ -335,6 +335,32 @@ def action_wol():
         else:
             return redirect(url_for('commands'))
 
+
+@app.route('/action/setup/select', methods=['GET'])
+@login_required
+def action_setup_select():
+    args = request.args.copy()
+
+    ips = parse_elements(args.to_dict())
+    if not validate_elements(ips):
+        return redirect(url_for('commands'))
+
+    if len(ips) == 1:
+        ip = list(ips)[0]
+        return redirect(url_for('action_setup_show', ip=ip))
+
+    form = SelectClientForm()
+    form.ips.data = " ".join(ips)
+    form.selected_client.choices = list(ips)
+
+    scopes, _ = get_scopes(ips)
+    selected_clients = list(get_selected_clients(scopes['scope']).items())
+
+    return render_template('actions/select_client.html',
+                           selected_clients=selected_clients,
+                           form=form, scopes=scopes)
+
+
 @app.route('/action/setup', methods=['GET'])
 @login_required
 def action_setup_show():
@@ -343,12 +369,15 @@ def action_setup_show():
     default_disk = 1
     selected_disk = int(args.pop('disk', default_disk))
 
-    ips = parse_elements(args.to_dict())
-    if not validate_elements(ips):
-        return redirect(url_for('commands'))
+    if args.get('ip'):
+        ips = {args['ip']}
+        ips_str = base_client = args['ip']
+    else:
+        ips_str = args['ips']
+        ips = set(args['ips'].split(' '))
+        base_client = args['selected_client']
 
-    ip = list(ips)[0]
-    db_partitions = get_client_setup(ip)
+    db_partitions = get_client_setup(base_client)
     filtered_partitions = [p for p in db_partitions
                            if p.get('disk') == selected_disk]
 
@@ -357,7 +386,7 @@ def action_setup_show():
              if d.get('partition') == disk_partition]
 
     form = SetupForm()
-    form.ips.data = " ".join(ips)
+    form.ips.data = ips_str
     form.disk.data = selected_disk
     # If partition table is empty, set MSDOS
     form.disk_type.data = filtered_partitions[0]['code'] or 1
