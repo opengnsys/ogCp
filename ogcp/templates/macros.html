@@ -24,7 +24,8 @@
   <li id="{{ scope["name"]|replace(".", "_")|replace(" ", "_") }}_{{ scope["id"] }}" class="nav-item">
     {% if " ".join(scope["ip"]) %}
         <input class="form-check-input" type="checkbox" form="scopesForm"
-               value="{{ " ".join(scope["ip"]) }}" {{ state }}
+               value="{{ " ".join(scope["ip"]) }}"
+               {% if state %}style="filter: grayscale(100%);" onclick="return false;"{% endif %}
                {% if scope.get("selected", False) %}checked{% endif %}
                name="{{ scope["name"] }}_{{ scope["id"] }}" />
     {% endif %}
