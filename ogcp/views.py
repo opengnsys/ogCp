@@ -408,6 +408,8 @@ def action_setup_show():
                            disks=disks,
                            form=form,
                            disk_size=disk_size,
+                           ips=ips_str,
+                           base_client=base_client,
                            scopes=scopes)
 
 @app.route('/action/setup', methods=['POST'])

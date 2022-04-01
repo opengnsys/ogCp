@@ -9,6 +9,11 @@
 
 <h1 class="m-5">{{_('Partition and Format')}}</h1>
 
+<form method="GET" id="changeDiskForm">
+    <input type="hidden" name="ips" value="{{ ips }}"/>
+    <input type="hidden" name="selected_client" value="{{ base_client }}"/>
+</form>
+
 <form class="form-inline" method="POST" id="setupForm">
     <table class="table">
         <thead class="text-center">
@@ -22,13 +27,13 @@
         <tbody data-target="partitons-fieldset" id="setupTable" class="text-center">
                     <tr>
                         <td>
-                            <select form="scopesForm" name="disk" >
+                            <select form="changeDiskForm" name="disk">
                             {% for disk in disks %}
                                 <option {% if disk == selected_disk %}selected{% endif %}
                                         value="{{ disk }}">{{ disk }}</option>
                             {% endfor %}
                             </select>
-                            <button class="btn btn-dark" form="scopesForm" formmethod="get"
+                            <button class="btn btn-dark" form="changeDiskForm" formmethod="get"
                                     formaction="{{ url_for('action_setup_show') }}">
                                 {{ _('Change disk') }}
                             </button>
