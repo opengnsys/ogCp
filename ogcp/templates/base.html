@@ -110,9 +110,9 @@
             {% endif %}
             $(document).Toasts('create', {
                 class: bgclass,
-                position: 'topLeft',
+                position: 'bottomRight',
                 autohide: true,
-                delay: 5000,
+                delay: 10000,
                 title: '{{ message }}',
             })
         {% endfor %}
