@@ -37,6 +37,25 @@ function storeCheckboxStatus(checkbox) {
             localStorage.removeItem(checkbox.name);
 }
 
+function checkParentsCheckboxes() {
+    const checkboxes = $('input:checkbox[form|="scopesForm"]');
+    const reversedCheckboxes = $(checkboxes.get().reverse())
+
+    reversedCheckboxes.each(function() {
+        const checkbox = this;
+        const checkboxChildren = $('input:checkbox', this.parentNode).not(this);
+
+        if (checkboxChildren.length == 0) return;
+
+        const unCheckedChildren = checkboxChildren.filter(":not(:checked)");
+
+        checkbox.indeterminate =
+          unCheckedChildren.length > 0 &&
+          unCheckedChildren.length < checkboxChildren.length;
+        checkbox.checked = unCheckedChildren.length === 0;
+    });
+}
+
 function checkChildrenCheckboxes() {
     const checkboxes = $('input:checkbox[form|="scopesForm"]')
 
@@ -48,6 +67,7 @@ function checkChildrenCheckboxes() {
             storeCheckboxStatus(this);
             $(this).trigger('show-client');
         });
+        checkParentsCheckboxes();
     });
 }
 
