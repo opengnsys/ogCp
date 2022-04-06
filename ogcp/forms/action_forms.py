@@ -137,6 +137,14 @@ class ImageCreateForm(FlaskForm):
     description = StringField(label=_l('Description'))
     create = SubmitField(label=_l('Create'))
 
+
+class ImageUpdateForm(FlaskForm):
+    ip = HiddenField()
+    os = SelectField(label=_l('Partition'), choices=[])
+    image = SelectField(label=_l('Image'), choices=[])
+    update = SubmitField(label=_l('Update'))
+
+
 class CenterForm(FlaskForm):
     name = StringField(label=_l('Center name'),
                        validators=[InputRequired()])

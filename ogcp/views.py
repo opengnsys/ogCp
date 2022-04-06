@@ -12,7 +12,7 @@ from ogcp.forms.action_forms import (
     WOLForm, SetupForm, ClientDetailsForm, ImageDetailsForm, HardwareForm,
     SessionForm, ImageRestoreForm, ImageCreateForm, SoftwareForm, BootModeForm,
     RoomForm, DeleteRoomForm, CenterForm, DeleteCenterForm, OgliveForm,
-    GenericForm, SelectClientForm
+    GenericForm, SelectClientForm, ImageUpdateForm
 )
 from flask_login import (
     current_user, LoginManager,
@@ -905,6 +905,73 @@ def action_image_create():
         scopes, clients = get_scopes(set(ips))
         return render_template('actions/image_create.html', form=form,
                                scopes=scopes)
+
+
+@app.route('/action/image/update', methods=['GET', 'POST'])
+@login_required
+def action_image_update():
+    form = ImageUpdateForm(request.form)
+    if request.method == 'POST':
+        ip = form.ip.data
+        disk, partition, code = form.os.data.split(' ')
+        image_id = form.image.data
+        r = g.server.get('/images')
+        images_list = r.json()['images']
+        image = search_image(images_list, int(image_id))
+        if not image:
+            flash(_('Image to restore was not found'), category='error')
+            return redirect(url_for('commands'))
+        payload = {'clients': [ip],
+                   'disk': disk,
+                   'partition': partition,
+                   'code': code,
+                   'name': image['name'],
+                   'repository': g.server.ip,
+                   'id': str(image['id']),
+                   # Dummy parameters, not used by ogServer on image update.
+                   'group_id': 0,
+                   'center_id': 0}
+        r = g.server.post('/image/create', payload)
+        if r.status_code == requests.codes.ok:
+            flash(_('Image update command sent sucessfully'), category='info')
+        else:
+            flash(_('There was a problem sending the image update command'),
+                  category='error')
+        return redirect(url_for('commands'))
+
+    ips = parse_elements(request.args.to_dict())
+    if not validate_elements(ips, max_len=1):
+        return redirect(url_for('commands'))
+    form.ip.data = ' '.join(ips)
+
+    r = g.server.get('/images')
+    for image in r.json()['images']:
+        form.image.choices.append((image['id'], image['name']))
+
+    r = g.server.get('/client/setup', payload={'client': list(ips)})
+    for partition in r.json()['partitions']:
+        disk_id = partition['disk']
+        part_id = partition['partition']
+        fs_id = partition['filesystem']
+        code = partition['code']
+
+        if part_id == 0:
+            # This is the disk data, not a partition.
+            continue
+
+        choice_value = f'{disk_id} {part_id} {code}'
+        choice_name = (f"{_('Disk')} {disk_id} | "
+                       f"{_('Partition')} {part_id} | "
+                       f"{_('FS')} {FS_CODES[fs_id]}")
+        form.os.choices.append((choice_value, choice_name))
+
+    scopes, _clients = get_scopes(set(ips))
+    selected_clients = list(get_selected_clients(scopes['scope']).items())
+
+    return render_template('actions/image_update.html', form=form,
+                           selected_clients=selected_clients,
+                           scopes=scopes)
+
 
 @app.route('/action/reboot', methods=['GET', 'POST'])
 @login_required
