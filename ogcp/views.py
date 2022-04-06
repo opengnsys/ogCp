@@ -457,15 +457,15 @@ def action_setup_modify():
     flash(_(f'Invalid setup form'), category='error')
     return redirect(url_for('commands'))
 
+def search_image(images_list, image_id):
+    for image in images_list:
+        if image['id'] == image_id:
+            return image
+    return False
+
 @app.route('/action/image/restore', methods=['GET', 'POST'])
 @login_required
 def action_image_restore():
-    def search_image(images_list, image_id):
-        for image in images_list:
-            if image['id'] == image_id:
-                return image
-        return False
-
     form = ImageRestoreForm(request.form)
     if request.method == 'POST':
         ips = form.ips.data.split(' ')
