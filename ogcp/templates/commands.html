@@ -64,12 +64,12 @@
 	    {{ _('Image') }}
     </button>
     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-    <input class="btn btn-light dropdown-item{% block nav_image_restore %}{% endblock %}" type="submit" value="{{ _('Restore Image') }}"
-           form="scopesForm" formaction="{{ url_for('action_image_restore') }}" formmethod="get">
-    <input class="btn btn-light dropdown-item {% block nav_image_update %}{% endblock %}" type="submit" value="{{ _('Update image') }}"
-           form="scopesForm" formaction="{{ url_for('action_image_update') }}" formmethod="get">
     <input class="btn btn-light dropdown-item{% block nav_image_create %}{% endblock %}" type="submit" value="{{ _('Create image') }}"
            form="scopesForm" formaction="{{ url_for('action_image_create') }}" formmethod="get">
+    <input class="btn btn-light dropdown-item {% block nav_image_update %}{% endblock %}" type="submit" value="{{ _('Update image') }}"
+           form="scopesForm" formaction="{{ url_for('action_image_update') }}" formmethod="get">
+    <input class="btn btn-light dropdown-item{% block nav_image_restore %}{% endblock %}" type="submit" value="{{ _('Restore Image') }}"
+           form="scopesForm" formaction="{{ url_for('action_image_restore') }}" formmethod="get">
     </div>
   </div>
 
