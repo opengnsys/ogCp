@@ -232,7 +232,13 @@ def index():
     if not current_user.is_authenticated:
         return redirect(url_for('login'))
 
-    clients = get_clients()
+    try:
+        clients = get_clients()
+    except requests.exceptions.RequestException as err:
+        flash(_('ogServer connection failed: {}.').format(err),
+              category='error')
+        logout_user()
+        return redirect(url_for('index'))
     images_response = g.server.get('/images')
     images = images_response.json()['images']
     images.sort(key=image_modified_date_from_str, reverse=True)
