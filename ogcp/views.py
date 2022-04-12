@@ -12,7 +12,7 @@ from ogcp.forms.action_forms import (
     WOLForm, SetupForm, ClientDetailsForm, ImageDetailsForm, HardwareForm,
     SessionForm, ImageRestoreForm, ImageCreateForm, SoftwareForm, BootModeForm,
     RoomForm, DeleteRoomForm, CenterForm, DeleteCenterForm, OgliveForm,
-    GenericForm, SelectClientForm, ImageUpdateForm
+    GenericForm, SelectClientForm, ImageUpdateForm, ImportClientsForm
 )
 from flask_login import (
     current_user, LoginManager,
@@ -30,6 +30,7 @@ from flask_babel import _
 from ogcp import app
 import requests
 import datetime
+import re
 
 FS_CODES = {
     0: 'DISK',
@@ -747,6 +748,66 @@ def action_client_add():
         scopes, clients = get_scopes()
         return render_template('actions/client_details.html', form=form,
                                parent="scopes.html", scopes=scopes)
+
+@app.route('/action/clients/import', methods=['GET'])
+@login_required
+def action_clients_import_get():
+    form = ImportClientsForm()
+    r = g.server.get('/scopes')
+    rooms = parse_scopes_from_tree(r.json(), 'room')
+    rooms = [(room['id'], room['name'] + " (" + room['parent'] + ")")
+             for room in rooms]
+    form.room.choices = list(rooms)
+    scopes, _clients = get_scopes()
+    return render_template('actions/import_clients.html', form=form,
+                           scopes=scopes)
+
+
+OG_REGEX_DHCPD_CONF = (r'(?: *host *)'
+                       r'([\w.-]*)'
+                       r'(?: *{ *hardware *ethernet *)'
+                       r'((?:[0-9A-Fa-f]{2}[:-]){5}(?:[0-9A-Fa-f]{2}))'
+                       r'(?: *; *fixed-address *)'
+                       r'(\d+\.\d+\.\d+\.\d+)'
+                       r'(?: *; *})')
+OG_CLIENT_DEFAULT_BOOT = "pxe"
+OG_CLIENT_DEFAULT_LIVEDIR = "ogLive"
+OG_CLIENT_DEFAULT_MAINTENANCE = False
+OG_CLIENT_DEFAULT_NETDRIVER = "generic"
+OG_CLIENT_DEFAULT_NETIFACE = "eth0"
+OG_CLIENT_DEFAULT_NETMASK = "255.255.255.0"
+OG_CLIENT_DEFAULT_REMOTE = False
+
+
+@app.route('/action/clients/import', methods=['POST'])
+@login_required
+def action_clients_import_post():
+    form = ImportClientsForm(request.form)
+    clients = re.findall(OG_REGEX_DHCPD_CONF, form.dhcpd_conf.data)
+    if not clients:
+        flash(_('No clients found. Check the dhcpd.conf file.'),
+              category='error')
+        return redirect(url_for('scopes'))
+    payload = {'boot': OG_CLIENT_DEFAULT_BOOT,
+               'livedir': OG_CLIENT_DEFAULT_LIVEDIR,
+               'maintenance': OG_CLIENT_DEFAULT_MAINTENANCE,
+               'netdriver': OG_CLIENT_DEFAULT_NETDRIVER,
+               'netiface': OG_CLIENT_DEFAULT_NETIFACE,
+               'netmask': OG_CLIENT_DEFAULT_NETMASK,
+               'remote': OG_CLIENT_DEFAULT_REMOTE,
+               'room': int(form.room.data)}
+    for client in clients:
+        payload['name'] = client[0]
+        payload['mac'] = client[1].replace(':', '')
+        payload['ip'] = client[2]
+        resp = g.server.post('/client/add', payload)
+        if resp.status_code != requests.codes.ok:
+            flash(_('ogServer: error adding client {}').format(client[0]),
+                  category='error')
+            return redirect(url_for('scopes'))
+    flash(_('Clients imported successfully'), category='info')
+    return redirect(url_for('scopes'))
+
 
 def get_selected_clients(scopes):
     selected_clients = dict()

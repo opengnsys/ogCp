@@ -1,0 +1,19 @@
+{% extends 'scopes.html' %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% set sidebar_state = 'disabled' %}
+{% set btn_back = true %}
+
+{% block nav_client %}active{% endblock %}
+{% block nav_clients_import %}active{% endblock %}
+{% block content %}
+
+<h1 class="m-5">{{_('Import clients')}}</h1>
+
+{{ wtf.quick_form(form,
+                  action=url_for('action_clients_import_post'),
+                  method='post',
+                  button_map={'submit': 'primary'},
+                  extra_classes="mx-5") }}
+
+{% endblock %}

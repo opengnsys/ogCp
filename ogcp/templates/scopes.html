@@ -23,6 +23,8 @@
     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
       <input class="btn btn-light dropdown-item {% block nav_client_add %}{% endblock %}" type="submit" value="{{ _('Add client') }}"
              form="scopesForm" formaction="{{ url_for('action_client_add') }}" formmethod="get">
+      <input class="btn btn-light dropdown-item {% block nav_clients_import %}{% endblock %}" type="submit" value="{{ _('Import clients') }}"
+             form="scopesForm" formaction="{{ url_for('action_clients_import_get') }}" formmethod="get">
       <input class="btn btn-light dropdown-item {% block nav_client_delete %}{% endblock %}" type="submit" value="{{ _('Delete client') }}"
              form="scopesForm" formaction="{{ url_for('action_client_delete') }}" formmethod="get">
     </div>

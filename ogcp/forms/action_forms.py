@@ -7,7 +7,7 @@
 
 from wtforms import (
     Form, SubmitField, HiddenField, SelectField, BooleanField, IntegerField,
-    StringField, RadioField, FormField, FieldList, DecimalField
+    StringField, RadioField, FormField, FieldList, DecimalField, TextAreaField
 )
 from wtforms.validators import InputRequired
 from flask_wtf import FlaskForm
@@ -118,6 +118,11 @@ class ClientDetailsForm(FlaskForm):
     room = SelectField(label=_l('Room'))
     boot = SelectField(label=_l('Boot Mode'))
     create = SubmitField(label=_l('Create'))
+
+class ImportClientsForm(FlaskForm):
+    room = SelectField(label=_l('Room'))
+    dhcpd_conf = TextAreaField(label=_l('dhcpd configuration'))
+    import_btn = SubmitField(label=_l('Import'))
 
 class BootModeForm(FlaskForm):
     ips = HiddenField()
