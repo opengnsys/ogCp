@@ -23,6 +23,6 @@ class LoginForm(FlaskForm):
         label=_l('Password'),
         validators=[InputRequired()]
     )
-    submit = SubmitField(
+    submit_btn = SubmitField(
         label=_l('Login')
     )
