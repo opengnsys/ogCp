@@ -21,6 +21,8 @@ class LoginForm(FlaskForm):
     )
     pwd = PasswordField(
         label=_l('Password'),
+    )
+    pwd_hash = HiddenField(
         validators=[InputRequired()]
     )
     submit_btn = SubmitField(

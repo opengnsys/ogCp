@@ -261,7 +261,7 @@ def login():
     form = LoginForm(request.form)
     if request.method == 'POST' and form.validate():
         form_user = request.form['user']
-        pwd = request.form['pwd']
+        pwd = request.form['pwd_hash']
         user_dict = authenticate_user(form_user, pwd)
         if not user_dict:
             return render_template('auth/login.html', form=form)

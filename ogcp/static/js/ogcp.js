@@ -207,3 +207,27 @@ function RemovePartition(evt) {
         });
     });
 }
+
+async function digestMessage(msg) {
+    const msgUint8 = new TextEncoder().encode(msg);
+    const hashBuffer = await crypto.subtle.digest('SHA-512', msgUint8);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+    return hashHex;
+}
+
+function digestLoginPassword() {
+    const loginForm = $('#login-form')
+    loginForm.one('submit', async function (event) {
+        event.preventDefault()
+
+        const pwdInput = $('#pwd');
+        const pwdHashInput = $('#pwd_hash');
+        const pwdStr = pwdInput.val();
+        const pwdStrHash = await digestMessage(pwdStr);
+
+        pwdInput.prop( "disabled", true );
+        pwdHashInput.val(pwdStrHash);
+        $(this).submit()
+    });
+}
