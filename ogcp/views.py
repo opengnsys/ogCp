@@ -1186,6 +1186,14 @@ def images():
     images = r.json()['images']
     return render_template('images.html', images=images)
 
+
+@app.route('/users/', methods=['GET'])
+@login_required
+def users():
+    users = app.config['USERS']
+    return render_template('users.html', users=users)
+
+
 @app.route('/action/image/info', methods=['GET'])
 @login_required
 def action_image_info():
