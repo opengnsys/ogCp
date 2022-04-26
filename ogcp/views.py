@@ -210,7 +210,7 @@ def load_user(username):
     if not user_dict:
         return None
 
-    user = User(username, user_dict.get('SCOPES'))
+    user = User(username, user_dict.get('SCOPES'), user_dict.get('ADMIN'))
     return user
 
 @app.before_request
@@ -265,7 +265,7 @@ def login():
         user_dict = authenticate_user(form_user, pwd)
         if not user_dict:
             return render_template('auth/login.html', form=form)
-        user = User(form_user, user_dict.get('SCOPES'))
+        user = User(form_user, user_dict.get('SCOPES'), user_dict.get('ADMIN'))
         login_user(user)
         return redirect(url_for('index'))
     return render_template('auth/login.html', form=LoginForm())

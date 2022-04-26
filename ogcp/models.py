@@ -8,6 +8,7 @@
 from flask_login import UserMixin
 
 class User(UserMixin):
-    def __init__(self, username, scopes):
+    def __init__(self, username, scopes, admin):
         self.id = username
         self.scopes = scopes
+        self.admin = admin
