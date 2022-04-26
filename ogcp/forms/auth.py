@@ -7,7 +7,7 @@
 
 from wtforms import (
     Form, SubmitField, HiddenField, SelectField, BooleanField, IntegerField,
-    StringField, RadioField, PasswordField
+    StringField, RadioField, PasswordField, SelectMultipleField
 )
 from wtforms.validators import InputRequired
 from flask_wtf import FlaskForm
@@ -27,4 +27,33 @@ class LoginForm(FlaskForm):
     )
     submit_btn = SubmitField(
         label=_l('Login')
+    )
+
+
+class UserForm(FlaskForm):
+    username = StringField(
+        label=_l('Username'),
+        validators=[InputRequired()]
+    )
+    pwd = PasswordField(
+        label=_l('Password'),
+    )
+    pwd_hash = HiddenField(
+        validators=[InputRequired()]
+    )
+    pwd_confirm = PasswordField(
+        label=_l('Repeat password'),
+    )
+    pwd_hash_confirm = HiddenField(
+        validators=[InputRequired()]
+    )
+    admin = BooleanField(
+        label=_l('Administrator'),
+    )
+    scopes = SelectMultipleField(
+        label=_l('Allowed scopes'),
+        description=_l('Leave this empty to give full permissions'),
+    )
+    submit_btn = SubmitField(
+        label=_l('Submit')
     )

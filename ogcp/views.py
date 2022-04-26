@@ -23,13 +23,15 @@ from flask_login import (
 from pathlib import Path
 
 from ogcp.models import User
-from ogcp.forms.auth import LoginForm
+from ogcp.forms.auth import LoginForm, UserForm
 from ogcp.og_server import OGServer
 from flask_babel import lazy_gettext as _l
 from flask_babel import _
 from ogcp import app
 import requests
 import datetime
+import json
+import os
 import re
 
 FS_CODES = {
@@ -1192,6 +1194,73 @@ def images():
 def users():
     users = app.config['USERS']
     return render_template('users.html', users=users)
+
+
+def get_available_scopes():
+    resp = g.server.get('/scopes')
+    centers = parse_scopes_from_tree(resp.json(), 'center')
+    centers = [(center['name'], center['name']) for center in centers]
+    rooms = parse_scopes_from_tree(resp.json(), 'room')
+    rooms = [(room['name'], room['name']) for room in rooms]
+    return centers + rooms
+
+
+def save_user(form):
+    username = form.username.data
+
+    pwd_hash = form.pwd_hash.data
+    pwd_hash_confirm = form.pwd_hash_confirm.data
+    if not pwd_hash == pwd_hash_confirm:
+        flash(_('Passwords do not match'), category='error')
+        return redirect(url_for('users'))
+
+    admin = form.admin.data
+    scopes = form.scopes.data
+
+    user = {
+        'USER': username,
+        'PASS': pwd_hash,
+        'ADMIN': admin,
+        'SCOPES': scopes,
+    }
+
+    filename = os.path.join(app.root_path, 'cfg', 'ogcp.json')
+    with open(filename, 'r+') as file:
+        config = json.load(file)
+
+        config['USERS'].append(user)
+
+        file.seek(0)
+        json.dump(config, file, indent='\t')
+        file.truncate()
+
+    app.config['USERS'].append(user)
+
+    return redirect(url_for('users'))
+
+
+@app.route('/user/add', methods=['GET'])
+@login_required
+def user_add_get():
+    form = UserForm()
+    form.scopes.choices = get_available_scopes()
+    return render_template('auth/add_user.html', form=form)
+
+
+@app.route('/user/add', methods=['POST'])
+@login_required
+def user_add_post():
+    form = UserForm(request.form)
+    form.scopes.choices = get_available_scopes()
+    if not form.validate():
+        flash(form.errors, category='error')
+        return redirect(url_for('users'))
+
+    if get_user(form.username.data):
+        flash(_('This username already exists'), category='error')
+        return redirect(url_for('users'))
+
+    return save_user(form)
 
 
 @app.route('/action/image/info', methods=['GET'])

@@ -231,3 +231,25 @@ function digestLoginPassword() {
         $(this).submit()
     });
 }
+
+function digestUserFormPassword() {
+    const loginForm = $('#user-form')
+    loginForm.one('submit', async function (event) {
+        event.preventDefault()
+
+        const pwdInput = $('#pwd');
+        const pwdHashInput = $('#pwd_hash');
+        const pwdStr = pwdInput.val();
+        const pwdStrHash = await digestMessage(pwdStr);
+
+        const pwdConfirmInput = $('#pwd_confirm');
+        const pwdHashConfirmInput = $('#pwd_hash_confirm');
+        const pwdConfirmStr = pwdConfirmInput.val();
+        const pwdConfirmStrHash = await digestMessage(pwdConfirmStr);
+
+        pwdInput.prop( "disabled", true );
+        pwdHashInput.val(pwdStrHash);
+        pwdHashConfirmInput.val(pwdConfirmStrHash);
+        $(this).submit()
+    });
+}
