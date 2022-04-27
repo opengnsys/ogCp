@@ -1239,6 +1239,24 @@ def save_user(form):
     return redirect(url_for('users'))
 
 
+def delete_user(username):
+    user = get_user(username)
+
+    filename = os.path.join(app.root_path, 'cfg', 'ogcp.json')
+    with open(filename, 'r+') as file:
+        config = json.load(file)
+
+        config['USERS'].remove(user)
+
+        file.seek(0)
+        json.dump(config, file, indent='\t')
+        file.truncate()
+
+    app.config['USERS'].remove(user)
+
+    return redirect(url_for('users'))
+
+
 @app.route('/user/add', methods=['GET'])
 @login_required
 def user_add_get():
@@ -1259,6 +1277,48 @@ def user_add_post():
     if get_user(form.username.data):
         flash(_('This username already exists'), category='error')
         return redirect(url_for('users'))
+
+    return save_user(form)
+
+
+@app.route('/user/edit', methods=['GET'])
+@login_required
+def user_edit_get():
+    username_set = parse_elements(request.args.to_dict())
+    if not validate_elements(username_set, max_len=1):
+        return redirect(url_for('users'))
+
+    username = username_set.pop()
+    user = get_user(username)
+    if not user:
+        flash(_('User {} do not exists').format(username), category='error')
+        return redirect(url_for('users'))
+
+    form = UserForm()
+    form.username.data = user.get('USER')
+    form.username.render_kw = {'readonly': True}
+    form.admin.data = user.get('ADMIN')
+    form.scopes.data = user.get('SCOPES')
+    form.scopes.choices = get_available_scopes()
+
+    return render_template('auth/edit_user.html', form=form)
+
+
+@app.route('/user/edit', methods=['POST'])
+@login_required
+def user_edit_post():
+    form = UserForm(request.form)
+    form.scopes.choices = get_available_scopes()
+    if not form.validate():
+        flash(form.errors, category='error')
+        return redirect(url_for('users'))
+
+    username = form.username.data
+    if not get_user(username):
+        flash(_('User {} do not exists').format(username), category='error')
+        return redirect(url_for('users'))
+
+    delete_user(username)
 
     return save_user(form)
 

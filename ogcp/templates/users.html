@@ -26,6 +26,8 @@
 {% block commands %}
   <input class="btn btn-light {% block nav_user_add %}{% endblock %}" type="submit" value="{{ _('Add user') }}"
          form="usersForm" formaction="{{ url_for('user_add_get') }}" formmethod="get">
+  <input class="btn btn-light {% block nav_user_edit %}{% endblock %}" type="submit" value="{{ _('Edit user') }}"
+         form="usersForm" formaction="{{ url_for('user_edit_get') }}" formmethod="get">
   {% if btn_back %}
     <button class="btn btn-danger ml-3" type="button" id="backButton" onclick="history.back()">
       {{ _("Back") }}
