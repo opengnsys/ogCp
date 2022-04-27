@@ -23,7 +23,7 @@ from flask_login import (
 from pathlib import Path
 
 from ogcp.models import User
-from ogcp.forms.auth import LoginForm, UserForm
+from ogcp.forms.auth import LoginForm, UserForm, DeleteUserForm
 from ogcp.og_server import OGServer
 from flask_babel import lazy_gettext as _l
 from flask_babel import _
@@ -1321,6 +1321,44 @@ def user_edit_post():
     delete_user(username)
 
     return save_user(form)
+
+
+@app.route('/user/delete', methods=['GET'])
+@login_required
+def user_delete_get():
+    username_set = parse_elements(request.args.to_dict())
+    if not validate_elements(username_set, max_len=1):
+        return redirect(url_for('users'))
+
+    username = username_set.pop()
+    user = get_user(username)
+    if not user:
+        flash(_('User {} do not exists').format(username), category='error')
+        return redirect(url_for('users'))
+
+    form = DeleteUserForm()
+    form.username.data = user.get('USER')
+
+    return render_template('auth/delete_user.html', form=form)
+
+
+@app.route('/user/delete', methods=['POST'])
+@login_required
+def user_delete_post():
+    form = DeleteUserForm(request.form)
+    if not form.validate():
+        flash(form.errors, category='error')
+        return redirect(url_for('users'))
+
+    username = form.username.data
+    if not get_user(username):
+        flash(_('User {} do not exists').format(username), category='error')
+        return redirect(url_for('users'))
+
+    delete_user(username)
+
+    flash(_('User {} deleted').format(username), category='info')
+    return redirect(url_for('users'))
 
 
 @app.route('/action/image/info', methods=['GET'])

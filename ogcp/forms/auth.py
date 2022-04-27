@@ -57,3 +57,12 @@ class UserForm(FlaskForm):
     submit_btn = SubmitField(
         label=_l('Submit')
     )
+
+
+class DeleteUserForm(FlaskForm):
+    username = HiddenField(
+        validators=[InputRequired()]
+    )
+    submit_btn = SubmitField(
+        label=_l('Submit')
+    )

@@ -1,0 +1,17 @@
+{% extends 'users.html' %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% set sidebar_state = 'disabled' %}
+{% set btn_back = true %}
+
+{% block nav_user_edit %}active{% endblock %}
+{% block content %}
+
+<h1 class="m-5">{{_('Delete user {}').format(form.username.data)}}</h1>
+
+{{ wtf.quick_form(form,
+                  action=url_for('user_delete_post'),
+                  method='post',
+                  button_map={'submit_btn':'primary'}) }}
+
+{% endblock %}
