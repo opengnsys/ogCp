@@ -1,16 +1,33 @@
 const Endpoint = '/scopes/status';
+const macs = new Map();
 const Interval = 1000;
 let updateTimeoutId = null;
+
+async function show_client_mac(pill_id) {
+    const pill = $('#' +pill_id);
+    const ip = pill.html().split('<br>')[1]
+
+    if (!macs.get(ip)) {
+        const resp = await fetch('/client/mac?ip=' + ip);
+        const resp_mac = await resp.json();
+        macs.set(ip, resp_mac)
+    }
+
+    const mac = macs.get(ip)
+    pill.append('<br>' + mac);
+}
 
 function showSelectedClient(client_checkbox) {
     const container = $('#selected-clients');
     const pill_id = 'pill-' + client_checkbox.name.replaceAll(/[.]|[ ]/g, '_');
 
     if (client_checkbox.checked) {
-        if (!($('#' + pill_id).length))
+        if (!($('#' + pill_id).length)) {
             $(container).append('<div class="badge badge-pill og-pill badge-light" ' +
                                 'id="'+ pill_id + '">' + client_checkbox.name +
                                 '<br>' + client_checkbox.value + '</div>');
+            show_client_mac(pill_id);
+        }
         return;
     }
 

@@ -284,6 +284,18 @@ def scopes_status():
     scopes, _clients = get_scopes()
     return jsonify(scopes)
 
+
+@app.route('/client/mac', methods=['GET'])
+@login_required
+def get_client_mac():
+    ip = parse_elements(request.args.to_dict())
+    payload = {'client': list(ip)}
+    resp = g.server.get('/client/info', payload)
+    client_info = resp.json()
+    mac = client_info.get('mac')
+    return jsonify(mac)
+
+
 @app.route('/scopes/')
 @login_required
 def scopes():
