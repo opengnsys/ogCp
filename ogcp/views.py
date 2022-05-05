@@ -139,6 +139,7 @@ def add_state_and_ips(scope, clients, ips):
         client = next(filtered_client, False)
         if client:
             scope['state'] = client['state']
+            scope['link'] = client.get('speed')
         else:
             scope['state'] = 'off'
         scope['ip'] = [scope['ip']]

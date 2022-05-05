@@ -141,7 +141,9 @@ function updateScopeState() {
     }, Interval);
 }
 
-function updatePillStatus(state, pill) {
+function updatePillStatus(scope, pill) {
+    const state = scope.state
+    const link = scope.link
     const pillCls = ['badge-danger', 'badge-success', 'badge-warning',
                      'badge-wol', 'badge-light'];
     pill.classList.remove(...pillCls);
@@ -156,6 +158,10 @@ function updatePillStatus(state, pill) {
     } else {
         pill.classList.add('badge-light');
     }
+
+    $('[name="link"]', pill).remove()
+    if (link)
+        $(pill).append('<b name="link"><br>' + link + ' Mb/s'+ '</b>');
 }
 
 function updateScopes(scopes) {
@@ -183,7 +189,7 @@ function updateScopes(scopes) {
             const pillScopeId = `pill-${scopeId}`;
             const pillEl = document.querySelector(`#${pillScopeId}`);
             if (pillEl)
-                updatePillStatus(scope.state, pillEl);
+                updatePillStatus(scope, pillEl);
         }
         if (scope.scope) {
             // This is a level so we should update all childs
