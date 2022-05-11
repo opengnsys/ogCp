@@ -169,20 +169,25 @@ function updateScopes(scopes) {
         if (scope.state) {
             const scopeId = `${scope.name}_${scope.id}`.replaceAll(/[.]|[ ]/g, '_');
             const iconEl = document.querySelector(`#${scopeId} .nav-icon`);
-            const iconCls = ['fas', 'far', 'text-danger', 'text-success',
+            const iconCls = ['fas', 'far', 'fa-circle', 'fa-check-circle',
+                             'fa-times-circle', 'text-danger', 'text-success',
                              'text-warning', 'text-wol'];
             iconEl.classList.remove(...iconCls);
             let newIconCls = [];
             if (scope.state === 'OPG') {
                 newIconCls.push('fas', 'text-warning');
+                if (scope.last_cmd.result === 'failure')
+                    newIconCls.push('fa-times-circle');
+                else
+                    newIconCls.push('fa-circle');
             } else if (scope.state === 'BSY') {
-                newIconCls.push('fas', 'text-danger');
+                newIconCls.push('fas', 'fa-circle', 'text-danger');
             } else if (scope.state === 'VDI') {
-                newIconCls.push('fas', 'text-success');
+                newIconCls.push('fas', 'fa-circle', 'text-success');
             } else if (scope.state === 'WOL_SENT') {
-                newIconCls.push('fas', 'text-wol');
+                newIconCls.push('fas', 'fa-circle', 'text-wol');
             } else {
-                newIconCls.push('far');
+                newIconCls.push('far', 'fa-circle');
             }
             iconEl.classList.add(...newIconCls);
 
