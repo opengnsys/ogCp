@@ -296,7 +296,8 @@ def get_client_mac():
     resp = g.server.get('/client/info', payload)
     client_info = resp.json()
     mac = client_info.get('mac')
-    return jsonify(mac)
+    pretty_mac = (':'.join(mac[i:i+2] for i in range(0, 12, 2))).upper()
+    return jsonify(pretty_mac)
 
 
 @app.route('/scopes/')
