@@ -140,6 +140,8 @@ class ImageCreateForm(FlaskForm):
     name = StringField(label=_l('Image name'),
                        validators=[InputRequired()])
     description = StringField(label=_l('Description'))
+    repository = SelectField(label=_l('Repository'), choices=[],
+                             validators=[InputRequired()])
     create = SubmitField(label=_l('Create'))
 
 

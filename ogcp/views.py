@@ -121,6 +121,13 @@ def get_clients(state_filter=None):
         return filter(clients.items(), lambda c: c.state == state_filter)
     return clients
 
+
+def get_repositories():
+    r = g.server.get('/repositories')
+    repositories = r.json()['repositories']
+    return repositories
+
+
 def parse_scopes_from_tree(tree, scope_type):
     scopes = []
     for scope in tree['scope']:
@@ -956,7 +963,7 @@ def action_image_create():
                    "partition": partition,
                    "code": code,
                    "name": form.name.data,
-                   "repository": g.server.ip,
+                   "repository": form.repository.data,
                    "id": "0", # This is ignored by the server.
                    "description": form.description.data,
                    "group_id": 0, # Default group.
@@ -987,6 +994,11 @@ def action_image_create():
                            f"{_('Partition')} {part_id} | "
                            f"{_('FS')} {FS_CODES[fs_id]}")
             form.os.choices.append((choice_value, choice_name))
+
+        repositories = get_repositories()
+        for repo in repositories:
+            form.repository.choices.append((repo['ip'], repo['name']))
+
         scopes, clients = get_scopes(set(ips))
         return render_template('actions/image_create.html', form=form,
                                scopes=scopes)
