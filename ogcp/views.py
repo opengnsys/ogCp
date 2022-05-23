@@ -122,6 +122,13 @@ def get_clients(state_filter=None):
     return clients
 
 
+def get_repository(repository_id):
+    repositories = get_repositories()
+    [repository] = [repository for repository in repositories
+                    if repository['id'] == repository_id]
+    return repository
+
+
 def get_repositories():
     r = g.server.get('/repositories')
     repositories = r.json()['repositories']
@@ -509,11 +516,12 @@ def action_image_restore():
         if not image:
             flash(_(f'Image to restore was not found'), category='error')
             return redirect(url_for('commands'))
+        repository = get_repository(image['repo_id'])
 
         payload = {'disk': disk,
                    'partition': partition,
                    'name': image['name'],
-                   'repository': g.server.ip,
+                   'repository': repository['ip'],
                    'clients': ips,
                    'type': form.method.data,
                    'profile': str(image['software_id']),
@@ -1018,12 +1026,13 @@ def action_image_update():
         if not image:
             flash(_('Image to restore was not found'), category='error')
             return redirect(url_for('commands'))
+        repository = get_repository(image['repo_id'])
         payload = {'clients': [ip],
                    'disk': disk,
                    'partition': partition,
                    'code': code,
                    'name': image['name'],
-                   'repository': g.server.ip,
+                   'repository': repository['ip'],
                    'id': str(image['id']),
                    # Dummy parameters, not used by ogServer on image update.
                    'group_id': 0,
