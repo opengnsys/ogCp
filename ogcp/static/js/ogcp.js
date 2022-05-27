@@ -143,7 +143,8 @@ function updateScopeState() {
 
 function updatePillStatus(scope, pill) {
     const state = scope.state
-    const link = scope.link
+    let link = scope.link
+    let units = 'Mb/s'
     const pillCls = ['badge-danger', 'badge-success', 'badge-warning',
                      'badge-wol', 'badge-light'];
     pill.classList.remove(...pillCls);
@@ -160,8 +161,13 @@ function updatePillStatus(scope, pill) {
     }
 
     $('[name="link"]', pill).remove()
-    if (link)
-        $(pill).append('<b name="link"><br>' + link + ' Mb/s'+ '</b>');
+    if (link) {
+        if (link >= 1000) {
+            link = link / 1000
+            units = 'Gb/s'
+        }
+        $(pill).append('<b name="link"><br>' + link + ' ' + units + '</b>');
+    }
 }
 
 function updateScopes(scopes) {
