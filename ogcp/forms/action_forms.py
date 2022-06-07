@@ -136,7 +136,7 @@ class OgliveForm(FlaskForm):
 
 class ImageCreateForm(FlaskForm):
     ip = HiddenField()
-    os = SelectField(label=_l('OS'), choices=[])
+    os = SelectField(label=_l('Partition'), choices=[])
     name = StringField(label=_l('Image name'),
                        validators=[InputRequired()])
     description = StringField(label=_l('Description'))
