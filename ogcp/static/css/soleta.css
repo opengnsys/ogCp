@@ -41,3 +41,7 @@ html, body {
 .og-pill {
   width: 11em;
 }
+
+#dhcpd_conf {
+  height: 25rem;
+}
