@@ -982,7 +982,7 @@ def action_image_create():
                    "partition": partition,
                    "code": code,
                    "name": form.name.data,
-                   "repository": form.repository.data,
+                   "repository_id": int(form.repository.data),
                    "id": "0", # This is ignored by the server.
                    "description": form.description.data,
                    "group_id": 0, # Default group.
@@ -1016,7 +1016,7 @@ def action_image_create():
 
         repositories = get_repositories()
         for repo in repositories:
-            form.repository.choices.append((repo['ip'], repo['name']))
+            form.repository.choices.append((repo['id'], repo['name']))
 
         scopes, clients = get_scopes(set(ips))
         return render_template('actions/image_create.html', form=form,
