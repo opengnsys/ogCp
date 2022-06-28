@@ -30,6 +30,7 @@ from flask_babel import _
 from ogcp import app
 import requests
 import datetime
+import hashlib
 import json
 import os
 import re
@@ -187,6 +188,15 @@ def get_scopes(ips=set()):
 
     return scopes, clients
 
+
+def hash_password(pwd):
+    sha = hashlib.sha512()
+    sha.update(pwd.encode())
+    pwd_hash = sha.hexdigest()
+
+    return pwd_hash
+
+
 def authenticate_user(username, pwd):
     for user in app.config['USERS']:
         if user.get("USER") == username:
@@ -280,8 +290,9 @@ def login():
     form = LoginForm(request.form)
     if request.method == 'POST' and form.validate():
         form_user = request.form['user']
-        pwd = request.form['pwd_hash']
-        user_dict = authenticate_user(form_user, pwd)
+        pwd = request.form['pwd']
+        pwd_hash = hash_password(pwd)
+        user_dict = authenticate_user(form_user, pwd_hash)
         if not user_dict:
             return render_template('auth/login.html', form=form)
         user = User(form_user, user_dict.get('SCOPES'), user_dict.get('ADMIN'))
@@ -1245,8 +1256,8 @@ def get_available_scopes():
 def save_user(form):
     username = form.username.data
 
-    pwd_hash = form.pwd_hash.data
-    pwd_hash_confirm = form.pwd_hash_confirm.data
+    pwd_hash = hash_password(form.pwd.data)
+    pwd_hash_confirm = hash_password(form.pwd_confirm.data)
     if not pwd_hash == pwd_hash_confirm:
         flash(_('Passwords do not match'), category='error')
         return redirect(url_for('users'))

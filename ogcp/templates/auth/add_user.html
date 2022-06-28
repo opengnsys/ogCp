@@ -12,15 +12,6 @@
 {{ wtf.quick_form(form,
                   action=url_for('user_add_post'),
                   method='post',
-                  button_map={'submit_btn':'primary'},
-                  id='user-form') }}
-
-<script>
-    document.addEventListener('readystatechange', () => {
-        if (document.readyState === 'complete') {
-            digestUserFormPassword()
-        }
-    });
-</script>
+                  button_map={'submit_btn':'primary'}) }}
 
 {% endblock %}

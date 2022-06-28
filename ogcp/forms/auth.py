@@ -21,8 +21,6 @@ class LoginForm(FlaskForm):
     )
     pwd = PasswordField(
         label=_l('Password'),
-    )
-    pwd_hash = HiddenField(
         validators=[InputRequired()]
     )
     submit_btn = SubmitField(
@@ -37,15 +35,11 @@ class UserForm(FlaskForm):
     )
     pwd = PasswordField(
         label=_l('Password'),
-    )
-    pwd_hash = HiddenField(
-        validators=[InputRequired()]
+        validators=[InputRequired()],
     )
     pwd_confirm = PasswordField(
         label=_l('Repeat password'),
-    )
-    pwd_hash_confirm = HiddenField(
-        validators=[InputRequired()]
+        validators=[InputRequired()],
     )
     admin = BooleanField(
         label=_l('Administrator'),

@@ -15,21 +15,12 @@
           {{ wtf.quick_form(form,
                             method='post',
                             form_type='basic',
-                            button_map={'submit_btn':'primary'},
-                            id='login-form') }}
+                            button_map={'submit_btn':'primary'}) }}
         </div>
         <!-- /.login-card-body -->
       </div>
     </div>
 <!-- /.login-box -->
 </div>
-
-<script>
-    document.addEventListener('readystatechange', () => {
-        if (document.readyState === 'complete') {
-            digestLoginPassword()
-        }
-    });
-</script>
 
 {% endblock %}
