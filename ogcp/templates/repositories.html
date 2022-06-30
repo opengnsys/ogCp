@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block nav_repositories %}active{% endblock %}
+
+{% block container %}
+    <form id="repositoriesForm">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+    </form>
+    {{ super() }}
+</form>
+{% endblock %}
+
+{% block sidebar %}
+    <ul id="repositories-list" class="nav flex-column nav-pills">
+        {% for repository in repositories %}
+            <li id="repository-{{ repository['id'] }}" class="nav-item">
+                <input class="form-check-input" type="checkbox" form="repositoriesForm"
+                       value="{{ repository['id'] }}"
+                       name="{{ repository['name'] }}" />
+                {{ repository['name'] }}
+            </li>
+        {% endfor %}
+    </ul>
+{% endblock %}
+
+{% block commands %}
+  {% if btn_back %}
+    <button class="btn btn-danger ml-3" type="button" id="backButton" onclick="history.back()">
+      {{ _("Back") }}
+    </button>
+  {% endif %}
+{% endblock %}
+

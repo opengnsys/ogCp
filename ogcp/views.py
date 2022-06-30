@@ -1237,6 +1237,14 @@ def images():
     return render_template('images.html', images=images)
 
 
+@app.route('/repositories/', methods=['GET'])
+@login_required
+def repositories():
+    r = g.server.get('/repositories')
+    repositories = r.json()['repositories']
+    return render_template('repositories.html', repositories=repositories)
+
+
 @app.route('/users/', methods=['GET'])
 @login_required
 def users():
