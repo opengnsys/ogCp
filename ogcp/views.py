@@ -12,7 +12,8 @@ from ogcp.forms.action_forms import (
     WOLForm, SetupForm, ClientDetailsForm, ImageDetailsForm, HardwareForm,
     SessionForm, ImageRestoreForm, ImageCreateForm, SoftwareForm, BootModeForm,
     RoomForm, DeleteRoomForm, CenterForm, DeleteCenterForm, OgliveForm,
-    GenericForm, SelectClientForm, ImageUpdateForm, ImportClientsForm
+    GenericForm, SelectClientForm, ImageUpdateForm, ImportClientsForm,
+    RepositoryForm
 )
 from flask_login import (
     current_user, LoginManager,
@@ -1243,6 +1244,34 @@ def repositories():
     r = g.server.get('/repositories')
     repositories = r.json()['repositories']
     return render_template('repositories.html', repositories=repositories)
+
+
+@app.route('/repositories/add', methods=['GET'])
+@login_required
+def repository_add_get():
+    form = RepositoryForm()
+    r = g.server.get('/repositories')
+    repositories = r.json()['repositories']
+    return render_template('actions/add_repository.html', form=form,
+                           repositories=repositories)
+
+
+@app.route('/repositories/add', methods=['POST'])
+@login_required
+def repository_add_post():
+    form = RepositoryForm(request.form)
+    if not form.validate():
+        flash(form.errors, category='error')
+        return redirect(url_for('repositories'))
+
+    payload = {"name": form.name.data,
+               "ip": form.ip.data}
+    r = g.server.post('/repository/add', payload)
+    if r.status_code != requests.codes.ok:
+        flash(_('ogServer: error adding the repository'), category='error')
+    else:
+        flash(_('Repository added successfully'), category='info')
+    return redirect(url_for("repositories"))
 
 
 @app.route('/users/', methods=['GET'])

@@ -185,3 +185,10 @@ class ImageDetailsForm(FlaskForm):
     modified = StringField(label=_l('Modified'))
     permissions = StringField(label=_l('Permissions'))
     software_id = StringField(label=_l('Software id'))
+
+class RepositoryForm(FlaskForm):
+    name = StringField(label=_l('Name'),
+                       validators=[InputRequired()])
+    ip = StringField(label=_l('IP'),
+                     validators=[InputRequired()])
+    submit = SubmitField(label=_l('Submit'))

@@ -24,6 +24,8 @@
 {% endblock %}
 
 {% block commands %}
+  <input class="btn btn-light {% block nav_repository_add %}{% endblock %}" type="submit" value="{{ _('Add repository') }}"
+         form="repositoriesForm" formaction="{{ url_for('repository_add_get') }}" formmethod="get">
   {% if btn_back %}
     <button class="btn btn-danger ml-3" type="button" id="backButton" onclick="history.back()">
       {{ _("Back") }}
