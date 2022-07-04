@@ -1,0 +1,23 @@
+{% extends 'repositories.html' %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% set sidebar_state = 'disabled' %}
+{% set btn_back = true %}
+
+{% block content %}
+
+{{ args }}
+
+<h1 class="m-5">
+  {{ _('Delete repository %(repo_name)s', repo_name=repo_name) }}
+</h1>
+
+{{ wtf.quick_form(form,
+                  action=url_for('repository_delete_post'),
+                  method='post',
+                  button_map={'submit': 'primary'},
+                  extra_classes="mx-5") }}
+
+{% endblock %}
+
+

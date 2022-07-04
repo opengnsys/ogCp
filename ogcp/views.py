@@ -13,7 +13,7 @@ from ogcp.forms.action_forms import (
     SessionForm, ImageRestoreForm, ImageCreateForm, SoftwareForm, BootModeForm,
     RoomForm, DeleteRoomForm, CenterForm, DeleteCenterForm, OgliveForm,
     GenericForm, SelectClientForm, ImageUpdateForm, ImportClientsForm,
-    RepositoryForm
+    RepositoryForm, DeleteRepositoryForm
 )
 from flask_login import (
     current_user, LoginManager,
@@ -1272,6 +1272,39 @@ def repository_add_post():
     else:
         flash(_('Repository added successfully'), category='info')
     return redirect(url_for("repositories"))
+
+
+@app.route('/repositories/delete', methods=['GET'])
+@login_required
+def repository_delete_get():
+    form = GenericForm()
+    repositories = get_repositories()
+    selected_repo = [(name, repo_id) for name, repo_id in
+                     request.args.to_dict().items() if name != "csrf_token"]
+    if not validate_elements(selected_repo, max_len=1):
+        flash(_('Please select one repository to delete'), category='error')
+        return redirect(url_for('repositories'))
+    repo_name, repo_id = selected_repo[0]
+    form.ids.data = repo_id
+    return render_template('actions/delete_repository.html', form=form,
+                           repo_name=repo_name, repositories=repositories)
+
+
+@app.route('/repositories/delete', methods=['POST'])
+@login_required
+def repository_delete_post():
+    form = GenericForm(request.form)
+    ids = form.ids.data.split(' ')
+    if not validate_elements(ids, max_len=1):
+        return redirect(url_for('repositories'))
+    repo_id = ids.pop()
+    payload = {'id': repo_id}
+    r = g.server.post('/repository/delete', payload)
+    if r.status_code != requests.codes.ok:
+        flash(_('OgServer: error deleting repository'), category='error')
+    else:
+        flash(_('Repository deleted successfully'), category='info')
+    return redirect(url_for('repositories'))
 
 
 @app.route('/users/', methods=['GET'])

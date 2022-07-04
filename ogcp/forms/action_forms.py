@@ -192,3 +192,8 @@ class RepositoryForm(FlaskForm):
     ip = StringField(label=_l('IP'),
                      validators=[InputRequired()])
     submit = SubmitField(label=_l('Submit'))
+
+class DeleteRepositoryForm(FlaskForm):
+    repository = SelectField(label=_l('Repository'),
+                             validators=[InputRequired()])
+    submit = SubmitField(label=_l('Submit'))
