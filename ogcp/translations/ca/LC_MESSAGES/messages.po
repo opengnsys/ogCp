@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  1.0.0\n"
 "Report-Msgid-Bugs-To: opengnsys@soleta.eu\n"
-"POT-Creation-Date: 2022-03-22 12:17+0200\n"
+"POT-Creation-Date: 2022-07-06 09:57+0200\n"
 "PO-Revision-Date: 2022-03-22 12:17+0200\n"
 "Last-Translator: Soleta Networks <opengnsys@soleta.eu>\n"
 "Language: ca\n"
@@ -18,191 +18,263 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.8.0\n"
 
-#: views.py:84
+#: views.py:89
 msgid "Please, select at least {} element(s)"
 msgstr "Si us plau, seleccioneu almenys {} element (s)"
 
-#: views.py:88
+#: views.py:93
 msgid "No more than {} element(s) can be selected for the given action"
 msgstr "No es poden seleccionar més que {} element(s) per a l'acció donada"
 
-#: views.py:176
+#: views.py:207
 msgid "Incorrect password"
 msgstr "contrasenya incorrecta"
 
-#: views.py:178
+#: views.py:209
 msgid "Incorrect user name"
 msgstr "Nom d'usuari incorrecte"
 
-#: views.py:189
+#: views.py:220
 msgid "days"
 msgstr "dies"
 
-#: views.py:190
+#: views.py:221
 msgid "hours"
 msgstr "hores"
 
-#: views.py:191
+#: views.py:222
 msgid "minutes"
 msgstr "minuts"
 
-#: views.py:295
+#: views.py:269
+msgid "ogServer connection failed: {}."
+msgstr "La connexió ogServer ha fallat: {}."
+
+#: views.py:347
 msgid "ogServer: error powering off client"
 msgstr "ogServer: Error en desactivar el client"
 
-#: views.py:298
+#: views.py:350
 msgid "Client powered off successfully"
 msgstr "El client es va apagar amb èxit"
 
-#: views.py:323
+#: views.py:375
 msgid "Wake On Lan request sent successfully"
 msgstr "WoL enviada correctament"
 
-#: views.py:425
+#: views.py:508
 msgid "Invalid setup form"
 msgstr "Formulari de configuració no vàlid"
 
-#: views.py:446
+#: views.py:529 views.py:1039
 msgid "Image to restore was not found"
 msgstr "No s'ha trobat la imatge per restaurar"
 
-#: views.py:459
+#: views.py:543
 msgid "Image restore command sent sucessfully"
 msgstr "Ordre de restauració d'imatges enviada amb èxit"
 
-#: views.py:461
+#: views.py:545
 msgid "There was a problem sending the image restore command"
 msgstr "S'ha produït un problema en enviar l'ordre de restauració de la imatge"
 
-#: views.py:492
+#: views.py:576
 msgid "Computers have different partition setup"
 msgstr "Els ordinadors tenen diferents configuracions de partició"
 
-#: views.py:496
+#: views.py:580
 msgid "ogServer was unable to obtain setup of selected computer {}"
 msgstr "ogServer no ha pogut obtenir la configuració de l'ordinador seleccionat {}"
 
-#: views.py:499
+#: views.py:583
 msgid "Disk: {} | Part: {}"
 msgstr "Disc: {} | Part: {}"
 
-#: views.py:517
+#: views.py:601
 msgid "Hardware inventory command has been sent"
 msgstr "S'ha enviat l'ordre d'inventari de maquinari"
 
-#: views.py:519
+#: views.py:603
 msgid "There was a problem sending the hardware inventory command"
 msgstr "S'ha produït un problema en enviar l'ordre d'inventari de maquinari"
 
-#: views.py:554
+#: views.py:638
 msgid "Software profile request sent successfully"
 msgstr "Sol·licitud de perfil de programari enviat correctament"
 
-#: views.py:556
+#: views.py:640
 msgid "Error processing software profile request: ({})"
 msgstr "S'ha produït un error en processar el perfil de programari: ({})"
 
-#: views.py:558
+#: views.py:642
 msgid "Error processing software profile form"
 msgstr "S'ha produït un error en processar el formulari de perfil de programari"
 
-#: views.py:692
+#: views.py:777
 msgid "ogServer: error adding client"
 msgstr "ogServer: Error afegint client"
 
-#: views.py:695
+#: views.py:780
 msgid "Client added successfully"
 msgstr "El client s'ha afegit correctament"
 
-#: views.py:738
+#: views.py:833
+msgid "No clients found. Check the dhcpd.conf file."
+msgstr "No s'ha trobat cap client. Comproveu el fitxer dhcpd.conf."
+
+#: views.py:850
+msgid "ogServer: error adding client {}"
+msgstr "ogServer: error afegint client {}"
+
+#: views.py:853
+msgid "Clients imported successfully"
+msgstr "Els clients s'han importat correctament"
+
+#: views.py:883
 msgid "ogServer: error deleting client"
 msgstr "ogServer: Error en suprimir el client"
 
-#: views.py:741
+#: views.py:886
 msgid "Client deleted successfully"
 msgstr "El client va suprimir correctament"
 
-#: views.py:766
+#: views.py:911
 msgid "Client set boot mode request sent successfully"
 msgstr "Sol·licitud de mode d'arrencada del client enviada correctament"
 
-#: views.py:768+views.py:801+views.py:808
+#: views.py:913 views.py:946 views.py:953
 msgid "Ogserver replied with status code not ok"
 msgstr "ogServer va respondre amb el codi d'estat que no està bé"
 
-#: views.py:798
+#: views.py:943
 msgid "Client set ogLive request sent successfully"
 msgstr "Sol·licitud de OGLive SET OGLIVE al client enviada correctament"
 
-#: views.py:888
+#: views.py:1054
+msgid "Image update command sent sucessfully"
+msgstr "L'ordre d'actualització de la imatge s'ha enviat amb èxit"
+
+#: views.py:1056
+msgid "There was a problem sending the image update command"
+msgstr "S'ha produït un problema en enviar l'ordre d'actualització de la imatge"
+
+#: views.py:1106
 msgid "ogServer: error rebooting client"
 msgstr "ogServer: Error de reiniciar el client"
 
-#: views.py:891
+#: views.py:1109
 msgid "Client rebooted successfully"
 msgstr "El client es va reiniciar correctament"
 
-#: views.py:917+views.py:1061
+#: views.py:1135 views.py:1521
 msgid "OgServer replied with a non ok status code"
 msgstr "ogServer va respondre amb un codi d'estat no correcte"
 
-#: views.py:919
+#: views.py:1137
 msgid "Refresh request processed successfully"
 msgstr "Sol·licitud d'actualització processada correctament"
 
-#: views.py:931
+#: views.py:1149
 msgid "Server replied with error code when adding the center"
 msgstr "El servidor va respondre amb un codi d'error en afegir el centre"
 
-#: views.py:934
+#: views.py:1152
 msgid "Center added successfully"
 msgstr "Centre afegit correctament"
 
-#: views.py:949
+#: views.py:1167
 msgid "Server replied with error code when deleting the center"
-msgstr "El servidor va respondre amb un codi d'error a l'hora de suprimir el centre"
+msgstr ""
+"El servidor va respondre amb un codi d'error a l'hora de suprimir el "
+"centre"
 
-#: views.py:952
+#: views.py:1170
 msgid "Center deleted successfully"
 msgstr "Centre eliminat correctament"
 
-#: views.py:973
+#: views.py:1191
 msgid "Server replied with error code when adding the room"
 msgstr "El servidor va respondre amb el codi d'error en afegir l'habitació"
 
-#: views.py:975
+#: views.py:1193
 msgid "Room added successfully"
 msgstr "Habitació afegida correctament"
 
-#: views.py:994
+#: views.py:1212
 msgid "Server replied with error code when deleting the room"
-msgstr "El servidor va respondre amb un codi d'error a l'hora de suprimir l'habitació"
+msgstr ""
+"El servidor va respondre amb un codi d'error a l'hora de suprimir "
+"l'habitació"
 
-#: views.py:997
+#: views.py:1215
 msgid "Room deleted successfully"
 msgstr "L'habitació s'ha eliminat correctament"
 
-#: views.py:1063
+#: views.py:1271
+msgid "ogServer: error adding the repository"
+msgstr "ogServer: error en afegir el repositori"
+
+#: views.py:1273
+msgid "Repository added successfully"
+msgstr "El repositori s'ha afegit correctament"
+
+#: views.py:1285
+msgid "Please select one repository to delete"
+msgstr "Seleccioneu un dipòsit que voleu suprimir"
+
+#: views.py:1304
+msgid "OgServer: error deleting repository"
+msgstr "OgServer: error en suprimir el repositori"
+
+#: views.py:1306
+msgid "Repository deleted successfully"
+msgstr "El dipòsit s'ha suprimit correctament"
+
+#: views.py:1332
+msgid "Passwords do not match"
+msgstr "Les contrasenyes no coincideixen"
+
+#: views.py:1396
+msgid "This username already exists"
+msgstr "Aquest nom d'usuari ja existeix"
+
+#: views.py:1412 views.py:1436 views.py:1454 views.py:1473
+msgid "User {} do not exists"
+msgstr "L'usuari {} no existeix"
+
+#: views.py:1478
+msgid "User {} deleted"
+msgstr "S'ha suprimit l'usuari {}"
+
+#: views.py:1523
 msgid "Image deletion request sent successfully"
 msgstr "Sol·licitud de supressió d'imatges enviada correctament"
 
-#: views.py:1073
+#: views.py:1533
 msgid "Please select one image to delete"
 msgstr "Seleccioneu una imatge per esborrar"
 
-#: forms/action_forms.py:21+forms/action_forms.py:29+forms/action_forms.py:138+forms/action_forms.py:143+forms/action_forms.py:152+forms/action_forms.py:157
+#: forms/action_forms.py:21 forms/action_forms.py:29 forms/action_forms.py:159
+#: forms/action_forms.py:164 forms/action_forms.py:173
+#: forms/action_forms.py:178 forms/action_forms.py:194
+#: forms/action_forms.py:199 forms/auth.py:52 forms/auth.py:61
 msgid "Submit"
 msgstr "Presentar"
 
-#: forms/action_forms.py:26+forms/action_forms.py:34+forms/action_forms.py:64+templates/actions/client_details.html:23+templates/actions/hardware.html:25+templates/actions/setup.html:33
+#: forms/action_forms.py:26 forms/action_forms.py:34 forms/action_forms.py:70
+#: templates/actions/client_details.html:23 templates/actions/hardware.html:25
+#: templates/actions/setup.html:47
 msgid "Type"
-msgstr "Escriure a màquina"
+msgstr "Tipus"
 
-#: forms/action_forms.py:32+forms/action_forms.py:77+forms/action_forms.py:88+templates/actions/client_details.html:22+templates/actions/setup.html:32
+#: forms/action_forms.py:32 forms/action_forms.py:83 forms/action_forms.py:94
+#: forms/action_forms.py:139 forms/action_forms.py:150
+#: templates/actions/client_details.html:22 templates/actions/setup.html:46
 msgid "Partition"
 msgstr "Divisió"
 
-#: forms/action_forms.py:50+templates/actions/client_details.html:24+templates/actions/setup.html:34
+#: forms/action_forms.py:50 templates/actions/client_details.html:24
+#: templates/actions/setup.html:48
 msgid "Filesystem"
 msgstr "Sistema de fitxers"
 
@@ -214,151 +286,163 @@ msgstr "Mida (KB)"
 msgid "Format"
 msgstr "Format"
 
-#: forms/action_forms.py:73+templates/commands.html:25
-msgid "Refresh"
-msgstr "Actualització"
+#: forms/action_forms.py:63
+msgid "Select one client as reference to define the partition scheme"
+msgstr "Seleccioneu un client com a referència per definir l'esquema de particions"
 
-#: forms/action_forms.py:78
-msgid "View"
-msgstr "Visió"
-
-#: forms/action_forms.py:79
-msgid "Update"
-msgstr "Actualitzar"
-
-#: forms/action_forms.py:83
-msgid "Session"
-msgstr "Sessió"
-
-#: forms/action_forms.py:84
-msgid "Run"
-msgstr "Correr"
-
-#: forms/action_forms.py:89+templates/actions/client_details.html:26+templates/commands.html:64
-msgid "Image"
-msgstr "Imatge"
-
-#: forms/action_forms.py:90
-msgid "Method"
-msgstr "Mètode"
-
-#: forms/action_forms.py:92
-msgid "Restore"
-msgstr "Retornar"
-
-#: forms/action_forms.py:95+forms/action_forms.py:161
-msgid "Name"
-msgstr "Nom"
-
-#: forms/action_forms.py:96
-msgid "IP"
-msgstr "IP"
-
-#: forms/action_forms.py:97
-msgid "MAC"
-msgstr "MAC"
-
-#: forms/action_forms.py:98
-msgid "Serial Number"
-msgstr "Número de sèrie"
-
-#: forms/action_forms.py:99+forms/action_forms.py:150
-msgid "Netmask"
-msgstr "Netmask"
-
-#: forms/action_forms.py:100+forms/action_forms.py:123
-msgid "ogLive"
-msgstr "ogLive"
-
-#: forms/action_forms.py:102
-msgid "Remote"
-msgstr "Remote"
-
-#: forms/action_forms.py:103
-msgid "Maintenance"
-msgstr "Manteniment"
-
-#: forms/action_forms.py:104
-msgid "Interface"
-msgstr "Interfície"
-
-#: forms/action_forms.py:108
-msgid "Driver"
-msgstr "Driver"
-
-#: forms/action_forms.py:110
-msgid "Repository"
-msgstr "Dipòsit"
-
-#: forms/action_forms.py:112+forms/action_forms.py:155+templates/scopes.html:32
-msgid "Room"
-msgstr "Habitació"
-
-#: forms/action_forms.py:113
-msgid "Boot Mode"
-msgstr "Mode d'arrencada"
-
-#: forms/action_forms.py:114+forms/action_forms.py:132
-msgid "Create"
-msgstr "Crear"
-
-#: forms/action_forms.py:118
-msgid "Boot mode"
-msgstr "Mode d'arrencada"
-
-#: forms/action_forms.py:119+forms/action_forms.py:124
+#: forms/action_forms.py:65 forms/action_forms.py:130 forms/action_forms.py:135
 msgid "Ok"
 msgstr "D'acord"
 
-#: forms/action_forms.py:128
-msgid "OS"
-msgstr "OS"
+#: forms/action_forms.py:79 templates/commands.html:25
+msgid "Refresh"
+msgstr "Actualització"
+
+#: forms/action_forms.py:84
+msgid "View"
+msgstr "Visió"
+
+#: forms/action_forms.py:85 forms/action_forms.py:152
+msgid "Update"
+msgstr "Actualitzar"
+
+#: forms/action_forms.py:89
+msgid "Session"
+msgstr "Sessió"
+
+#: forms/action_forms.py:90
+msgid "Run"
+msgstr "Correr"
+
+#: forms/action_forms.py:95 forms/action_forms.py:151
+#: templates/actions/client_details.html:26 templates/commands.html:64
+msgid "Image"
+msgstr "Imatge"
+
+#: forms/action_forms.py:96
+msgid "Method"
+msgstr "Mètode"
+
+#: forms/action_forms.py:98
+msgid "Restore"
+msgstr "Retornar"
+
+#: forms/action_forms.py:101 forms/action_forms.py:182
+#: forms/action_forms.py:190
+msgid "Name"
+msgstr "Nom"
+
+#: forms/action_forms.py:102 forms/action_forms.py:192
+msgid "IP"
+msgstr "IP"
+
+#: forms/action_forms.py:103
+msgid "MAC"
+msgstr "MAC"
+
+#: forms/action_forms.py:104
+msgid "Serial Number"
+msgstr "Número de sèrie"
+
+#: forms/action_forms.py:105 forms/action_forms.py:171
+msgid "Netmask"
+msgstr "Netmask"
+
+#: forms/action_forms.py:106 forms/action_forms.py:134
+msgid "ogLive"
+msgstr "ogLive"
+
+#: forms/action_forms.py:108
+msgid "Remote"
+msgstr "Remote"
+
+#: forms/action_forms.py:109
+msgid "Maintenance"
+msgstr "Manteniment"
+
+#: forms/action_forms.py:110
+msgid "Interface"
+msgstr "Interfície"
+
+#: forms/action_forms.py:114
+msgid "Driver"
+msgstr "Driver"
+
+#: forms/action_forms.py:116 forms/action_forms.py:143
+#: forms/action_forms.py:197
+msgid "Repository"
+msgstr "Dipòsit"
+
+#: forms/action_forms.py:118 forms/action_forms.py:123
+#: forms/action_forms.py:176 templates/scopes.html:34
+msgid "Room"
+msgstr "Habitació"
+
+#: forms/action_forms.py:119
+msgid "Boot Mode"
+msgstr "Mode d'arrencada"
+
+#: forms/action_forms.py:120 forms/action_forms.py:145
+msgid "Create"
+msgstr "Crear"
+
+#: forms/action_forms.py:124
+msgid "dhcpd configuration"
+msgstr "configuració dhcpd"
+
+#: forms/action_forms.py:125
+msgid "Import"
+msgstr "Importació"
 
 #: forms/action_forms.py:129
+msgid "Boot mode"
+msgstr "Mode d'arrencada"
+
+#: forms/action_forms.py:140
 msgid "Image name"
 msgstr "Nom de la imatge"
 
-#: forms/action_forms.py:131
+#: forms/action_forms.py:142
 msgid "Description"
 msgstr "Descripció"
 
-#: forms/action_forms.py:135
+#: forms/action_forms.py:156
 msgid "Center name"
 msgstr "Nom del centre"
 
-#: forms/action_forms.py:137
+#: forms/action_forms.py:158
 msgid "Comment"
 msgstr "Comentari"
 
-#: forms/action_forms.py:141+forms/action_forms.py:146+templates/scopes.html:43
+#: forms/action_forms.py:162 forms/action_forms.py:167 templates/scopes.html:45
 msgid "Center"
 msgstr "Centre"
 
-#: forms/action_forms.py:148
+#: forms/action_forms.py:169
 msgid "Room name"
 msgstr "Nom de l'habitació"
 
-#: forms/action_forms.py:160
+#: forms/action_forms.py:181
 msgid "Id"
 msgstr "ID"
 
-#: forms/action_forms.py:162
+#: forms/action_forms.py:183
 msgid "Size (GiB)"
 msgstr "Mida (GIB)"
 
-#: forms/action_forms.py:163
+#: forms/action_forms.py:184
 msgid "Datasize (GiB)"
 msgstr "Datasize (GIB)"
 
-#: forms/action_forms.py:164
+#: forms/action_forms.py:185
 msgid "Modified"
 msgstr "Modificat"
 
-#: forms/action_forms.py:165
+#: forms/action_forms.py:186
 msgid "Permissions"
 msgstr "Permisos"
 
-#: forms/action_forms.py:166
+#: forms/action_forms.py:187
 msgid "Software id"
 msgstr "Identificador de programari"
 
@@ -366,13 +450,33 @@ msgstr "Identificador de programari"
 msgid "User"
 msgstr "Utilitària"
 
-#: forms/auth.py:23
+#: forms/auth.py:23 forms/auth.py:37
 msgid "Password"
 msgstr "Contrasenya"
 
-#: forms/auth.py:27+templates/base.html:52
+#: forms/auth.py:27 templates/base.html:60
 msgid "Login"
 msgstr "Iniciar sessió"
+
+#: forms/auth.py:33
+msgid "Username"
+msgstr "Nom d'usuari"
+
+#: forms/auth.py:41
+msgid "Repeat password"
+msgstr "Repeteix la contrasenya"
+
+#: forms/auth.py:45
+msgid "Administrator"
+msgstr "Administrador"
+
+#: forms/auth.py:48
+msgid "Allowed scopes"
+msgstr "Àmbits permesos"
+
+#: forms/auth.py:49
+msgid "Leave this empty to give full permissions"
+msgstr "Deixeu-ho buit per donar els permisos complets"
 
 #: templates/base.html:28
 msgid "Dashboard"
@@ -390,11 +494,19 @@ msgstr "Ordres"
 msgid "Images"
 msgstr "Imatges"
 
-#: templates/base.html:46
+#: templates/base.html:40
+msgid "Repositories"
+msgstr "Repositoris"
+
+#: templates/base.html:44
+msgid "Users"
+msgstr "Usuaris"
+
+#: templates/base.html:54
 msgid "Logout"
 msgstr "Tancar sessió"
 
-#: templates/commands.html:22+templates/scopes.html:21
+#: templates/commands.html:22 templates/scopes.html:21
 msgid "Client"
 msgstr "Clienta"
 
@@ -402,7 +514,7 @@ msgstr "Clienta"
 msgid "Start session"
 msgstr "Inici sessió"
 
-#: templates/actions/client_details.html:12+templates/commands.html:29
+#: templates/actions/client_details.html:12 templates/commands.html:29
 msgid "Client details"
 msgstr "Detalls del client"
 
@@ -439,34 +551,40 @@ msgid "Reboot"
 msgstr "Reiniciar"
 
 #: templates/commands.html:67
-msgid "Restore Image"
-msgstr "Restaura la imatge"
-
-#: templates/commands.html:69
 msgid "Create image"
 msgstr "Crea una imatge"
 
-#: templates/commands.html:76
+#: templates/commands.html:69
+msgid "Update image"
+msgstr "Actualitza la imatge"
+
+#: templates/commands.html:71
+msgid "Restore Image"
+msgstr "Restaura la imatge"
+
+#: templates/commands.html:78
 msgid "Inventory"
 msgstr "Inventari"
 
-#: templates/commands.html:79
+#: templates/commands.html:81
 msgid "Hardware"
 msgstr "Hardware"
 
-#: templates/commands.html:81
+#: templates/commands.html:83
 msgid "Software"
 msgstr "Software"
 
-#: templates/commands.html:91
+#: templates/commands.html:93
 msgid "System log"
 msgstr "Registre del sistema"
 
-#: templates/commands.html:93
+#: templates/commands.html:95
 msgid "Real time log"
 msgstr "Registre de temps real"
 
-#: templates/commands.html:100+templates/images.html:34+templates/scopes.html:54
+#: templates/commands.html:102 templates/images.html:34
+#: templates/repositories.html:37 templates/scopes.html:56
+#: templates/users.html:35
 msgid "Back"
 msgstr "Torna"
 
@@ -479,54 +597,60 @@ msgid "Uptime"
 msgstr "Temps d'activitat"
 
 #: templates/dashboard.html:26
+msgid "ogServer uptime"
+msgstr "ogServer temps d'activitat"
+
+#: templates/dashboard.html:34
 msgid "Connected clients (ogClient)"
 msgstr "Clients connectats (ogclient)"
 
-#: templates/dashboard.html:34
+#: templates/dashboard.html:42
 msgid "Number of images"
 msgstr "Nombre d'imatges"
 
-#: templates/dashboard.html:46
+#: templates/dashboard.html:54
 msgid "Disk stats"
 msgstr "Estadístiques del disc"
 
-#: templates/dashboard.html:52
+#: templates/dashboard.html:60
 msgid "Disk size"
 msgstr "Mida del disc"
 
-#: templates/dashboard.html:55+templates/dashboard.html:91+templates/dashboard.html:127
+#: templates/dashboard.html:63 templates/dashboard.html:99
+#: templates/dashboard.html:136
 msgid "used"
 msgstr "usà"
 
-#: templates/dashboard.html:58+templates/dashboard.html:94+templates/dashboard.html:130
+#: templates/dashboard.html:66 templates/dashboard.html:102
+#: templates/dashboard.html:139
 msgid "available"
 msgstr "disponible"
 
-#: templates/dashboard.html:82
+#: templates/dashboard.html:90
 msgid "Memory"
 msgstr "Memòria"
 
-#: templates/dashboard.html:88
+#: templates/dashboard.html:96
 msgid "Memory size"
 msgstr "Mida de la memòria"
 
-#: templates/dashboard.html:118
+#: templates/dashboard.html:126
 msgid "Swap"
 msgstr "Swap"
 
-#: templates/dashboard.html:124
+#: templates/dashboard.html:133
 msgid "swap size"
 msgstr "mida d'swap"
 
-#: templates/dashboard.html:154
+#: templates/dashboard.html:166
 msgid "Latest images"
 msgstr "Últimes imatges"
 
-#: templates/dashboard.html:173
+#: templates/dashboard.html:185
 msgid "ogLive images"
 msgstr "Imatges Oglive"
 
-#: templates/dashboard.html:180
+#: templates/dashboard.html:192
 msgid "default"
 msgstr "absència"
 
@@ -534,7 +658,7 @@ msgstr "absència"
 msgid "Error!"
 msgstr "Error!"
 
-#: templates/actions/image_details.html:8+templates/images.html:28
+#: templates/actions/image_details.html:8 templates/images.html:28
 msgid "Image details"
 msgstr "Detalls de la imatge"
 
@@ -542,55 +666,102 @@ msgstr "Detalls de la imatge"
 msgid "Delete image"
 msgstr "Suprimeix la imatge"
 
-#: templates/macros.html:53
+#: templates/macros.html:55
 msgid "Selected clients"
 msgstr "Clients seleccionats"
+
+#: templates/macros.html:59
+msgid "Apagado"
+msgstr "Apagado"
+
+#: templates/macros.html:60
+msgid "WoL sent"
+msgstr "WoL enviat"
+
+#: templates/macros.html:62
+msgid "Busy"
+msgstr "Ocupat"
+
+#: templates/repositories.html:27
+msgid "Add repository"
+msgstr "Afegeix un repositori"
+
+#: templates/repositories.html:33
+msgid "Delete repository"
+msgstr "Suprimeix el repositori"
 
 #: templates/scopes.html:24
 msgid "Add client"
 msgstr "Afegir client"
 
-#: templates/scopes.html:26
+#: templates/actions/import_clients.html:11 templates/scopes.html:26
+msgid "Import clients"
+msgstr "Importa clients"
+
+#: templates/scopes.html:28
 msgid "Delete client"
 msgstr "Suprimeix el client"
 
-#: templates/actions/add_room.html:11+templates/scopes.html:35
+#: templates/actions/add_room.html:11 templates/scopes.html:37
 msgid "Add room"
 msgstr "Afegir espai"
 
-#: templates/actions/delete_room.html:11+templates/scopes.html:37
+#: templates/actions/delete_room.html:11 templates/scopes.html:39
 msgid "Delete room"
 msgstr "Suprimeix la sala"
 
-#: templates/actions/add_center.html:11+templates/scopes.html:46
+#: templates/actions/add_center.html:11 templates/scopes.html:48
 msgid "Add center"
 msgstr "Afegir centre"
 
-#: templates/actions/delete_center.html:11+templates/scopes.html:48
+#: templates/actions/delete_center.html:11 templates/scopes.html:50
 msgid "Delete center"
 msgstr "Suprimeix el centre"
 
-#: templates/actions/client_details.html:25+templates/actions/setup.html:35
+#: templates/users.html:27
+msgid "Add user"
+msgstr "Afegeix un usuari"
+
+#: templates/users.html:29
+msgid "Edit user"
+msgstr "Edita l'usuari"
+
+#: templates/users.html:31
+msgid "Delete user"
+msgstr "Suprimeix l'usuari"
+
+#: templates/actions/add_repository.html:10
+msgid "Add a repository"
+msgstr "Afegeix un repositori"
+
+#: templates/actions/client_details.html:25 templates/actions/setup.html:49
 msgid "Size"
 msgstr "Tamany"
 
 #: templates/actions/delete_client.html:15
+#, python-format
 msgid "Delete %(ip_count)d client(s)"
 msgstr "Eliminar %(ip_count)d Client (s)"
 
 #: templates/actions/delete_image.html:12
+#, python-format
 msgid "Delete image %(image_name)s"
-msgstr "Suprimeix la imatge% (image_name) s"
+msgstr "Suprimeix la imatge %(image_name)s"
+
+#: templates/actions/delete_repository.html:12
+#, python-format
+msgid "Delete repository %(repo_name)s"
+msgstr "Suprimeix el dipòsit %(repo_name)s"
 
 #: templates/actions/hardware.html:11
 msgid "Hardware inventory"
 msgstr "Inventari de maquinari"
 
-#: templates/actions/hardware.html:13+templates/actions/software_list.html:13
+#: templates/actions/hardware.html:13 templates/actions/software_list.html:13
 msgid "Selected client:"
 msgstr "Client seleccionat:"
 
-#: templates/actions/hardware.html:24+templates/actions/software_list.html:18
+#: templates/actions/hardware.html:24 templates/actions/software_list.html:18
 msgid "Item"
 msgstr "Article"
 
@@ -603,26 +774,41 @@ msgid "Selected client"
 msgstr "Client seleccionat"
 
 #: templates/actions/image_restore.html:15
+#, python-format
 msgid "Restore partition image to %(ip_count)d computer(s)"
 msgstr "Restaurar la imatge de partició a %(ip_count)d ordinador(s)"
 
+#: templates/actions/image_update.html:12
+msgid "Update partition image"
+msgstr "Actualitza la imatge de la partició"
+
 #: templates/actions/mode.html:15
+#, python-format
 msgid "Changing boot mode of %(ip_count)d computer(s)"
 msgstr "Canvi de mode d'arrencada de %(ip_count)d ordinador(s)"
 
 #: templates/actions/oglive.html:15
+#, python-format
 msgid "Changing ogLive of %(ip_count)d computer(s)"
 msgstr "Canvi d'Oglive de %(ip_count)d ordinador(s)"
 
 #: templates/actions/poweroff.html:15
+#, python-format
 msgid "Power off %(ip_count)d client(s)"
 msgstr "Apagar %(ip_count)d client(s)"
 
 #: templates/actions/reboot.html:15
+#, python-format
 msgid "Reboot %(ip_count)d client(s)"
 msgstr "Reinicieu %(ip_count)d Client (s)"
 
+#: templates/actions/select_client.html:15
+#, python-format
+msgid "Partitioning %(ip_count)d client(s)"
+msgstr "S'estan particionant %(ip_count)d clients"
+
 #: templates/actions/session.html:14
+#, python-format
 msgid "Start %(ip_count)d client(s) session"
 msgstr "Inicieu %(ip_count)d Sessió del client"
 
@@ -630,31 +816,31 @@ msgstr "Inicieu %(ip_count)d Sessió del client"
 msgid "Partition and Format"
 msgstr "Partició i format"
 
-#: templates/actions/setup.html:16
+#: templates/actions/setup.html:21
+msgid "Disk"
+msgstr "Disc"
+
+#: templates/actions/setup.html:22
 msgid "Partition Table Type"
 msgstr "Tipus de taula de particions"
 
-#: templates/actions/setup.html:17
+#: templates/actions/setup.html:23
 msgid "Total Disk Size"
 msgstr "Mida total del disc"
 
-#: templates/actions/setup.html:36
+#: templates/actions/setup.html:50
 msgid "Format?"
 msgstr "Format?"
 
-#: templates/actions/setup.html:52
+#: templates/actions/setup.html:66
 msgid "Remove"
 msgstr "Treure"
 
-#: templates/actions/setup.html:69
-msgid "Change disk"
-msgstr "Canvia el disc"
-
-#: templates/actions/setup.html:73
+#: templates/actions/setup.html:76
 msgid "Add a new partition"
 msgstr "Afegiu una nova partició"
 
-#: templates/actions/setup.html:77
+#: templates/actions/setup.html:80
 msgid "Accept"
 msgstr "Acceptar"
 
@@ -667,9 +853,23 @@ msgid "Software inventory"
 msgstr "Inventari de programari"
 
 #: templates/actions/wol.html:15
+#, python-format
 msgid "Powering on %(ip_count)d computer(s)"
 msgstr "Enceneu el %(ip_count)d ordinador(s)"
 
 #: templates/actions/legacy/log.html:8
 msgid "Client log"
 msgstr "Registre de clients"
+
+#: templates/auth/add_user.html:10
+msgid "Add a user"
+msgstr "Afegeix un usuari"
+
+#: templates/auth/delete_user.html:10
+msgid "Delete user {}"
+msgstr "Suprimeix l'usuari {}"
+
+#: templates/auth/edit_user.html:10
+msgid "Edit user {}"
+msgstr "Edita l'usuari {}"
+
