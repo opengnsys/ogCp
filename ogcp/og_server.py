@@ -11,9 +11,8 @@ import requests
 import json
 
 class OGServer:
-    def __init__(self, ip=app.config['IP'],
-                 port=app.config['PORT'],
-                 api_token=app.config['API_TOKEN']):
+    def __init__(self, name, ip, port, api_token):
+        self.name = name
         self.ip = ip
         self.port = port
         self.api_token = api_token
@@ -34,3 +33,19 @@ class OGServer:
                           headers=self.HEADERS,
                           json=payload)
         return r
+
+
+servers = []
+if {'IP', 'PORT', 'API_TOKEN'} <= app.config.keys():
+    # Config file backward compatibility
+    servers.append(OGServer(app.config['IP'],
+                            app.config['IP'],
+                            app.config['PORT'],
+                            app.config['API_TOKEN']))
+else:
+    for server in app.config['SERVERS']:
+        ogserver = OGServer(server['NAME'],
+                            server['IP'],
+                            server['PORT'],
+                            server['API_TOKEN'])
+        servers.append(ogserver)

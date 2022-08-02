@@ -1,7 +1,4 @@
 {
-	"IP": "127.0.0.1",
-	"PORT": 8888,
-	"API_TOKEN": "c3fe7bb0395747ec42a25df027585871",
 	"LANG": "en",
 	"USERS": [
 		{
@@ -17,6 +14,20 @@
 			"SCOPES": [
 				"Unidad Organizativa (Default)"
 			]
+		}
+	],
+	"SERVERS": [
+		{
+			"NAME": "Server 1",
+			"IP": "127.0.0.1",
+			"PORT": 8888,
+			"API_TOKEN": "a0e9ab768cbe93dab5b1998e952bcdb7"
+		},
+		{
+			"NAME": "Server 2",
+			"IP": "127.0.0.1",
+			"PORT": 18888,
+			"API_TOKEN": "e4c8gh913dph32nxm6q2768c427jrsj1"
 		}
 	]
 }

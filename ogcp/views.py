@@ -25,7 +25,7 @@ from pathlib import Path
 
 from ogcp.models import User
 from ogcp.forms.auth import LoginForm, UserForm, DeleteUserForm
-from ogcp.og_server import OGServer
+from ogcp.og_server import servers
 from flask_babel import lazy_gettext as _l
 from flask_babel import _
 from ogcp import app
@@ -177,17 +177,24 @@ def get_allowed_scopes(scopes, allowed_scopes):
             get_allowed_scopes(scope, allowed_scopes)
 
 def get_scopes(ips=set()):
-    r = g.server.get('/scopes')
-    scopes = r.json()
+    list_scopes = []
+    for server in servers:
+        r = server.get('/scopes')
+        scopes = r.json()
+        server_scope = {}
+        server_scope['name'] = server.name
+        server_scope.update(scopes)
+        list_scopes.append(server_scope)
+    all_scopes = {'scope': list_scopes}
     if current_user.scopes:
         allowed_scopes = []
-        get_allowed_scopes(scopes, allowed_scopes)
-        scopes = {'scope': allowed_scopes}
+        get_allowed_scopes(all_scopes, allowed_scopes)
+        all_scopes = {'scope': allowed_scopes}
     r = g.server.get('/clients')
     clients = r.json()
-    add_state_and_ips(scopes, clients['clients'], ips)
+    add_state_and_ips(all_scopes, clients['clients'], ips)
 
-    return scopes, clients
+    return all_scopes, clients
 
 
 def hash_password(pwd):
@@ -245,7 +252,7 @@ def load_user(username):
 
 @app.before_request
 def load_config():
-    g.server = OGServer()
+    g.server = servers[0]
 
 @app.errorhandler(404)
 def page_not_found(error):
