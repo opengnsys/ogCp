@@ -117,10 +117,18 @@ def get_client_setup(ip):
     return db_partitions
 
 def get_clients(state_filter=None):
-    r = g.server.get('/clients')
-    clients = r.json()
+    responses = multi_request('get', '/clients')
+
+    clients_list = []
+    for r in responses:
+        clients_list = clients_list + r['json']['clients']
+
+    clients = {}
+    clients['clients'] = clients_list
+
     if state_filter:
         return filter(clients.items(), lambda c: c.state == state_filter)
+
     return clients
 
 
