@@ -176,13 +176,33 @@ def get_allowed_scopes(scopes, allowed_scopes):
         else:
             get_allowed_scopes(scope, allowed_scopes)
 
+def multi_request(method, uri, payload=None):
+    responses = []
+
+    for server in servers:
+        response = {}
+
+        if method == 'get':
+            r = server.get(uri, payload)
+        elif method == 'post':
+            r = server.post(uri, payload)
+        else:
+            raise Exception('Invalid method, use get or post')
+
+        response['server'] = server.name
+        response['status_code'] = r.status_code
+        response['json'] = r.json()
+        responses.append(response)
+
+    return responses
+
 def get_scopes(ips=set()):
     list_scopes = []
-    for server in servers:
-        r = server.get('/scopes')
-        scopes = r.json()
+    responses = multi_request('get', '/scopes')
+    for r in responses:
+        scopes = r['json']
         server_scope = {}
-        server_scope['name'] = server.name
+        server_scope['name'] = r['server']
         server_scope.update(scopes)
         list_scopes.append(server_scope)
     all_scopes = {'scope': list_scopes}
