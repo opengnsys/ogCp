@@ -218,8 +218,7 @@ def get_scopes(ips=set()):
         allowed_scopes = []
         get_allowed_scopes(all_scopes, allowed_scopes)
         all_scopes = {'scope': allowed_scopes}
-    r = g.server.get('/clients')
-    clients = r.json()
+    clients = get_clients()
     add_state_and_ips(all_scopes, clients['clients'], ips)
 
     return all_scopes, clients
