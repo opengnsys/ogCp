@@ -197,12 +197,29 @@ def multi_request(method, uri, payload=None):
         else:
             raise Exception('Invalid method, use get or post')
 
-        response['server'] = server.name
-        response['status_code'] = r.status_code
+        response['server'] = server
         response['json'] = r.json()
         responses.append(response)
 
     return responses
+
+
+def get_server_from_clients(selected_clients):
+    server = None
+
+    responses = multi_request('get', '/scopes')
+    for r in responses:
+        server_clients = [c['ip'] for c in parse_scopes_from_tree(r['json'],
+                                                                  'computer')]
+        if all(client in server_clients for client in selected_clients):
+            server = r['server']
+            break
+
+    if not server:
+        raise Exception('Selected clients not found in any server')
+
+    return server
+
 
 def get_scopes(ips=set()):
     list_scopes = []
@@ -732,8 +749,10 @@ def action_client_info():
     if not validate_elements(ips, max_len=1):
         return redirect(url_for('commands'))
 
+    server = get_server_from_clients(list(ips))
+
     payload = {'client': list(ips)}
-    r = g.server.get('/client/info', payload)
+    r = server.get('/client/info', payload)
     db_client = r.json()
 
     form.name.data = db_client['name']
@@ -750,24 +769,24 @@ def action_client_info():
     form.room.data = db_client['room']
     form.boot.data = db_client['boot']
 
-    r = g.server.get('/oglive/list')
+    r = server.get('/oglive/list')
     available_oglives = r.json()['oglive']
     for oglive in available_oglives:
         choice = (oglive.get('directory'), oglive.get('directory'))
         form.livedir.choices.append(choice)
 
-    r = g.server.get('/mode')
+    r = server.get('/mode')
     available_modes = [(mode, mode) for mode in r.json()['modes']]
     form.boot.choices = list(available_modes)
 
-    r = g.server.get('/scopes')
+    r = server.get('/scopes')
     rooms = parse_scopes_from_tree(r.json(), 'room')
     rooms = [(room['id'], room['name']) for room in rooms]
     form.room.choices = list(rooms)
 
     form.create.render_kw = {"style": "visibility:hidden;"}
 
-    r = g.server.get('/images')
+    r = server.get('/images')
     images = r.json()['images']
 
     ip = list(ips)[0]
