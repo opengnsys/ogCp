@@ -104,7 +104,8 @@ def parse_elements(checkboxes_dict):
 
 def get_client_setup(ip):
     payload = {'client': [ip]}
-    r = g.server.get('/client/setup', payload)
+    server = get_server_from_clients([ip])
+    r = server.get('/client/setup', payload)
     db_partitions = r.json()['partitions']
     for partition in db_partitions:
         if partition['partition'] == 0:
@@ -393,7 +394,8 @@ def action_poweroff():
             return redirect(url_for('commands'))
 
         payload = {'clients': ips}
-        r = g.server.post('/poweroff', payload)
+        server = get_server_from_clients(ips)
+        r = server.post('/poweroff', payload)
         if r.status_code != requests.codes.ok:
             flash(_('ogServer: error powering off client'),
                   category='error')
@@ -422,7 +424,8 @@ def action_wol():
         wol_type = form.wol_type.data
         ips = form.ips.data.split(' ')
         payload = {'type': wol_type, 'clients': ips}
-        g.server.post('/wol', payload)
+        server = get_server_from_clients(ips)
+        server.post('/wol', payload)
         flash(_('Wake On Lan request sent successfully'), category='info')
         return redirect(url_for('commands'))
     else:
@@ -553,7 +556,8 @@ def action_setup_modify():
             }
             payload['partition_setup'].append(empty_part)
 
-        r = g.server.post('/setup', payload=payload)
+        server = get_server_from_clients(list(ips))
+        r = server.post('/setup', payload=payload)
         if r.status_code == requests.codes.ok:
             return redirect(url_for('commands'))
     flash(_(f'Invalid setup form'), category='error')
@@ -573,7 +577,8 @@ def action_image_restore():
         ips = form.ips.data.split(' ')
         disk, partition = form.partition.data.split(' ')
         image_id = form.image.data
-        r = g.server.get('/images')
+        server = get_server_from_clients(ips)
+        r = server.get('/images')
         images_list = r.json()['images']
         image = search_image(images_list, int(image_id))
         if not image:
@@ -589,7 +594,7 @@ def action_image_restore():
                    'type': form.method.data,
                    'profile': str(image['software_id']),
                    'id': str(image['id'])}
-        g.server.post('/image/restore', payload)
+        server.post('/image/restore', payload)
         if r.status_code == requests.codes.ok:
             flash(_(f'Image restore command sent sucessfully'), category='info')
         else:
@@ -603,12 +608,12 @@ def action_image_restore():
 
         part_choices = []
 
-        r = g.server.get('/images')
+        r = server.get('/images')
         for image in r.json()['images']:
             form.image.choices.append((image['id'], image['name']))
 
         for ip in ips:
-            r = g.server.get('/client/setup', payload={'client': [ip]})
+            r = server.get('/client/setup', payload={'client': [ip]})
             if r.status_code == requests.codes.ok:
                 partitions = r.json()['partitions']
                 parts = []
@@ -647,7 +652,8 @@ def action_hardware():
     form = HardwareForm(request.form)
     if request.method == 'POST':
         ips = form.ips.data.split(' ')
-        r = g.server.post('/hardware', payload={'clients': ips})
+        server = get_server_from_clients(ips)
+        r = server.post('/hardware', payload={'clients': ips})
         if r.status_code == requests.codes.ok:
             flash(_(f'Hardware inventory command has been sent'), category='info')
         else:
@@ -660,7 +666,8 @@ def action_hardware():
             return redirect(url_for('commands'))
 
         form.ips.data = ' '.join(ips)
-        r = g.server.get('/hardware', payload={'client': list(ips)})
+        server = get_server_from_clients(ips)
+        r = server.get('/hardware', payload={'client': list(ips)})
         hardware = r.json()['hardware']
         return render_template('actions/hardware.html', form=form,
                                hardware=hardware, scopes=scopes)
@@ -672,8 +679,9 @@ def action_software():
     if request.method == 'POST':
         ips = form.ips.data.split(' ')
         disk, partition = form.os.data.split(' ')
+        server = get_server_from_clients(ips)
         if form.view.data:
-            r = g.server.get('/software', payload={'client': ips,
+            r = server.get('/software', payload={'client': ips,
                                                'disk': int(disk),
                                                'partition': int(partition)})
             if r.status_code == requests.codes.ok:
@@ -682,7 +690,7 @@ def action_software():
                 return render_template('actions/software_list.html',
                                        software=software, form=form, scopes=scopes)
         elif form.update.data:
-            r = g.server.post('/software', payload={'clients': ips,
+            r = server.post('/software', payload={'clients': ips,
                                                     'disk': disk,
                                                     'partition': partition})
             if r.status_code == requests.codes.ok:
@@ -699,7 +707,8 @@ def action_software():
             return redirect(url_for('commands'))
 
         form.ips.data = ' '.join(ips)
-        r = g.server.get('/client/setup', payload={'client': list(ips)})
+        server = get_server_from_clients(ips)
+        r = server.get('/client/setup', payload={'client': list(ips)})
 
         for part in r.json()['partitions'][1:]:
             form.os.choices.append(
@@ -717,9 +726,11 @@ def action_session():
     if request.method == 'POST':
         ips = form.ips.data.split(' ')
         disk, partition = form.os.data.split(' ')
-        r = g.server.post('/session', payload={'clients': ips,
-                                               'disk': str(disk),
-                                               'partition': str(partition)})
+
+        server = get_server_from_clients(list(ips))
+        r = server.post('/session', payload={'clients': ips,
+                                             'disk': str(disk),
+                                             'partition': str(partition)})
         if r.status_code == requests.codes.ok:
             return redirect(url_for('commands'))
         return make_response("400 Bad Request", 400)
@@ -728,8 +739,9 @@ def action_session():
         if not validate_elements(ips, max_len=1):
             return redirect(url_for('commands'))
 
+        server = get_server_from_clients(list(ips))
         form.ips.data = ' '.join(ips)
-        r = g.server.get('/session', payload={'client': list(ips)})
+        r = server.get('/session', payload={'client': list(ips)})
         sessions = r.json()['sessions']
         for os in sessions:
             choice = (f"{os['disk']} {os['partition']}",
@@ -959,7 +971,8 @@ def action_mode():
         ips = form.ips.data.split(' ')
         payload = { 'clients': ips, 'mode': form.boot.data }
         print(payload)
-        r = g.server.post('/mode', payload)
+        server = get_server_from_clients(ips)
+        r = server.post('/mode', payload)
         if r.status_code == requests.codes.ok:
             flash(_('Client set boot mode request sent successfully'), category='info')
         else:
@@ -967,14 +980,15 @@ def action_mode():
         return redirect(url_for('commands'))
 
     else:
-        r = g.server.get('/mode')
-        available_modes = [(mode, mode) for mode in r.json()['modes']]
-        form.boot.choices = list(available_modes)
-
         ips = parse_elements(request.args.to_dict())
         form.ips.data = " ".join(ips)
         if not validate_elements(ips):
             return redirect(url_for('commands'))
+
+        server = get_server_from_clients(ips)
+        r = server.get('/mode')
+        available_modes = [(mode, mode) for mode in r.json()['modes']]
+        form.boot.choices = list(available_modes)
 
         form.ok.render_kw = { 'formaction': url_for('action_mode') }
         scopes, clients = get_scopes(set(ips))
@@ -991,7 +1005,8 @@ def action_oglive():
     if request.method == 'POST':
         ips = form.ips.data.split(' ')
         payload = {'clients': ips, 'name': form.oglive.data}
-        r = g.server.post('/oglive/set', payload)
+        server = get_server_from_clients(ips)
+        r = server.post('/oglive/set', payload)
         if r.status_code == requests.codes.ok:
             flash(_('Client set ogLive request sent successfully'),
                   category='info')
@@ -1001,7 +1016,13 @@ def action_oglive():
         return redirect(url_for('commands'))
 
     else:
-        r = g.server.get('/oglive/list')
+        ips = parse_elements(request.args.to_dict())
+        form.ips.data = " ".join(ips)
+        if not validate_elements(ips):
+            return redirect(url_for('commands'))
+
+        server = get_server_from_clients(list(ips))
+        r = server.get('/oglive/list')
         if r.status_code != requests.codes.ok:
             flash(_('Ogserver replied with status code not ok'),
                   category='error')
@@ -1010,11 +1031,6 @@ def action_oglive():
                              for oglive in r.json()['oglive']]
         available_oglives.insert(0, ('default', 'default'))
         form.oglive.choices = list(available_oglives)
-
-        ips = parse_elements(request.args.to_dict())
-        form.ips.data = " ".join(ips)
-        if not validate_elements(ips):
-            return redirect(url_for('commands'))
 
         form.ok.render_kw = {'formaction': url_for('action_oglive')}
         scopes, clients = get_scopes(set(ips))
@@ -1029,7 +1045,8 @@ def action_image_create():
     form = ImageCreateForm(request.form)
     if request.method == 'POST':
         ip = form.ip.data
-        r = g.server.get('/client/info', payload={"client": [ip]})
+        server = get_server_from_clients([ip])
+        r = server.get('/client/info', payload={"client": [ip]})
         disk, partition, code = form.os.data.split(' ')
         payload = {"clients": [ip],
                    "disk": disk,
@@ -1041,7 +1058,7 @@ def action_image_create():
                    "description": form.description.data,
                    "group_id": 0, # Default group.
                    "center_id": r.json()["center"]}
-        r = g.server.post('/image/create', payload)
+        r = server.post('/image/create', payload)
         if r.status_code == requests.codes.ok:
             return redirect(url_for('commands'))
         return make_response("400 Bad Request", 400)
@@ -1051,7 +1068,8 @@ def action_image_create():
         if not validate_elements(ips, max_len=1):
             return redirect(url_for('commands'))
 
-        r = g.server.get('/client/setup', payload={'client': list(ips)})
+        server = get_server_from_clients(ips)
+        r = server.get('/client/setup', payload={'client': list(ips)})
         for partition in r.json()['partitions']:
             disk_id = partition['disk']
             part_id = partition['partition']
@@ -1085,7 +1103,8 @@ def action_image_update():
         ip = form.ip.data
         disk, partition, code = form.os.data.split(' ')
         image_id = form.image.data
-        r = g.server.get('/images')
+        server = get_server_from_clients([ip])
+        r = server.get('/images')
         images_list = r.json()['images']
         image = search_image(images_list, int(image_id))
         if not image:
@@ -1102,7 +1121,7 @@ def action_image_update():
                    # Dummy parameters, not used by ogServer on image update.
                    'group_id': 0,
                    'center_id': 0}
-        r = g.server.post('/image/create', payload)
+        r = server.post('/image/create', payload)
         if r.status_code == requests.codes.ok:
             flash(_('Image update command sent sucessfully'), category='info')
         else:
@@ -1115,11 +1134,11 @@ def action_image_update():
         return redirect(url_for('commands'))
     form.ip.data = ' '.join(ips)
 
-    r = g.server.get('/images')
+    r = server.get('/images')
     for image in r.json()['images']:
         form.image.choices.append((image['id'], image['name']))
 
-    r = g.server.get('/client/setup', payload={'client': list(ips)})
+    r = server.get('/client/setup', payload={'client': list(ips)})
     for partition in r.json()['partitions']:
         disk_id = partition['disk']
         part_id = partition['partition']
@@ -1154,7 +1173,8 @@ def action_reboot():
             return redirect(url_for('commands'))
 
         payload = {'clients': ips}
-        r = g.server.post('/reboot', payload)
+        server = get_server_from_clients(ips)
+        r = server.post('/reboot', payload)
         if r.status_code != requests.codes.ok:
             flash(_('ogServer: error rebooting client'),
                   category='error')
@@ -1182,8 +1202,9 @@ def action_refresh():
     if not validate_elements(ips):
         return redirect(url_for('commands'))
 
+    server = get_server_from_clients(list(ips))
     payload = {'clients': list(ips)}
-    r = g.server.post('/refresh', payload)
+    r = server.post('/refresh', payload)
     if r.status_code != requests.codes.ok:
         flash(_('OgServer replied with a non ok status code'), category='error')
     else:
