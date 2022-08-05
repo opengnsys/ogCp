@@ -227,7 +227,7 @@ def get_scopes(ips=set()):
     for r in responses:
         scopes = r['json']
         server_scope = {}
-        server_scope['name'] = r['server']
+        server_scope['name'] = r['server'].name
         server_scope.update(scopes)
         list_scopes.append(server_scope)
     all_scopes = {'scope': list_scopes}
