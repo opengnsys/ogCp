@@ -64,6 +64,12 @@ function checkParentsCheckboxes() {
 
         if (checkboxChildren.length == 0) return;
 
+        if (this.name == "scope-server") {
+            const checkedChildren = checkboxChildren.filter(":checked");
+            checkbox.checked = checkedChildren.length > 0;
+            return;
+        }
+
         const unCheckedChildren = checkboxChildren.filter(":not(:checked)");
 
         checkbox.indeterminate =

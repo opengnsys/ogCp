@@ -98,6 +98,7 @@ class ImageRestoreForm(FlaskForm):
     restore = SubmitField(label=_l('Restore'))
 
 class ClientDetailsForm(FlaskForm):
+    server = HiddenField()
     name = StringField(label=_l('Name'))
     ip = StringField(label=_l('IP'))
     mac = StringField(label=_l('MAC'))

@@ -96,7 +96,7 @@ def validate_elements(elements, min_len=1, max_len=float('inf')):
     return valid
 
 def parse_elements(checkboxes_dict):
-    unwanted_elements = ['csrf_token', 'scope-room']
+    unwanted_elements = ['csrf_token', 'scope-server', 'scope-room']
     elements = set()
     for key, elements_list in checkboxes_dict.items():
         if key not in unwanted_elements:
@@ -223,6 +223,16 @@ def get_server_from_clients(selected_clients):
     return server
 
 
+def get_server_from_ip_port(str_ip_port):
+    ip, port = str_ip_port.split(':')
+
+    for s in servers:
+        if s.ip == ip and s.port == int(port):
+            return s
+
+    raise Exception('Server with address ' + str_ip_port + 'is not configured')
+
+
 def get_scopes(ips=set()):
     list_scopes = []
     responses = multi_request('get', '/scopes')
@@ -230,6 +240,9 @@ def get_scopes(ips=set()):
         scopes = r['json']
         server_scope = {}
         server_scope['name'] = r['server'].name
+        server_scope['type'] = "server"
+        server_scope['server_ip_port'] = (r['server'].ip + ":" +
+                                          str(r['server'].port))
         server_scope.update(scopes)
         list_scopes.append(server_scope)
     all_scopes = {'scope': list_scopes}
@@ -838,7 +851,8 @@ def action_client_add():
                    "room": int(form.room.data),
                    "serial_number": form.serial_number.data}
 
-        r = g.server.post('/client/add', payload)
+        server = get_server_from_ip_port(form.server.data)
+        r = server.post('/client/add', payload)
         if r.status_code != requests.codes.ok:
             flash(_('ogServer: error adding client'),
                   category='error')
@@ -846,15 +860,17 @@ def action_client_add():
             flash(_('Client added successfully'), category='info')
         return redirect(url_for("scopes"))
     else:
-        r = g.server.get('/mode')
         params = request.args.to_dict()
         if not params.get('scope-room'):
             flash(_('Please, select one room'), category='error')
             return redirect(url_for('scopes'))
+        form.server.data = params['scope-server']
+        server = get_server_from_ip_port(params['scope-server'])
+        r = server.get('/mode')
         available_modes = [(mode, mode) for mode in r.json()['modes']]
         form.boot.choices = list(available_modes)
 
-        r = g.server.get('/scopes')
+        r = server.get('/scopes')
         room_id = params['scope-room']
         rooms = parse_scopes_from_tree(r.json(), 'room')
         rooms = [(room['id'], room['name']) for room in rooms
