@@ -96,9 +96,10 @@ def validate_elements(elements, min_len=1, max_len=float('inf')):
     return valid
 
 def parse_elements(checkboxes_dict):
+    unwanted_elements = ['csrf_token', 'scope-room']
     elements = set()
     for key, elements_list in checkboxes_dict.items():
-        if key != 'csrf_token':
+        if key not in unwanted_elements:
             elements.update(elements_list.split(' '))
     return elements
 
@@ -846,13 +847,20 @@ def action_client_add():
         return redirect(url_for("scopes"))
     else:
         r = g.server.get('/mode')
+        params = request.args.to_dict()
+        if not params.get('scope-room'):
+            flash(_('Please, select one room'), category='error')
+            return redirect(url_for('scopes'))
         available_modes = [(mode, mode) for mode in r.json()['modes']]
         form.boot.choices = list(available_modes)
 
         r = g.server.get('/scopes')
+        room_id = params['scope-room']
         rooms = parse_scopes_from_tree(r.json(), 'room')
-        rooms = [(room['id'], room['name']) for room in rooms]
+        rooms = [(room['id'], room['name']) for room in rooms
+                 if room['id'] == int(room_id)]
         form.room.choices = list(rooms)
+        form.room.render_kw = {'readonly': True}
 
         form.create.render_kw = {"formaction": url_for('action_client_add')}
         scopes, clients = get_scopes()
