@@ -887,12 +887,20 @@ def action_client_add():
 @app.route('/action/clients/import', methods=['GET'])
 @login_required
 def action_clients_import_get():
+    params = request.args.to_dict()
+    if not params.get('scope-room'):
+        flash(_('Please, select one room'), category='error')
+        return redirect(url_for('scopes'))
+
     form = ImportClientsForm()
     r = g.server.get('/scopes')
     rooms = parse_scopes_from_tree(r.json(), 'room')
-    rooms = [(room['id'], room['name'] + " (" + room['parent'] + ")")
-             for room in rooms]
-    form.room.choices = list(rooms)
+    selected_room_id = params['scope-room']
+    selected_room = [(room['id'], room['name'] + " (" + room['parent'] + ")")
+                     for room in rooms if room['id'] == int(selected_room_id)]
+    form.room.choices = selected_room
+    form.room.render_kw = {'readonly': True}
+
     scopes, _clients = get_scopes()
     return render_template('actions/import_clients.html', form=form,
                            scopes=scopes)
