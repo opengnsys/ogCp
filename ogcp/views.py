@@ -176,7 +176,8 @@ def add_state_and_ips(scope, clients, ips):
         scope['ip'] = []
         for child in scope['scope']:
             scope['ip'] += add_state_and_ips(child, clients, ips)
-            scope['selected'] = set(scope['ip']).issubset(ips)
+            scope['selected'] = (len(scope['ip']) < 0 and
+                                 set(scope['ip']).issubset(ips))
     return scope['ip']
 
 def get_allowed_scopes(scopes, allowed_scopes):
