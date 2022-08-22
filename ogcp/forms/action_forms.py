@@ -121,6 +121,7 @@ class ClientDetailsForm(FlaskForm):
     create = SubmitField(label=_l('Create'))
 
 class ImportClientsForm(FlaskForm):
+    server = HiddenField()
     room = SelectField(label=_l('Room'))
     dhcpd_conf = TextAreaField(label=_l('dhcpd configuration'))
     import_btn = SubmitField(label=_l('Import'))

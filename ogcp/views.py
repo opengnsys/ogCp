@@ -893,7 +893,9 @@ def action_clients_import_get():
         return redirect(url_for('scopes'))
 
     form = ImportClientsForm()
-    r = g.server.get('/scopes')
+    form.server.data = params['scope-server']
+    server = get_server_from_ip_port(params['scope-server'])
+    r = server.get('/scopes')
     rooms = parse_scopes_from_tree(r.json(), 'room')
     selected_room_id = params['scope-room']
     selected_room = [(room['id'], room['name'] + " (" + room['parent'] + ")")
@@ -926,6 +928,7 @@ OG_CLIENT_DEFAULT_REMOTE = False
 @login_required
 def action_clients_import_post():
     form = ImportClientsForm(request.form)
+    server = get_server_from_ip_port(form.server.data)
     clients = re.findall(OG_REGEX_DHCPD_CONF, form.dhcpd_conf.data)
     if not clients:
         flash(_('No clients found. Check the dhcpd.conf file.'),
@@ -943,7 +946,7 @@ def action_clients_import_post():
         payload['name'] = client[0]
         payload['mac'] = client[1].replace(':', '')
         payload['ip'] = client[2]
-        resp = g.server.post('/client/add', payload)
+        resp = server.post('/client/add', payload)
         if resp.status_code != requests.codes.ok:
             flash(_('ogServer: error adding client {}').format(client[0]),
                   category='error')
