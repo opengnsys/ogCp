@@ -1336,11 +1336,17 @@ def action_room_delete():
             flash(_('Room deleted successfully'), category='info')
         return redirect(url_for("scopes"))
     else:
+        params = request.args.to_dict()
+        if not params.get('scope-room'):
+            flash(_('Please, select one room'), category='error')
+            return redirect(url_for('scopes'))
         r = g.server.get('/scopes')
         rooms = parse_scopes_from_tree(r.json(), 'room')
-        rooms = [(room['id'], room['name'] + " (" + room['parent'] + ")")
-                 for room in rooms]
-        form.room.choices = list(rooms)
+        selected_room_id = params['scope-room']
+        selected_room = [(room['id'], room['name'] + " (" + room['parent'] + ")")
+                         for room in rooms if room['id'] == int(selected_room_id)]
+        form.room.choices = selected_room
+        form.room.render_kw = {'readonly': True}
         scopes, clients = get_scopes()
         return render_template('actions/delete_room.html', form=form,
                                scopes=scopes)
