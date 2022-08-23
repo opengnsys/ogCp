@@ -1255,7 +1255,8 @@ def action_center_add():
     if request.method == 'POST':
         payload = {"name": form.name.data,
                    "comment": form.comment.data}
-        r = g.server.post('/center/add', payload)
+        server = get_server_from_ip_port(form.server.data)
+        r = server.post('/center/add', payload)
         if r.status_code != requests.codes.ok:
             flash(_('Server replied with error code when adding the center'),
                   category='error')
@@ -1263,6 +1264,9 @@ def action_center_add():
             flash(_('Center added successfully'), category='info')
         return redirect(url_for("scopes"))
     else:
+        server_choices = [(server.ip + ':' + str(server.port), server.name)
+                          for server in servers]
+        form.server.choices = server_choices
         scopes, clients = get_scopes()
         return render_template('actions/add_center.html', form=form,
                                scopes=scopes)

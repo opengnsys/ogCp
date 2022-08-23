@@ -155,6 +155,8 @@ class ImageUpdateForm(FlaskForm):
 
 
 class CenterForm(FlaskForm):
+    server = SelectField(label=_l('Server'),
+                         validators=[InputRequired()])
     name = StringField(label=_l('Center name'),
                        validators=[InputRequired()])
     comment = StringField(label=_l('Comment'))
