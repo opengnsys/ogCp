@@ -28,6 +28,12 @@
                value="{{ scope["server_ip_port"] }}" onclick="return false;"
                {% if scope.get("selected", False) %}checked{% endif %}
                name="scope-server" hidden/>
+    {% elif scope["type"] == "center" %}
+        <input class="form-check-input" type="checkbox" form="scopesForm"
+               value="{{ scope["id"] }}"
+               {% if state %}style="filter: grayscale(100%);" onclick="return false;"{% endif %}
+               {% if scope.get("selected", False) %}checked{% endif %}
+               name="scope-center" />
     {% elif scope["type"] == "room" %}
         <input class="form-check-input" type="checkbox" form="scopesForm"
                value="{{ scope["id"] }}"

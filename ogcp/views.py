@@ -96,7 +96,8 @@ def validate_elements(elements, min_len=1, max_len=float('inf')):
     return valid
 
 def parse_elements(checkboxes_dict):
-    unwanted_elements = ['csrf_token', 'scope-server', 'scope-room']
+    unwanted_elements = ['csrf_token', 'scope-server', 'scope-center',
+                         'scope-room']
     elements = set()
     for key, elements_list in checkboxes_dict.items():
         if key not in unwanted_elements:
@@ -1303,10 +1304,17 @@ def action_room_add():
             flash(_('Room added successfully'), category='info')
         return redirect(url_for("scopes"))
     else:
+        params = request.args.to_dict()
+        if not params.get('scope-center'):
+            flash(_('Please, select one center'), category='error')
+            return redirect(url_for('scopes'))
         r = g.server.get('/scopes')
+        selected_center_id = params['scope-center']
         centers = parse_scopes_from_tree(r.json(), 'center')
-        centers = [(center['id'], center['name']) for center in centers]
-        form.center.choices = list(centers)
+        selected_center = [(center['id'], center['name']) for center in centers
+                           if center['id'] == int(selected_center_id)]
+        form.center.choices = selected_center
+        form.center.render_kw = {'readonly': True}
         scopes, clients = get_scopes()
         return render_template('actions/add_room.html', form=form,
                                scopes=scopes)
