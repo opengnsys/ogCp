@@ -176,6 +176,7 @@ class RoomForm(FlaskForm):
     submit = SubmitField(label=_l('Submit'))
 
 class DeleteRoomForm(FlaskForm):
+    server = HiddenField()
     room = SelectField(label=_l('Room'),
                        validators=[InputRequired()])
     submit = SubmitField(label=_l('Submit'))

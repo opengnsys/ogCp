@@ -1328,7 +1328,8 @@ def action_room_delete():
     form = DeleteRoomForm(request.form)
     if request.method == 'POST':
         payload = {"id": form.room.data}
-        r = g.server.post('/room/delete', payload)
+        server = get_server_from_ip_port(form.server.data)
+        r = server.post('/room/delete', payload)
         if r.status_code != requests.codes.ok:
             flash(_('Server replied with error code when deleting the room'),
                   category='error')
@@ -1340,13 +1341,15 @@ def action_room_delete():
         if not params.get('scope-room'):
             flash(_('Please, select one room'), category='error')
             return redirect(url_for('scopes'))
-        r = g.server.get('/scopes')
+        server = get_server_from_ip_port(params['scope-server'])
+        r = server.get('/scopes')
         rooms = parse_scopes_from_tree(r.json(), 'room')
         selected_room_id = params['scope-room']
         selected_room = [(room['id'], room['name'] + " (" + room['parent'] + ")")
                          for room in rooms if room['id'] == int(selected_room_id)]
         form.room.choices = selected_room
         form.room.render_kw = {'readonly': True}
+        form.server.data = params['scope-server']
         scopes, clients = get_scopes()
         return render_template('actions/delete_room.html', form=form,
                                scopes=scopes)
