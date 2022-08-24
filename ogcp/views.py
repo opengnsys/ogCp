@@ -1285,10 +1285,17 @@ def action_center_delete():
             flash(_('Center deleted successfully'), category='info')
         return redirect(url_for("scopes"))
     else:
+        params = request.args.to_dict()
+        if not params.get('scope-center'):
+            flash(_('Please, select one center'), category='error')
+            return redirect(url_for('scopes'))
         r = g.server.get('/scopes')
+        selected_center_id = params['scope-center']
         centers = parse_scopes_from_tree(r.json(), 'center')
-        centers = [(center['id'], center['name']) for center in centers]
-        form.center.choices = list(centers)
+        selected_center = [(center['id'], center['name']) for center in centers
+                           if center['id'] == int(selected_center_id)]
+        form.center.choices = selected_center
+        form.center.render_kw = {'readonly': True}
         scopes, clients = get_scopes()
         return render_template('actions/delete_center.html', form=form,
                                scopes=scopes)
