@@ -163,6 +163,7 @@ class CenterForm(FlaskForm):
     submit = SubmitField(label=_l('Submit'))
 
 class DeleteCenterForm(FlaskForm):
+    server = HiddenField()
     center = SelectField(label=_l('Center'),
                          validators=[InputRequired()])
     submit = SubmitField(label=_l('Submit'))
