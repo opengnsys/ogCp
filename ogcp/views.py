@@ -1377,9 +1377,8 @@ def commands():
 @app.route('/images/', methods=['GET'])
 @login_required
 def images():
-    r = g.server.get('/images')
-    images = r.json()['images']
-    return render_template('images.html', images=images)
+    responses = multi_request('get', '/images')
+    return render_template('images.html', responses=responses)
 
 
 @app.route('/repositories/', methods=['GET'])
@@ -1645,10 +1644,10 @@ def action_image_info():
     form.permissions.data = image['permissions']
     form.software_id.data = image['software_id']
 
-    images = g.server.get('/images').json()['images']
+    responses = multi_request('get', '/images')
 
     return render_template('actions/image_details.html', form=form,
-                           images=images)
+                           responses=responses)
 
 @app.route('/action/image/delete', methods=['GET', 'POST'])
 @login_required
@@ -1671,14 +1670,14 @@ def action_image_delete():
         if not validate_elements(images, max_len=1):
             return redirect(url_for('images'))
         image_name, image_id = images[0]
-        r = g.server.get('/images')
+        responses = multi_request('get', '/images')
         form.ids.data = image_id
         if not validate_elements(images, max_len=1):
             flash(_('Please select one image to delete'), category='error')
             return redirect(url_for('images'))
         return render_template('actions/delete_image.html', form=form,
                                image_name=image_name.split('_', 1)[0], image_id=image_id,
-                               images=r.json()['images'])
+                               responses=responses)
 
 @app.route('/action/log', methods=['GET'])
 @login_required

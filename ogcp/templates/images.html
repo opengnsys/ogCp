@@ -11,14 +11,20 @@
 {% endblock %}
 
 {% block sidebar %}
-    <ul id="images" class="nav flex-column nav-pills">
-        {% for image in images %}
-            <li id="{{ image["name"] }}_{{ image["id"] }}" class="nav-item">
-                <input class="form-check-input" type="checkbox" form="imagesForm"
-                       value="{{ image["id"] }}"
-                       {% if image.get("selected", False) %}checked{% endif %}
-                       name="{{ image["name"] }}_{{ image["id"] }}" />
-                        {{ image["name"] }}
+    <ul id="servers" class="nav flex-column nav-pills">
+        {% for response in responses %}
+        <li class="nav-item"><b>{{ response["server"]["name"] }}</b>
+                <ul id="images" class="nav flex-column nav-pills">
+                    {% for image in response["json"]["images"] %}
+                        <li id="{{ image["name"] }}_{{ image["id"] }}" class="nav-item">
+                            <input class="form-check-input" type="checkbox" form="imagesForm"
+                                   value="{{ image["id"] }}"
+                                   {% if image.get("selected", False) %}checked{% endif %}
+                                   name="{{ image["name"] }}_{{ image["id"] }}" />
+                                    {{ image["name"] }}
+                        </li>
+                    {% endfor %}
+                </ul>
             </li>
         {% endfor %}
     </ul>
