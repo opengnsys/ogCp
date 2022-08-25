@@ -97,7 +97,7 @@ def validate_elements(elements, min_len=1, max_len=float('inf')):
 
 def parse_elements(checkboxes_dict):
     unwanted_elements = ['csrf_token', 'scope-server', 'scope-center',
-                         'scope-room']
+                         'scope-room', 'image-server']
     elements = set()
     for key, elements_list in checkboxes_dict.items():
         if key not in unwanted_elements:
@@ -1626,12 +1626,14 @@ def user_delete_post():
 @login_required
 def action_image_info():
     form = ImageDetailsForm()
-    ids = parse_elements(request.args.to_dict())
+    params = request.args.to_dict()
+    ids = parse_elements(params)
     if not validate_elements(ids, max_len=1):
         return redirect(url_for('images'))
 
     id = ids.pop()
-    r = g.server.get('/images')
+    server = get_server_from_ip_port(params['image-server'])
+    r = server.get('/images')
     images = r.json()['images']
     image = next(img for img in images if img['id'] == int(id))
 

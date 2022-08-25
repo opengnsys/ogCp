@@ -8,17 +8,31 @@
     </form>
     {{ super() }}
 </form>
+
+<script>
+    // Launch the javascript on document ready, so all the global functions exists
+    // in the scope
+    document.addEventListener('readystatechange', () => {
+        if (document.readyState === 'complete') {
+            checkImageServer();
+        }
+    });
+</script>
 {% endblock %}
 
 {% block sidebar %}
     <ul id="servers" class="nav flex-column nav-pills">
         {% for response in responses %}
+        {% set server_str = response["server"]["ip"] ~ ":" ~ response["server"]["port"] %}
+        <input class="form-check-input" type="checkbox" form="imagesForm"
+               id="{{ server_str }}" value="{{ server_str }}"
+               onclick="return false;" name="image-server" hidden/>
         <li class="nav-item"><b>{{ response["server"]["name"] }}</b>
                 <ul id="images" class="nav flex-column nav-pills">
                     {% for image in response["json"]["images"] %}
                         <li id="{{ image["name"] }}_{{ image["id"] }}" class="nav-item">
                             <input class="form-check-input" type="checkbox" form="imagesForm"
-                                   value="{{ image["id"] }}"
+                                   data-server="{{ server_str }}" value="{{ image["id"] }}"
                                    {% if image.get("selected", False) %}checked{% endif %}
                                    name="{{ image["name"] }}_{{ image["id"] }}" />
                                     {{ image["name"] }}
@@ -41,4 +55,3 @@
     </button>
   {% endif %}
 {% endblock %}
-

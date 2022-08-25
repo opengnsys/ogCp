@@ -248,3 +248,20 @@ function RemovePartition(evt) {
     });
 }
 
+function checkImageServer() {
+    const images = $('input:checkbox[form|="imagesForm"]:not(:hidden)')
+
+    images.on('change', function() {
+        const selectedServer = $('#' + $.escapeSelector(this.dataset.server));
+        const serversSelector = 'input:checkbox[name|="image-server"]';
+        const nonSelectedServers = $(serversSelector).not(selectedServer);
+
+        selectedServer.prop('checked', true);
+
+        nonSelectedServers.each(function() {
+            $(this).prop('checked', false);
+            const checkboxes = $('input:checkbox[data-server|="' + this.id + '"]');
+            checkboxes.prop('checked', false);
+        });
+    });
+}
