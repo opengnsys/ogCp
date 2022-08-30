@@ -1661,19 +1661,24 @@ def action_image_delete():
             return redirect(url_for('images'))
         id = ids.pop()
         payload = {'image': id}
-        r = g.server.post('/image/delete', payload)
+        server = get_server_from_ip_port(form.server.data)
+        r = server.post('/image/delete', payload)
         if r.status_code != requests.codes.ok:
             flash(_('OgServer replied with a non ok status code'), category='error')
         else:
             flash(_('Image deletion request sent successfully'), category='info')
         return redirect(url_for('images'))
     else:
-        images = [(name, imgid) for name, imgid in request.args.to_dict().items() if name != "csrf_token"]
+        params = request.args.to_dict()
+        images = [(name, imgid) for name, imgid in params.items()
+                  if name != 'csrf_token' and name != 'image-server']
         if not validate_elements(images, max_len=1):
             return redirect(url_for('images'))
         image_name, image_id = images[0]
+        server = get_server_from_ip_port(params['image-server'])
         responses = multi_request('get', '/images')
         form.ids.data = image_id
+        form.server.data = params['image-server']
         if not validate_elements(images, max_len=1):
             flash(_('Please select one image to delete'), category='error')
             return redirect(url_for('images'))
