@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block nav_servers %}active{% endblock %}
+
+{% block container %}
+    <form id="serversForm">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+    </form>
+    {{ super() }}
+</form>
+{% endblock %}
+
+{% block sidebar %}
+    <ul id="servers-list" class="nav flex-column nav-pills">
+        {% for server in servers %}
+        {% set server_str = server["ip"] ~ ":" ~ server["port"] %}
+            <li class="nav-item">
+                <input class="form-check-input" type="checkbox" form="serversForm"
+                       value="{{ server_str }}"
+                       name="selected-server" />
+                {{ server["name"] }}
+            </li>
+        {% endfor %}
+    </ul>
+{% endblock %}
+
+{% block commands %}
+  <input class="btn btn-light {% block nav_server_add %}{% endblock %}" type="submit" value="{{ _('Add server') }}"
+         form="serversForm" formaction="{{ url_for('server_add_get') }}" formmethod="get">
+  <input class="btn btn-light {% block nav_server_delete %}{% endblock %}" type="submit" value="{{ _('Delete server') }}"
+         form="serversForm" formaction="{{ url_for('server_delete_get') }}" formmethod="get">
+  {% if btn_back %}
+    <button class="btn btn-danger ml-3" type="button" id="backButton" onclick="history.back()">
+      {{ _("Back") }}
+    </button>
+  {% endif %}
+{% endblock %}
+

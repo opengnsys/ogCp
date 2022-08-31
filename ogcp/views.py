@@ -13,7 +13,7 @@ from ogcp.forms.action_forms import (
     SessionForm, ImageRestoreForm, ImageCreateForm, SoftwareForm, BootModeForm,
     RoomForm, DeleteRoomForm, CenterForm, DeleteCenterForm, OgliveForm,
     GenericForm, SelectClientForm, ImageUpdateForm, ImportClientsForm,
-    RepositoryForm, DeleteRepositoryForm
+    ServerForm, DeleteRepositoryForm
 )
 from flask_login import (
     current_user, LoginManager,
@@ -25,7 +25,7 @@ from pathlib import Path
 
 from ogcp.models import User
 from ogcp.forms.auth import LoginForm, UserForm, DeleteUserForm
-from ogcp.og_server import servers
+from ogcp.og_server import OGServer, servers
 from flask_babel import lazy_gettext as _l
 from flask_babel import _
 from ogcp import app, ogcp_cfg_path
@@ -143,8 +143,8 @@ def get_repository(repository_id):
 
 
 def get_repositories():
-    r = g.server.get('/repositories')
-    repositories = r.json()['repositories']
+    r = g.server.get('/servers')
+    repositories = r.json()['servers']
     return repositories
 
 
@@ -1382,73 +1382,76 @@ def images():
     return render_template('images.html', responses=responses)
 
 
-@app.route('/repositories/', methods=['GET'])
+@app.route('/servers/', methods=['GET'])
 @login_required
-def repositories():
-    r = g.server.get('/repositories')
-    repositories = r.json()['repositories']
-    return render_template('repositories.html', repositories=repositories)
+def manage_servers():
+    return render_template('servers.html', servers=servers)
 
 
-@app.route('/repositories/add', methods=['GET'])
+@app.route('/server/add', methods=['GET'])
 @login_required
-def repository_add_get():
-    form = RepositoryForm()
-    r = g.server.get('/repositories')
-    repositories = r.json()['repositories']
-    return render_template('actions/add_repository.html', form=form,
-                           repositories=repositories)
+def server_add_get():
+    form = ServerForm()
+    return render_template('actions/add_server.html', form=form,
+                           servers=servers)
 
 
-@app.route('/repositories/add', methods=['POST'])
+@app.route('/server/add', methods=['POST'])
 @login_required
-def repository_add_post():
-    form = RepositoryForm(request.form)
+def server_add_post():
+    form = ServerForm(request.form)
     if not form.validate():
         flash(form.errors, category='error')
-        return redirect(url_for('repositories'))
+        return redirect(url_for('servers'))
+    ip_port_str = form.ip.data + ":" + form.port.data
+    try:
+        get_server_from_ip_port(ip_port_str)
+        flash(_('Server {} already exists').format(ip_port_str),
+              category='error')
+        return redirect(url_for('manage_servers'))
+    except Exception:
+        return save_server(form)
 
-    payload = {"name": form.name.data,
-               "ip": form.ip.data}
-    r = g.server.post('/repository/add', payload)
-    if r.status_code != requests.codes.ok:
-        flash(_('ogServer: error adding the repository'), category='error')
-    else:
-        flash(_('Repository added successfully'), category='info')
-    return redirect(url_for("repositories"))
 
-
-@app.route('/repositories/delete', methods=['GET'])
+@app.route('/server/delete', methods=['GET'])
 @login_required
-def repository_delete_get():
-    form = GenericForm()
-    repositories = get_repositories()
-    selected_repo = [(name, repo_id) for name, repo_id in
-                     request.args.to_dict().items() if name != "csrf_token"]
-    if not validate_elements(selected_repo, max_len=1):
-        flash(_('Please select one repository to delete'), category='error')
-        return redirect(url_for('repositories'))
-    repo_name, repo_id = selected_repo[0]
-    form.ids.data = repo_id
-    return render_template('actions/delete_repository.html', form=form,
-                           repo_name=repo_name, repositories=repositories)
+def server_delete_get():
+    params = request.args.to_dict()
+    try:
+        selected_server = get_server_from_ip_port(params['selected-server'])
+    except KeyError:
+        flash(_('Please, select one server'), category='error')
+        return redirect(url_for('manage_servers'))
+
+    form = ServerForm()
+    form.name.data = selected_server.name
+    form.name.render_kw = {'readonly': True}
+    form.ip.data = selected_server.ip
+    form.ip.render_kw = {'readonly': True}
+    form.port.data = selected_server.port
+    form.port.render_kw = {'readonly': True}
+    form.api_token.data = selected_server.api_token
+    form.api_token.render_kw = {'readonly': True}
+    return render_template('actions/delete_server.html', form=form,
+                           servers=servers)
 
 
-@app.route('/repositories/delete', methods=['POST'])
+@app.route('/server/delete', methods=['POST'])
 @login_required
-def repository_delete_post():
-    form = GenericForm(request.form)
-    ids = form.ids.data.split(' ')
-    if not validate_elements(ids, max_len=1):
-        return redirect(url_for('repositories'))
-    repo_id = ids.pop()
-    payload = {'id': repo_id}
-    r = g.server.post('/repository/delete', payload)
-    if r.status_code != requests.codes.ok:
-        flash(_('OgServer: error deleting repository'), category='error')
-    else:
-        flash(_('Repository deleted successfully'), category='info')
-    return redirect(url_for('repositories'))
+def server_delete_post():
+    form = ServerForm(request.form)
+    if not form.validate():
+        flash(form.errors, category='error')
+        return redirect(url_for('manage_servers'))
+
+    ip_port_str = form.ip.data + ":" + form.port.data
+    try:
+        server = get_server_from_ip_port(ip_port_str)
+        return delete_server(server)
+    except Exception:
+        flash(_('Server {} do not exists').format(ip_port_str),
+              category='error')
+        return redirect(url_for('manage_servers'))
 
 
 @app.route('/users/', methods=['GET'])
@@ -1467,8 +1470,58 @@ def get_available_scopes():
     return centers + rooms
 
 
+def save_server(form):
+    server_dict = {
+        'NAME': form.name.data,
+        'IP': form.ip.data,
+        'PORT': int(form.port.data),
+        'API_TOKEN': form.api_token.data,
+    }
+    server_obj = OGServer(form.name.data,
+                          form.ip.data,
+                          int(form.port.data),
+                          form.api_token.data)
+
+    filename = os.path.join(app.root_path, ogcp_cfg_path)
+    with open(filename, 'r+') as file:
+        config = json.load(file)
+
+        config['SERVERS'].append(server_dict)
+
+        file.seek(0)
+        json.dump(config, file, indent='\t')
+        file.truncate()
+
+    servers.append(server_obj)
+
+    return redirect(url_for('manage_servers'))
+
+
+def delete_server(server):
+    server_dict = {
+        'NAME': server.name,
+        'IP': server.ip,
+        'PORT': int(server.port),
+        'API_TOKEN': server.api_token,
+    }
+
+    filename = os.path.join(app.root_path, ogcp_cfg_path)
+    with open(filename, 'r+') as file:
+        config = json.load(file)
+
+        config['SERVERS'].remove(server_dict)
+
+        file.seek(0)
+        json.dump(config, file, indent='\t')
+        file.truncate()
+
+    servers.remove(server)
+
+    return redirect(url_for('manage_servers'))
+
+
 def save_user(form):
-    username = form.username.data
+    username = form.username.datk
 
     pwd_hash = hash_password(form.pwd.data)
     pwd_hash_confirm = hash_password(form.pwd_confirm.data)

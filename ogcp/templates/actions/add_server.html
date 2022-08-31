@@ -1,16 +1,16 @@
-{% extends 'repositories.html' %}
+{% extends 'servers.html' %}
 {% import "bootstrap/wtf.html" as wtf %}
 
 {% set sidebar_state = 'disabled' %}
 {% set btn_back = true %}
 
-{% block nav_repository_add %}active{% endblock %}
+{% block nav_server_add %}active{% endblock %}
 {% block content %}
 
-<h1 class="m-5">{{_('Add a repository')}}</h1>
+<h1 class="m-5">{{_('Add a server')}}</h1>
 
 {{ wtf.quick_form(form,
-                  action=url_for('repository_add_post'),
+                  action=url_for('server_add_post'),
                   method='post',
                   button_map={'submit_btn':'primary'}) }}
 

@@ -194,10 +194,14 @@ class ImageDetailsForm(FlaskForm):
     permissions = StringField(label=_l('Permissions'))
     software_id = StringField(label=_l('Software id'))
 
-class RepositoryForm(FlaskForm):
+class ServerForm(FlaskForm):
     name = StringField(label=_l('Name'),
                        validators=[InputRequired()])
     ip = StringField(label=_l('IP'),
+                     validators=[InputRequired()])
+    port = StringField(label=_l('Port'),
+                     validators=[InputRequired()])
+    api_token = StringField(label=_l('API token'),
                      validators=[InputRequired()])
     submit = SubmitField(label=_l('Submit'))
 
