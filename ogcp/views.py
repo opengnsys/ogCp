@@ -28,7 +28,7 @@ from ogcp.forms.auth import LoginForm, UserForm, DeleteUserForm
 from ogcp.og_server import servers
 from flask_babel import lazy_gettext as _l
 from flask_babel import _
-from ogcp import app
+from ogcp import app, ogcp_cfg_path
 import requests
 import datetime
 import hashlib
@@ -1486,7 +1486,7 @@ def save_user(form):
         'SCOPES': scopes,
     }
 
-    filename = os.path.join(app.root_path, 'cfg', 'ogcp.json')
+    filename = os.path.join(app.root_path, ogcp_cfg_path)
     with open(filename, 'r+') as file:
         config = json.load(file)
 
@@ -1504,7 +1504,7 @@ def save_user(form):
 def delete_user(username):
     user = get_user(username)
 
-    filename = os.path.join(app.root_path, 'cfg', 'ogcp.json')
+    filename = os.path.join(app.root_path, ogcp_cfg_path)
     with open(filename, 'r+') as file:
         config = json.load(file)
 

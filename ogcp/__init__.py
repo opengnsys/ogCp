@@ -11,8 +11,10 @@ from flask_babel import Babel
 from flask import Flask
 from os import urandom
 
+ogcp_cfg_path = 'cfg/ogcp.json'
+
 app = Flask(__name__)
-app.config.from_json('cfg/ogcp.json')
+app.config.from_json(ogcp_cfg_path)
 app.secret_key = urandom(16)
 
 babel = Babel(app)
