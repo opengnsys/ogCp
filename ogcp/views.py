@@ -387,7 +387,8 @@ def scopes_status():
 def get_client_mac():
     ip = parse_elements(request.args.to_dict())
     payload = {'client': list(ip)}
-    resp = g.server.get('/client/info', payload)
+    server = get_server_from_clients(list(ip))
+    resp = server.get('/client/info', payload)
     client_info = resp.json()
     mac = client_info.get('mac')
     pretty_mac = (':'.join(mac[i:i+2] for i in range(0, 12, 2))).upper()
