@@ -201,6 +201,8 @@ def multi_request(method, uri, payload=None):
         else:
             raise Exception('Invalid method, use get or post')
 
+        if not r:
+            continue
         response['server'] = server
         response['json'] = r.json()
         responses.append(response)

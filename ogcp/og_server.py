@@ -23,9 +23,12 @@ class OGServer:
         self.HEADERS = {'Authorization' : self.api_token}
 
     def get(self, path, payload=None):
-        r = requests.get(f'{self.URL}{path}',
-                         headers=self.HEADERS,
-                         json=payload)
+        try:
+            r = requests.get(f'{self.URL}{path}',
+                             headers=self.HEADERS,
+                             json=payload)
+        except requests.exceptions.ConnectionError:
+            return None
         return r
 
     def post(self, path, payload):
