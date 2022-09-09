@@ -983,7 +983,8 @@ def action_client_delete():
             return redirect(url_for('scopes'))
 
         payload = {'clients': ips}
-        r = g.server.post('/client/delete', payload)
+        server = get_server_from_clients(ips)
+        r = server.post('/client/delete', payload)
         if r.status_code != requests.codes.ok:
             flash(_('ogServer: error deleting client'),
                   category='error')
