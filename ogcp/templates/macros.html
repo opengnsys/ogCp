@@ -1,4 +1,4 @@
-{% macro scopes_tree_collapse(scopes, state='') -%}
+{% macro scopes_tree_collapse(scopes, state='', selection_mode='scopes') -%}
 
 <ul id="scopes" class="nav flex-column nav-pills">
   {{ scopes_tree_collapse_level(scopes["scope"], "", state) }}
@@ -11,9 +11,13 @@
             showSelectedClientsOnEvents();
             updateScopeState();
             keepScopesTreeState();
-            keepSelectedClients();
-            checkChildrenCheckboxes();
-            checkParentsCheckboxes();
+            {% if selection_mode == 'commands' %}
+                keepSelectedClients();
+                checkChildrenCheckboxes();
+                checkParentsCheckboxes();
+            {% elif selection_mode == 'scopes' %}
+                limitCheckboxes();
+            {% endif %}
         }
     });
 </script>

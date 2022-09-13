@@ -265,3 +265,28 @@ function checkImageServer() {
         });
     });
 }
+
+function limitCheckboxes() {
+    const checkboxes = $('input:checkbox[form|="scopesForm"]');
+
+    checkboxes.on('change', function () {
+        const checked = this;
+        checkboxes.filter((i, c) => c !== checked).prop('checked', false);
+        checkboxes.each(function() {
+            showSelectedClient(this);
+        });
+        checkScopeServer();
+    });
+}
+
+function checkScopeServer() {
+    const servers = $('input:checkbox[form|="scopesForm"][name="scope-server"]');
+    servers.each(function() {
+        const checkbox = this;
+        const checkboxChildren = $('input:checkbox', this.parentNode).not(this);
+        if (checkboxChildren.length == 0) return;
+
+        const checkedChildren = checkboxChildren.filter(":checked");
+        checkbox.checked = checkedChildren.length > 0;
+    });
+}
