@@ -85,6 +85,26 @@ function checkChildrenCheckboxes() {
     checkboxes.on('change', function () {
         const checked = this.checked
         const children = $('input:checkbox', this.parentNode).not(this)
+
+        if (checked) {
+            // Only for rooms, deselect other rooms
+            if (this.name === 'scope-room') {
+                const others = $('input:checkbox[form|="scopesForm"]').not(this);
+                others.prop('checked', false);
+                others.trigger('change');
+            } else {
+                // Look for room, deselect all other rooms
+                const selectedRoom = $(this).parent().parent().parent().children('[name="scope-room"]');
+                const others = $('input:checkbox[name="scope-room"]').not(selectedRoom);
+                others.prop('checked', false).prop('indeterminate', false);
+                others.each(function() {
+                    const checks = $(this).parent().find('input:checkbox').prop('checked', false);
+                    checks.trigger('change');
+                });
+                others.trigger('change');
+            }
+        }
+
         children.each(function () {
             this.checked = checked;
             storeCheckboxStatus(this);
@@ -272,7 +292,7 @@ function limitCheckboxes() {
     checkboxes.on('change', function () {
         const checked = this;
         checkboxes.filter((i, c) => c !== checked).prop('checked', false);
-        checkboxes.each(function() {
+        checkboxes.not('[name="scope-server"]').each(function() {
             showSelectedClient(this);
         });
         checkScopeServer();

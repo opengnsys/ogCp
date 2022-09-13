@@ -1,7 +1,7 @@
 {% macro scopes_tree_collapse(scopes, state='', selection_mode='scopes') -%}
 
 <ul id="scopes" class="nav flex-column nav-pills">
-  {{ scopes_tree_collapse_level(scopes["scope"], "", state) }}
+  {{ scopes_tree_collapse_level(scopes["scope"], "", state, selection_mode) }}
 </ul>
 <script>
     // Launch the javascript on document ready, so all the global functions exists
@@ -24,7 +24,7 @@
 
 {% endmacro %}
 
-{% macro scopes_tree_collapse_level(scopes, parent_id, state) -%}
+{% macro scopes_tree_collapse_level(scopes, parent_id, state, selection_mode) -%}
 {% for scope in scopes %}
   <li id="{{ scope["name"]|replace(".", "_")|replace(" ", "_") }}_{{ scope["id"] }}" class="nav-item">
     {% if scope["type"] == "server" %}
@@ -33,11 +33,13 @@
                {% if scope.get("selected", False) %}checked{% endif %}
                name="scope-server" hidden/>
     {% elif scope["type"] == "center" %}
+        {% if selection_mode != "commands" %}
         <input class="form-check-input" type="checkbox" form="scopesForm"
                value="{{ scope["id"] }}"
                {% if state %}style="filter: grayscale(100%);" onclick="return false;"{% endif %}
                {% if scope.get("selected", False) %}checked{% endif %}
                name="scope-center" />
+        {% endif %}
     {% elif scope["type"] == "room" %}
         <input class="form-check-input" type="checkbox" form="scopesForm"
                value="{{ scope["id"] }}"
@@ -65,7 +67,7 @@
     </a>
     {% if scope["scope"] %}
       <ul class="nav flex-column collapse level{{i}}" id="scope{{parent_id ~ "-" ~ loop.index}}">
-          {{ scopes_tree_collapse_level(scope["scope"], parent_id ~ "-" ~ loop.index, state) }}
+          {{ scopes_tree_collapse_level(scope["scope"], parent_id ~ "-" ~ loop.index, state, selection_mode) }}
       </ul>
     {% endif %}
   </li>
