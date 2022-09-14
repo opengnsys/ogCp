@@ -3,310 +3,396 @@
 {% block nav_dashboard %}active{% endblock %}
 
 {% block content %}
+
 <div class="row">
-  <div class="col-{{ colsize }}">
-    <ul class="list-group list-group-horizontal">
-      <li class="list-group-item w-50">
-        {{ _('Date') }}
-      </li>
-      <li class="list-group-item w-50">
-        <p class="card-text">{{ time_dict['now'] }}</p>
-      </li>
-    </ul>
-    <ul class="list-group list-group-horizontal">
-      <li class="list-group-item w-50">
-        {{ _('Uptime') }}
-      </li>
-      <li class="list-group-item w-50">
-        <p class="card-text">{{ time_dict['boot'] }}</p>
-      </li>
-    </ul>
-    <ul class="list-group list-group-horizontal">
-      <li class="list-group-item w-50">
-        {{ _('ogServer uptime') }}
-      </li>
-      <li class="list-group-item w-50">
-        <p class="card-text">{{ time_dict['start'] }}</p>
-      </li>
-    </ul>
-    <ul class="list-group list-group-horizontal">
-      <li class="list-group-item w-50">
-        {{ _('Connected clients (ogClient)') }}
-      </li>
-      <li class="list-group-item w-50">
-        <p class="card-text">{{ clients['clients'] | length }}</p>
-      </li>
-    </ul>
-    <ul class="list-group list-group-horizontal">
-      <li class="list-group-item w-50">
-        {{ _('Number of images') }}
-      </li>
-      <li class="list-group-item w-50">
-        <p class="card-text">{{ images | length }}</p>
-      </li>
-    </ul>
-  </div>
+  <div class="card col-12">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Server</th>
+          <th>Uptime</th>
+          <th>ogServer uptime</th>
+          <th>Connected clients</th>
+          <th>Number of images</th>
+          <th>Disk</th>
+          <th>Memory</th>
+          <th>Swap</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for id, server in servers.items() %}
+        <tr>
+          <th>{{ server.name }}</th>
+          <td>{{ server.time_dict.boot }}</td>
+          <td>{{ server.time_dict.start }}</td>
+          <td>{{ server.clients | length }}</td>
+          <td>{{ server.images | length }}</td>
+          <td>
+            {% set disk = server.disk %}
+            {% set used = (((disk['total'] - disk['free']) / disk['total']) * 100)|int %}
+            <div class="progress progress-lg">
+              <div class="progress-bar bg-primary" style="width: {{used}}%"></div>
+            </div>
+          </td>
+          <td>
+            {% set memory = server.stats.memory %}
+            {% set used = (((memory['size'] - memory['free']) / memory['size']) * 100)|int %}
+            <div class="progress progress-lg">
+              <div class="progress-bar bg-primary" style="width: {{used}}%"></div>
+            </div>
+          </td>
+          {% set swap = server.stats.swap %}
+          {% if swap.size %}
+            <td>
+              {% set used = (((swap['size'] - swap['free']) / swap['size']) * 100)|int %}
+              <div class="progress progress-lg">
+                <div class="progress-bar bg-primary" style="width: {{used}}%"></div>
+              </div>
+            </td>
+          {% else %}
+            <td>No swap</td>
+          {% endif %}
+        </tr>
+        {% endfor %}
+      </tbody>
 
-  <!-- disk stats -->
-  <div class="col-{{ colsize }}">
-    <div class="card text-center">
-      <div class="card-header">
-        {{ _('Disk stats') }}
-      </div>
-      <div class="card-body">
-        <canvas id="diskChart" class="mb-2"></canvas>
-        <ul class="list-group list-group-horizontal">
-          <li class="list-group-item w-50">
-            {{ _('Disk size') }}
-          </li>
-          <li class="list-group-item w-50">
-            {{ _('used') }} (%)
-          </li>
-          <li class="list-group-item w-50">
-            {{ _('available') }} (%)
-          </li>
-        </ul>
-        <ul class="list-group list-group-horizontal">
-          <li class="list-group-item w-50">
-            {{ disk['total'] // 2**30 }} Gbytes
-          </li>
-          <li class="list-group-item w-50">
-            {{ (disk['total'] - disk['free']) // 2**30 }} Gbytes
-            ({{ (((disk['total'] - disk['free']) / disk['total']) * 100)|int }}%)
-          </li>
-          <li class="list-group-item w-50">
-            {{ disk['free'] // 2**30 }} Gbytes
-            ({{ ((disk['free'] / disk['total']) * 100)|int }}%)
-          </li>
-        </ul>
-      </div>
-    </div>
+    </table>
   </div>
+</div>
 
-  <!-- Memory stats -->
-  <div class="col-{{ colsize }}">
-    <div class="card text-center">
-      <div class="card-header">
-        {{ _('Memory') }}
-      </div>
-      <div class="card-body">
-        <canvas id="memoryChart" class="mb-2"></canvas>
-        <ul class="list-group list-group-horizontal">
-          <li class="list-group-item w-50">
-            {{ _('Memory size') }}
-          </li>
-          <li class="list-group-item w-50">
-            {{ _('used') }} (%)
-          </li>
-          <li class="list-group-item w-50">
-            {{ _('available') }} (%)
-          </li>
-        </ul>
-        <ul class="list-group list-group-horizontal">
-          <li class="list-group-item w-50">
-            {{ (stats['memory']['size'] / 2**30)|round(3) }} Gbytes
-          </li>
-          <li class="list-group-item w-50">
-            {{ ((stats['memory']['size'] - stats['memory']['free']) / 2**30)|round(3) }} Gbytes
-            ({{ (((stats['memory']['size'] - stats['memory']['free']) / stats['memory']['size']) * 100)|int }}%)
-          </li>
-          <li class="list-group-item w-50">
-            {{ (stats['memory']['free'] / 2**30)|round(3) }} Gbytes
-            ({{ ((stats['memory']['free'] / stats['memory']['size']) * 100)|int }}%)
-          </li>
-        </ul>
-      </div>
-    </div>
-  </div>
+<hr />
 
-  <!-- Swap stats -->
-  <div class="col-{{ colsize }}">
-    <div class="card text-center">
-      <div class="card-header">
-        {{ _('Swap') }}
-      </div>
-      <div class="card-body">
-        {% if stats['swap']['size'] %}
-        <canvas id="swapChart" class="mb-2"></canvas>
-        <ul class="list-group list-group-horizontal">
-          <li class="list-group-item w-50">
-            {{ _('swap size') }}
-          </li>
-          <li class="list-group-item w-50">
-            {{ _('used') }} (%)
-          </li>
-          <li class="list-group-item w-50">
-            {{ _('available') }} (%)
-          </li>
-        </ul>
-        <ul class="list-group list-group-horizontal">
-          <li class="list-group-item w-50">
-            {{ (stats['swap']['size'] / 2**30)|round(3) }} Gbytes
-          </li>
-          <li class="list-group-item w-50">
-            {{ ((stats['swap']['size'] - stats['swap']['free']) / 2**30)|round(3) }} Gbytes
-            ({{ (((stats['swap']['size'] - stats['swap']['free']) / stats['swap']['size']) * 100)|int }}%)
-          </li>
-          <li class="list-group-item w-50">
-            {{ (stats['swap']['free'] / 2**30)|round(3) }} Gbytes
-            ({{ ((stats['swap']['free'] / stats['swap']['size']) * 100)|int }}%)
-          </li>
-        </ul>
-        {% else %}
-        <h2>No swap</h2>
-        {% endif %}
-      </div>
-    </div>
-  </div>
+<ul class="nav nav-tabs" id="serversTab" role="tablist">
+{% for id, server in servers.items() %}
+  <li class="nav-item" role="presentation">
+      <button class="nav-link {% if loop.first %}active{% endif %}" id="{{ id }}-tab" data-toggle="tab" data-target="#{{ id }}" type="button" role="tab" aria-controls="{{ id }}" aria-selected="true">
+        {{ server.name }}
+      </button>
+  </li>
+{% endfor %}
+</ul>
 
-  <!-- latest images -->
-  <div class="col-{{ colsize }}">
-    <div class="card text-center">
-      <div class="card-header">
-        {{ _('Latest images') }}
-      </div>
-        {% for image in images[:10] %}
+<div class="tab-content" id="serversTabContent">
+{% for id, server in servers.items() %}
+    {% set stats = server.stats %}
+    {% set time_dict = server.time_dict %}
+    {% set images = server.images %}
+    {% set disk = server.disk %}
+    {% set oglive_list = server.oglive_list %}
+
+    <div class="tab-pane {% if loop.first %}show active{% endif %}" id="{{ id }}" role="tabpanel">
+      <div class="row">
+        <div class="col-{{ colsize }}">
           <ul class="list-group list-group-horizontal">
             <li class="list-group-item w-50">
-              {{ image['name'] }}
+              {{ _('Date') }}
             </li>
             <li class="list-group-item w-50">
-              {{ image['modified'] }}
+              <p class="card-text">{{ time_dict['now'] }}</p>
             </li>
           </ul>
-        {% endfor %}
-    </div>
-  </div>
-
-  <!-- ogLives -->
-  <div class="col-{{ colsize }}">
-    <div class="card text-center">
-      <div class="card-header">
-        {{ _('ogLive images') }}
-      </div>
-        <ul class="list-group">
-          {% for oglive in oglive_list['oglive'] %}
-            <li class="list-group-item">
-              {{ oglive['directory'] }}
-            {% if loop.index0 == oglive_list['default'] %}
-              ({{ _('default') }})
-            {% endif %}
+          <ul class="list-group list-group-horizontal">
+            <li class="list-group-item w-50">
+              {{ _('Uptime') }}
             </li>
-          {% endfor %}
-        </ul>
+            <li class="list-group-item w-50">
+              <p class="card-text">{{ time_dict['boot'] }}</p>
+            </li>
+          </ul>
+          <ul class="list-group list-group-horizontal">
+            <li class="list-group-item w-50">
+              {{ _('ogServer uptime') }}
+            </li>
+            <li class="list-group-item w-50">
+              <p class="card-text">{{ time_dict['start'] }}</p>
+            </li>
+          </ul>
+          <ul class="list-group list-group-horizontal">
+            <li class="list-group-item w-50">
+              {{ _('Connected clients (ogClient)') }}
+            </li>
+            <li class="list-group-item w-50">
+              <p class="card-text">{{ server.clients | length }}</p>
+            </li>
+          </ul>
+          <ul class="list-group list-group-horizontal">
+            <li class="list-group-item w-50">
+              {{ _('Number of images') }}
+            </li>
+            <li class="list-group-item w-50">
+              <p class="card-text">{{ images | length }}</p>
+            </li>
+          </ul>
+        </div>
+
+        <!-- disk stats -->
+        <div class="col-{{ colsize }}">
+          <div class="card text-center">
+            <div class="card-header">
+              {{ _('Disk stats') }}
+            </div>
+            <div class="card-body">
+              <canvas id="diskChart-{{ id }}" class="mb-2"></canvas>
+              <ul class="list-group list-group-horizontal">
+                <li class="list-group-item w-50">
+                  {{ _('Disk size') }}
+                </li>
+                <li class="list-group-item w-50">
+                  {{ _('used') }} (%)
+                </li>
+                <li class="list-group-item w-50">
+                  {{ _('available') }} (%)
+                </li>
+              </ul>
+              <ul class="list-group list-group-horizontal">
+                <li class="list-group-item w-50">
+                  {{ disk['total'] // 2**30 }} Gbytes
+                </li>
+                <li class="list-group-item w-50">
+                  {{ (disk['total'] - disk['free']) // 2**30 }} Gbytes
+                  ({{ (((disk['total'] - disk['free']) / disk['total']) * 100)|int }}%)
+                </li>
+                <li class="list-group-item w-50">
+                  {{ disk['free'] // 2**30 }} Gbytes
+                  ({{ ((disk['free'] / disk['total']) * 100)|int }}%)
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- Memory stats -->
+        <div class="col-{{ colsize }}">
+          <div class="card text-center">
+            <div class="card-header">
+              {{ _('Memory') }}
+            </div>
+            <div class="card-body">
+              <canvas id="memoryChart-{{ id }}" class="mb-2"></canvas>
+              <ul class="list-group list-group-horizontal">
+                <li class="list-group-item w-50">
+                  {{ _('Memory size') }}
+                </li>
+                <li class="list-group-item w-50">
+                  {{ _('used') }} (%)
+                </li>
+                <li class="list-group-item w-50">
+                  {{ _('available') }} (%)
+                </li>
+              </ul>
+              <ul class="list-group list-group-horizontal">
+                <li class="list-group-item w-50">
+                  {{ (stats['memory']['size'] / 2**30)|round(3) }} Gbytes
+                </li>
+                <li class="list-group-item w-50">
+                  {{ ((stats['memory']['size'] - stats['memory']['free']) / 2**30)|round(3) }} Gbytes
+                  ({{ (((stats['memory']['size'] - stats['memory']['free']) / stats['memory']['size']) * 100)|int }}%)
+                </li>
+                <li class="list-group-item w-50">
+                  {{ (stats['memory']['free'] / 2**30)|round(3) }} Gbytes
+                  ({{ ((stats['memory']['free'] / stats['memory']['size']) * 100)|int }}%)
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- Swap stats -->
+        <div class="col-{{ colsize }}">
+          <div class="card text-center">
+            <div class="card-header">
+              {{ _('Swap') }}
+            </div>
+            <div class="card-body">
+              {% if stats['swap']['size'] %}
+              <canvas id="swapChart-{{ id }}" class="mb-2"></canvas>
+              <ul class="list-group list-group-horizontal">
+                <li class="list-group-item w-50">
+                  {{ _('swap size') }}
+                </li>
+                <li class="list-group-item w-50">
+                  {{ _('used') }} (%)
+                </li>
+                <li class="list-group-item w-50">
+                  {{ _('available') }} (%)
+                </li>
+              </ul>
+              <ul class="list-group list-group-horizontal">
+                <li class="list-group-item w-50">
+                  {{ (stats['swap']['size'] / 2**30)|round(3) }} Gbytes
+                </li>
+                <li class="list-group-item w-50">
+                  {{ ((stats['swap']['size'] - stats['swap']['free']) / 2**30)|round(3) }} Gbytes
+                  ({{ (((stats['swap']['size'] - stats['swap']['free']) / stats['swap']['size']) * 100)|int }}%)
+                </li>
+                <li class="list-group-item w-50">
+                  {{ (stats['swap']['free'] / 2**30)|round(3) }} Gbytes
+                  ({{ ((stats['swap']['free'] / stats['swap']['size']) * 100)|int }}%)
+                </li>
+              </ul>
+              {% else %}
+              <h2>No swap</h2>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+
+        <!-- latest images -->
+        <div class="col-{{ colsize }}">
+          <div class="card text-center">
+            <div class="card-header">
+              {{ _('Latest images') }}
+            </div>
+              {% for image in images[:10] %}
+                <ul class="list-group list-group-horizontal">
+                  <li class="list-group-item w-50">
+                    {{ image['name'] }}
+                  </li>
+                  <li class="list-group-item w-50">
+                    {{ image['modified'] }}
+                  </li>
+                </ul>
+              {% endfor %}
+          </div>
+        </div>
+
+        <!-- ogLives -->
+        <div class="col-{{ colsize }}">
+          <div class="card text-center">
+            <div class="card-header">
+              {{ _('ogLive images') }}
+            </div>
+              <ul class="list-group">
+                {% for oglive in oglive_list['oglive'] %}
+                  <li class="list-group-item">
+                    {{ oglive['directory'] }}
+                  {% if loop.index0 == oglive_list['default'] %}
+                    ({{ _('default') }})
+                  {% endif %}
+                  </li>
+                {% endfor %}
+              </ul>
+          </div>
+        </div>
+      </div>
     </div>
-  </div>
+{% endfor %}
 </div>
 {% endblock %}
 
 {% block extrabody %}
-<script>
-  const diskChartConfig = {
-    type: 'doughnut',
-    data: {
-      labels: ['Used', 'Available'],
-      datasets: [
-        {
-          label: 'Disk usage',
-          data: [
-            {{ (disk['total'] - disk['free']) // 2**30 }},
-            {{ disk['free'] // 2**30 }},
-          ],
-          backgroundColor: [
-            'rgb(255, 99, 132)',
-            'rgb(54, 162, 235)',
-          ],
-        },
-      ],
-    },
-    options: {
-      responsive: true,
-      plugins: {
-        legend: {
-          position: 'top',
-        },
-        title: {
-          display: true,
-          text: 'Chart.js Doughnut Chart'
-        },
-      },
-    },
-  };
-  var diskChart = new Chart(
-    document.getElementById('diskChart'),
-    diskChartConfig,
-  );
-  const memoryChartConfig = {
-    type: 'doughnut',
-    data: {
-      labels: ['Used', 'Available'],
-      datasets: [
-        {
-          label: 'Memory usage',
-          data: [
-            {{ ((stats['memory']['size'] - stats['memory']['free']) / 2**30)|round(3) }},
-            {{ (stats['memory']['free'] / 2**30)|round(3) }},
-          ],
-          backgroundColor: [
-            'rgb(179, 180, 146)',
-            'rgb(203, 184, 169)',
+{% for id, server in servers.items() %}
+    {% set stats = server.stats %}
+    {% set disk = server.disk %}
+    <script>
+      var diskChartConfig = {
+        type: 'doughnut',
+        data: {
+          labels: ['Used', 'Available'],
+          datasets: [
+            {
+              label: 'Disk usage',
+              data: [
+                {{ (disk['total'] - disk['free']) // 2**30 }},
+                {{ disk['free'] // 2**30 }},
+              ],
+              backgroundColor: [
+                'rgb(255, 99, 132)',
+                'rgb(54, 162, 235)',
+              ],
+            },
           ],
         },
-      ],
-    },
-    options: {
-      responsive: true,
-      plugins: {
-        legend: {
-          position: 'top',
+        options: {
+          responsive: true,
+          plugins: {
+            legend: {
+              position: 'top',
+            },
+            title: {
+              display: true,
+              text: 'Chart.js Doughnut Chart'
+            },
+          },
         },
-        title: {
-          display: true,
-          text: 'Chart.js Doughnut Chart'
-        },
-      },
-    },
-  };
-  var memoryChart = new Chart(
-    document.getElementById('memoryChart'),
-    memoryChartConfig,
-  );
-  {% if stats['swap']['size'] %}
-  const swapChartConfig = {
-    type: 'doughnut',
-    data: {
-      labels: ['Used', 'Available'],
-      datasets: [
-        {
-          label: 'Swap usage',
-          data: [
-            {{ ((stats['swap']['size'] - stats['swap']['free']) / 2**30)|round(3) }},
-            {{ (stats['swap']['free'] / 2**30)|round(3) }},
+      };
+      var diskChart = new Chart(
+        document.getElementById('diskChart-{{ id }}'),
+        diskChartConfig,
+      );
+      var memoryChartConfig = {
+        type: 'doughnut',
+        data: {
+          labels: ['Used', 'Available'],
+          datasets: [
+            {
+              label: 'Memory usage',
+              data: [
+                {{ ((stats['memory']['size'] - stats['memory']['free']) / 2**30)|round(3) }},
+                {{ (stats['memory']['free'] / 2**30)|round(3) }},
+              ],
+              backgroundColor: [
+                'rgb(179, 180, 146)',
+                'rgb(203, 184, 169)',
+              ],
+            },
           ],
-          backgroundColor: [
-            'rgb(191, 171, 37)',
-            'rgb(216, 164, 127)',
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: {
+              position: 'top',
+            },
+            title: {
+              display: true,
+              text: 'Chart.js Doughnut Chart'
+            },
+          },
+        },
+      };
+      var memoryChart = new Chart(
+        document.getElementById('memoryChart-{{ id }}'),
+        memoryChartConfig,
+      );
+      {% if stats['swap']['size'] %}
+      var swapChartConfig = {
+        type: 'doughnut',
+        data: {
+          labels: ['Used', 'Available'],
+          datasets: [
+            {
+              label: 'Swap usage',
+              data: [
+                {{ ((stats['swap']['size'] - stats['swap']['free']) / 2**30)|round(3) }},
+                {{ (stats['swap']['free'] / 2**30)|round(3) }},
+              ],
+              backgroundColor: [
+                'rgb(191, 171, 37)',
+                'rgb(216, 164, 127)',
+              ],
+            },
           ],
         },
-      ],
-    },
-    options: {
-      responsive: true,
-      plugins: {
-        legend: {
-          position: 'top',
+        options: {
+          responsive: true,
+          plugins: {
+            legend: {
+              position: 'top',
+            },
+            title: {
+              display: true,
+              text: 'Chart.js Doughnut Chart'
+            },
+          },
         },
-        title: {
-          display: true,
-          text: 'Chart.js Doughnut Chart'
-        },
-      },
-    },
-  };
-  var swapChart = new Chart(
-    document.getElementById('swapChart'),
-    swapChartConfig,
-  );
-  {% endif %}
-</script>
+      };
+      var swapChart = new Chart(
+        document.getElementById('swapChart-{{ id }}'),
+        swapChartConfig,
+      );
+      {% endif %}
+    </script>
+
+{% endfor %}
 {% endblock %}

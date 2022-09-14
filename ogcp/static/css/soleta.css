@@ -11,19 +11,19 @@ html, body {
     margin: 10px;
 }
 
-.nav {
+.nav.ogcp-nav {
   position: relative;
 }
 
-.nav-item {
+.ogcp-nav .nav-item {
   padding-left: 20px;
   position: relative;
 }
 
-.nav-link {
+.ogcp-nav .nav-link {
   padding: 0;
 }
-.active > .nav-link {
+.ogcp-nav .active > .nav-link {
   font-weight: bold;
   background: slategrey;
   border-radius: 10rem;

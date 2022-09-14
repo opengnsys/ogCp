@@ -37,6 +37,11 @@ class OGServer:
                           json=payload)
         return r
 
+    @property
+    def id(self):
+        ip = self.ip.replace('.', '-')
+        return f'server_{ip}_{self.port}'
+
 
 servers = []
 if {'IP', 'PORT', 'API_TOKEN'} <= app.config.keys():

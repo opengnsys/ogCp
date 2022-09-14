@@ -11,7 +11,7 @@
 {% endblock %}
 
 {% block sidebar %}
-    <ul id="servers-list" class="nav flex-column nav-pills">
+    <ul id="servers-list" class="nav ogcp-nav flex-column nav-pills">
         {% for server in servers %}
         {% set server_str = server["ip"] ~ ":" ~ server["port"] %}
             <li class="nav-item">

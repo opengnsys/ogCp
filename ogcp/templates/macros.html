@@ -1,6 +1,6 @@
 {% macro scopes_tree_collapse(scopes, state='', selection_mode='scopes') -%}
 
-<ul id="scopes" class="nav flex-column nav-pills">
+<ul id="scopes" class="nav ogcp-nav flex-column nav-pills">
   {{ scopes_tree_collapse_level(scopes["scope"], "", state, selection_mode) }}
 </ul>
 <script>
@@ -78,7 +78,7 @@
 <hr><h2>{{_('Selected clients')}}</h2>
 <div class="card">
   <div class="card-body">
-    <ul id="clients-color-legend" class="d-flex flex-wrap justify-content-center nav nav-pills">
+    <ul id="clients-color-legend" class="d-flex flex-wrap justify-content-center nav ogcp-nav nav-pills">
       <li class="nav-item"><i class="nav-icon far fa-circle"></i> {{_('Apagado')}} </li>
       <li class="nav-item"><i class="nav-icon fas fa-circle text-wol"></i> {{_('WoL sent')}} </li>
       <li class="nav-item"><i class="nav-icon fas fa-circle text-warning"></i> ogLive </li>

@@ -11,7 +11,7 @@
 {% endblock %}
 
 {% block sidebar %}
-    <ul id="users-list" class="nav flex-column nav-pills">
+    <ul id="users-list" class="nav ogcp-nav flex-column nav-pills">
         {% for user in users %}
             <li id="user-{{ user['USER'] }}" class="nav-item">
                 <input class="form-check-input" type="checkbox" form="usersForm"

@@ -333,28 +333,45 @@ def index():
     if not current_user.is_authenticated:
         return redirect(url_for('login'))
 
-    try:
-        clients = get_clients()
-    except requests.exceptions.RequestException as err:
-        flash(_('ogServer connection failed: {}.').format(err),
-              category='error')
-        logout_user()
-        return redirect(url_for('index'))
-    images_response = g.server.get('/images')
-    images = images_response.json()['images']
-    images.sort(key=image_modified_date_from_str, reverse=True)
-    disk = images_response.json()['disk']
-    oglive_list = g.server.get('/oglive/list').json()
-    stats = g.server.get('/stats').json()
-    timestamp = datetime.datetime.fromtimestamp(stats.get('time').get('now'))
-    now = timestamp.strftime('%Y-%m-%d  %H:%M:%S')
-    boot = display_time(stats.get('time').get('boot'))
-    start = display_time(stats.get('time').get('start'))
-    time_dict = {'now': now, 'boot': boot, 'start': start}
-    return render_template('dashboard.html', clients=clients,
-                           images=images, disk=disk, colsize="6",
-                           oglive_list=oglive_list, stats=stats,
-                           time_dict=time_dict)
+    images_response = multi_request('get', '/images')
+    dashboard_servers = {}
+    for i in images_response:
+        server_name = i['server'].name
+        server_id = i['server'].id
+        images = i['json']['images']
+        images.sort(key=image_modified_date_from_str, reverse=True)
+        disk = i['json']['disk']
+
+        if server_name not in dashboard_servers:
+            dashboard_servers[server_id] = {'name': server_name}
+
+        dashboard_servers[server_id]['images'] = images
+        dashboard_servers[server_id]['disk'] = disk
+
+    oglive_list = multi_request('get', '/oglive/list')
+    for i in oglive_list:
+        server_id = i['server'].id
+        dashboard_servers[server_id]['oglive_list'] = i['json']
+
+    all_stats = multi_request('get', '/stats')
+    for i in all_stats:
+        server_id = i['server'].id
+        stats = i['json']
+        dashboard_servers[server_id]['stats'] = stats
+
+        timestamp = datetime.datetime.fromtimestamp(stats.get('time').get('now'))
+        now = timestamp.strftime('%Y-%m-%d  %H:%M:%S')
+        boot = display_time(stats.get('time').get('boot'))
+        start = display_time(stats.get('time').get('start'))
+        time_dict = {'now': now, 'boot': boot, 'start': start}
+        dashboard_servers[server_id]['time_dict'] = time_dict
+
+    clients_response = multi_request('get', '/clients')
+    for i in clients_response:
+        server_id = i['server'].id
+        dashboard_servers[server_id]['clients'] = i['json']['clients']
+
+    return render_template('dashboard.html', servers=dashboard_servers, colsize="6")
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
