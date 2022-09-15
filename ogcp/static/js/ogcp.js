@@ -19,7 +19,7 @@ async function show_client_mac(pill_id) {
 
 function showSelectedClient(client_checkbox) {
     const container = $('#selected-clients');
-    const pill_id = 'pill-' + client_checkbox.name.replaceAll(/[.]|[ ]/g, '_');
+    const pill_id = 'pill-' + client_checkbox.name.replaceAll(/[. ()]/g, '_');
 
     if (client_checkbox.checked) {
         if (!($('#' + pill_id).length)) {
