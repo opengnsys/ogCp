@@ -1,7 +1,7 @@
 {% macro scopes_tree_collapse(scopes, state='', selection_mode='scopes') -%}
 
 <ul id="scopes" class="nav ogcp-nav flex-column nav-pills">
-  {{ scopes_tree_collapse_level(scopes["scope"], "", state, selection_mode) }}
+  {{ scopes_tree_collapse_level(scopes["scope"], "", "", state, selection_mode) }}
 </ul>
 <script>
     // Launch the javascript on document ready, so all the global functions exists
@@ -24,7 +24,7 @@
 
 {% endmacro %}
 
-{% macro scopes_tree_collapse_level(scopes, parent_id, state, selection_mode) -%}
+{% macro scopes_tree_collapse_level(scopes, parent_room, parent_id, state, selection_mode) -%}
 {% for scope in scopes %}
   <li id="{{ scope["name"]|replace(".", "_")|replace(" ", "_") }}_{{ scope["id"] }}" class="nav-item">
     {% if scope["type"] == "server" %}
@@ -41,14 +41,15 @@
                name="scope-center" />
         {% endif %}
     {% elif scope["type"] == "room" %}
+        {% set parent_room = scope.name + "-" + scope.id|string %}
         <input class="form-check-input" type="checkbox" form="scopesForm"
-               value="{{ scope["id"] }}"
+               value="{{ scope["id"] }}" data-room="{{ parent_room }}"
                {% if state %}style="filter: grayscale(100%);" onclick="return false;"{% endif %}
                {% if scope.get("selected", False) %}checked{% endif %}
                name="scope-room" />
     {% elif " ".join(scope["ip"]) %}
         <input class="form-check-input" type="checkbox" form="scopesForm"
-               value="{{ " ".join(scope["ip"]) }}"
+               value="{{ " ".join(scope["ip"]) }}" data-parent-room="{{ parent_room }}"
                {% if state %}style="filter: grayscale(100%);" onclick="return false;"{% endif %}
                {% if scope.get("selected", False) %}checked{% endif %}
                name="{{ scope["name"] }}_{{ scope["id"] }}" />
@@ -67,7 +68,7 @@
     </a>
     {% if scope["scope"] %}
       <ul class="nav flex-column collapse level{{i}}" id="scope{{parent_id ~ "-" ~ loop.index}}">
-          {{ scopes_tree_collapse_level(scope["scope"], parent_id ~ "-" ~ loop.index, state, selection_mode) }}
+          {{ scopes_tree_collapse_level(scope["scope"], parent_room, parent_id ~ "-" ~ loop.index, state, selection_mode) }}
       </ul>
     {% endif %}
   </li>

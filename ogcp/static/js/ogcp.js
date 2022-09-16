@@ -94,7 +94,7 @@ function checkChildrenCheckboxes() {
                 others.trigger('change');
             } else {
                 // Look for room, deselect all other rooms
-                const selectedRoom = $(this).parent().parent().parent().children('[name="scope-room"]');
+                const selectedRoom = $('[data-room="' + $(this).data('parentRoom') + '"]');
                 const others = $('input:checkbox[name="scope-room"]').not(selectedRoom);
                 others.prop('checked', false).prop('indeterminate', false);
                 others.each(function() {
