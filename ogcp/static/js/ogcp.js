@@ -91,7 +91,11 @@ function checkChildrenCheckboxes() {
             if (this.name === 'scope-room') {
                 const others = $('input:checkbox[form|="scopesForm"]').not(this);
                 others.prop('checked', false);
-                others.trigger('change');
+                others.each(function() {
+                    showSelectedClient(this);
+                    storeCheckboxStatus(this);
+                });
+                //others.trigger('change');
             } else {
                 // Look for room, deselect all other rooms
                 const selectedRoom = $('[data-room="' + $(this).data('parentRoom') + '"]');
@@ -99,9 +103,12 @@ function checkChildrenCheckboxes() {
                 others.prop('checked', false).prop('indeterminate', false);
                 others.each(function() {
                     const checks = $(this).parent().find('input:checkbox').prop('checked', false);
-                    checks.trigger('change');
+                    storeCheckboxStatus(this);
+                    checks.each(function() {
+                        showSelectedClient(this);
+                        storeCheckboxStatus(this);
+                    });
                 });
-                others.trigger('change');
             }
         }
 
