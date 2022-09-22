@@ -313,10 +313,6 @@ def load_user(username):
     user = User(username, user_dict.get('SCOPES'), user_dict.get('ADMIN'))
     return user
 
-@app.before_request
-def load_config():
-    g.server = servers[0]
-
 @app.errorhandler(404)
 def page_not_found(error):
     return render_template('error.html', message=error), 404
