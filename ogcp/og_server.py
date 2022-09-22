@@ -50,7 +50,7 @@ if {'IP', 'PORT', 'API_TOKEN'} <= app.config.keys():
                             app.config['IP'],
                             app.config['PORT'],
                             app.config['API_TOKEN']))
-else:
+if app.config.get('SERVERS'):
     for server in app.config['SERVERS']:
         ogserver = OGServer(server['NAME'],
                             server['IP'],
