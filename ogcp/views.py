@@ -1483,12 +1483,16 @@ def users():
 
 
 def get_available_scopes():
-    resp = g.server.get('/scopes')
-    centers = parse_scopes_from_tree(resp.json(), 'center')
-    centers = [(center['name'], center['name']) for center in centers]
-    rooms = parse_scopes_from_tree(resp.json(), 'room')
-    rooms = [(room['name'], room['name']) for room in rooms]
-    return centers + rooms
+    responses = multi_request('get', '/scopes')
+    available_scopes = list()
+    for resp in responses:
+        centers = parse_scopes_from_tree(resp['json'], 'center')
+        centers = [(center['name'], center['name']) for center in centers]
+        available_scopes.extend(centers)
+        rooms = parse_scopes_from_tree(resp['json'], 'room')
+        rooms = [(room['name'], room['name']) for room in rooms]
+        available_scopes.extend(rooms)
+    return available_scopes
 
 
 def save_server(form):
