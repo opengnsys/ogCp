@@ -1534,7 +1534,12 @@ def delete_server(server):
     with open(filename, 'r+') as file:
         config = json.load(file)
 
-        config['SERVERS'].remove(server_dict)
+        try:
+            config['SERVERS'].remove(server_dict)
+        except (KeyError, ValueError):
+            config.pop('IP')
+            config.pop('PORT')
+            config.pop('API_TOKEN')
 
         file.seek(0)
         json.dump(config, file, indent='\t')
