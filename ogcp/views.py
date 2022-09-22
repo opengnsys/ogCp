@@ -644,6 +644,7 @@ def action_image_restore():
 
         part_choices = []
 
+        server = get_server_from_clients(ips)
         r = server.get('/images')
         for image in r.json()['images']:
             form.image.choices.append((image['id'], image['name']))
