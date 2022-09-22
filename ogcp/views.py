@@ -135,15 +135,15 @@ def get_clients(state_filter=None):
     return clients
 
 
-def get_repository(repository_id):
-    repositories = get_repositories()
+def get_repository(repository_id, server):
+    repositories = get_repositories(server)
     [repository] = [repository for repository in repositories
                     if repository['id'] == repository_id]
     return repository
 
 
-def get_repositories():
-    r = g.server.get('/repositories')
+def get_repositories(server):
+    r = server.get('/repositories')
     repositories = r.json()['repositories']
     return repositories
 
@@ -620,7 +620,7 @@ def action_image_restore():
         if not image:
             flash(_(f'Image to restore was not found'), category='error')
             return redirect(url_for('commands'))
-        repository = get_repository(image['repo_id'])
+        repository = get_repository(image['repo_id'], server)
 
         payload = {'disk': disk,
                    'partition': partition,
@@ -1145,7 +1145,7 @@ def action_image_create():
                            f"{_('FS')} {FS_CODES[fs_id]}")
             form.os.choices.append((choice_value, choice_name))
 
-        repositories = get_repositories()
+        repositories = get_repositories(server)
         for repo in repositories:
             form.repository.choices.append((repo['id'], repo['name']))
 
@@ -1169,7 +1169,7 @@ def action_image_update():
         if not image:
             flash(_('Image to restore was not found'), category='error')
             return redirect(url_for('commands'))
-        repository = get_repository(image['repo_id'])
+        repository = get_repository(image['repo_id'], server)
         payload = {'clients': [ip],
                    'disk': disk,
                    'partition': partition,
