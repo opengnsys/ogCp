@@ -1507,7 +1507,11 @@ def save_server(form):
     with open(filename, 'r+') as file:
         config = json.load(file)
 
-        config['SERVERS'].append(server_dict)
+        try:
+            config['SERVERS'].append(server_dict)
+        except KeyError:
+            config['SERVERS'] = list()
+            config['SERVERS'].append(server_dict)
 
         file.seek(0)
         json.dump(config, file, indent='\t')
