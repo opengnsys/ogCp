@@ -143,8 +143,8 @@ def get_repository(repository_id):
 
 
 def get_repositories():
-    r = g.server.get('/servers')
-    repositories = r.json()['servers']
+    r = g.server.get('/repositories')
+    repositories = r.json()['repositories']
     return repositories
 
 
