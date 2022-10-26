@@ -1483,6 +1483,9 @@ def get_available_scopes():
     responses = multi_request('get', '/scopes')
     available_scopes = list()
     for resp in responses:
+        servers = parse_scopes_from_tree(resp['json'], 'server')
+        servers = [(server['name'], server['name']) for server in servers]
+        available_scopes.extend(servers)
         centers = parse_scopes_from_tree(resp['json'], 'center')
         centers = [(center['name'], center['name']) for center in centers]
         available_scopes.extend(centers)
