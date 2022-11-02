@@ -179,10 +179,18 @@ function updatePillStatus(scope, pill) {
     let link = scope.link
     let units = 'Mb/s'
     const pillCls = ['badge-danger', 'badge-success', 'badge-warning',
-                     'badge-wol', 'badge-light'];
+                     'badge-wol', 'badge-light', 'text-linux', 'text-windows'];
     pill.classList.remove(...pillCls);
     if (state === 'OPG') {
         pill.classList.add('badge-warning');
+    } else if (state === 'LNX') {
+        pill.classList.add('badge-linux');
+    } else if (state === 'LNXS') {
+        pill.classList.add('badge-linux');
+    } else if (state === 'WIN') {
+        pill.classList.add('badge-windows');
+    } else if (state === 'WINS') {
+        pill.classList.add('badge-windows');
     } else if (state === 'BSY') {
         pill.classList.add('badge-danger');
     } else if (state === 'VDI') {
@@ -209,8 +217,9 @@ function updateScopes(scopes) {
             const scopeId = `${scope.name}_${scope.id}`.replaceAll(/[.]|[ ]/g, '_');
             const iconEl = document.querySelector(`#${scopeId} .nav-icon`);
             const iconCls = ['fas', 'far', 'fa-circle', 'fa-check-circle',
-                             'fa-times-circle', 'text-danger', 'text-success',
-                             'text-warning', 'text-wol'];
+                             'fa-times-circle', 'fa-user-circle', 'text-danger',
+                             'text-success', 'text-warning', 'text-wol',
+                             'text-linux', 'text-windows'];
             iconEl.classList.remove(...iconCls);
             let newIconCls = [];
             if (scope.state === 'OPG') {
@@ -219,6 +228,14 @@ function updateScopes(scopes) {
                     newIconCls.push('fa-times-circle');
                 else
                     newIconCls.push('fa-circle');
+            } else if (scope.state === 'LNX') {
+                newIconCls.push('fas', 'fa-circle', 'text-linux');
+            } else if (scope.state === 'LNXS') {
+                newIconCls.push('fas', 'fa-user-circle', 'text-linux');
+            } else if (scope.state === 'WIN') {
+                newIconCls.push('fas', 'fa-circle', 'text-windows');
+            } else if (scope.state === 'WINS') {
+                newIconCls.push('fas', 'fa-user-circle', 'text-windows');
             } else if (scope.state === 'BSY') {
                 newIconCls.push('fas', 'fa-circle', 'text-danger');
             } else if (scope.state === 'VDI') {

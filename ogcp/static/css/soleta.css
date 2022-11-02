@@ -33,9 +33,25 @@ html, body {
   color: #99791a !important;
 }
 
+.text-linux {
+  color: #d77cb3 !important;
+}
+
+.text-windows {
+  color: #2d9efb !important;
+}
+
 .badge-wol {
   color: white !important;
   background-color: #99791a !important;
+}
+
+.badge-linux {
+  background-color: #d77cb3 !important;
+}
+
+.badge-windows {
+  background-color: #2d9efb !important;
 }
 
 .og-pill {

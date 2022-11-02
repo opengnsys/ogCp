@@ -59,6 +59,10 @@
       {% if "state" in scope %}
         <i class="nav-icon fa-circle
                   {% if scope['state'] == 'OPG' %}fas text-warning
+                  {% elif scope['state'] == 'LNX' %}fas text-linux
+                  {% elif scope['state'] == 'LNX' %}fas fa-user-circle text-linux
+                  {% elif scope['state'] == 'WIN' %}fas text-windows
+                  {% elif scope['state'] == 'WIN' %}fas fa-user-circle text-windows
                   {% elif scope['state'] == 'BSY' %}fas text-danger
                   {% elif scope['state'] == 'VDI' %}fas text-success
                   {% elif scope['state'] == 'WOL_SENT' %}fas text-wol
@@ -84,6 +88,10 @@
       <li class="nav-item"><i class="nav-icon fas fa-circle text-wol"></i> {{_('WoL sent')}} </li>
       <li class="nav-item"><i class="nav-icon fas fa-circle text-warning"></i> ogLive </li>
       <li class="nav-item"><i class="nav-icon fas fa-circle text-danger"></i> {{_('Busy')}} </li>
+      <li class="nav-item"><i class="nav-icon fas fa-circle text-linux"></i> Linux </li>
+      <li class="nav-item"><i class="nav-icon fas fa-user-circle text-linux"></i> {{_('Linux session')}} </li>
+      <li class="nav-item"><i class="nav-icon fas fa-circle text-windows"></i> Windows </li>
+      <li class="nav-item"><i class="nav-icon fas fa-user-circle text-windows"></i> {{_('Windows session')}} </li>
       <li class="nav-item"><i class="nav-icon fas fa-circle text-success"></i> VDI </li>
     </ul>
   </div>
