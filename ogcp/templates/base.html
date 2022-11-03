@@ -35,7 +35,7 @@
                     </li>
                     {% if current_user.admin %}
                     <li class="nav-item {% block nav_scopes%}{% endblock %}">
-                        <a class="nav-link" href="{{ url_for('scopes') }}">{{ _('Scopes') }}</a>
+                        <a class="nav-link" href="{{ url_for('scopes') }}">{{ _('Scopes management') }}</a>
                     </li>
                     <li class="nav-item {% block nav_servers %}{% endblock %}">
                         <a class="nav-link" href="{{ url_for('manage_servers') }}">{{ _('Servers') }}</a>
