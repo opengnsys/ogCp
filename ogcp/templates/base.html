@@ -27,9 +27,6 @@
                     <li class="nav-item {% block nav_dashboard%}{% endblock %}">
                         <a class="nav-link" href="{{ url_for('index') }}">{{ _('Dashboard') }}<span class="sr-only">(current)</span></a>
                     </li>
-		    <li class="nav-item {% block nav_scopes%}{% endblock %}">
-                        <a class="nav-link" href="{{ url_for('scopes') }}">{{ _('Scopes') }}</a>
-                    </li>
                     <li class="nav-item {% block nav_commands%}{% endblock %}">
                         <a class="nav-link" href="{{ url_for('commands') }}">{{ _('Commands') }}</a>
                     </li>
@@ -37,6 +34,9 @@
                         <a class="nav-link" href="{{ url_for('images') }}">{{ _('Images') }}</a>
                     </li>
                     {% if current_user.admin %}
+                    <li class="nav-item {% block nav_scopes%}{% endblock %}">
+                        <a class="nav-link" href="{{ url_for('scopes') }}">{{ _('Scopes') }}</a>
+                    </li>
                     <li class="nav-item {% block nav_servers %}{% endblock %}">
                         <a class="nav-link" href="{{ url_for('manage_servers') }}">{{ _('Servers') }}</a>
                     </li>
