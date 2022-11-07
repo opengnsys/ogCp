@@ -1,6 +1,9 @@
 {% extends 'commands.html' %}
 {% import "bootstrap/wtf.html" as wtf %}
 
+{% set sidebar_state = 'disabled' %}
+{% set btn_back = true %}
+
 {% block nav_logs %} active{% endblock %}
 {% block nav_logs_log %} active{% endblock %}
 {% block content %}
