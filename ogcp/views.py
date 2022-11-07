@@ -1555,7 +1555,7 @@ def delete_server(server):
 
 
 def save_user(form):
-    username = form.username.datk
+    username = form.username.data
 
     pwd_hash = hash_password(form.pwd.data)
     pwd_hash_confirm = hash_password(form.pwd_confirm.data)
