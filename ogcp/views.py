@@ -515,6 +515,9 @@ def action_setup_show():
         base_client = args['selected_client']
 
     db_partitions = get_client_setup(base_client)
+    if not db_partitions:
+        flash(_('Selected client has no disks'), category='error')
+        return redirect(url_for('commands'))
     filtered_partitions = [p for p in db_partitions
                            if p.get('disk') == selected_disk]
 
